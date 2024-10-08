@@ -1,31 +1,20 @@
-import sqlite3
+import os
+from sqlalchemy import create_engine, Column, Integer, String, Float
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
 
-# Inicializar la base de datos
-def init_db():
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    
-    # Crear tabla de usuarios
-    cursor.execute('''CREATE TABLE IF NOT EXISTS usuarios (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        usuario TEXT NOT NULL,
-                        clave TEXT NOT NULL,
-                        llave TEXT NOT NULL)''')
-    
-    # Crear tabla para registro de peticiones
-    cursor.execute('''CREATE TABLE IF NOT EXISTS peticiones (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        usuario_id INTEGER,
-                        usuario_api TEXT,
-                        clave_api TEXT,
-                        request_api TEXT,
-                        status_api TEXT,
-                        FOREIGN KEY(usuario_id) REFERENCES usuarios(id))''')
-    
-    conn.commit()
-    conn.close()
+load_dotenv()
 
-# Conexión a la base de datos
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    return conn
+TURSO_DATABASE_URL = os.getenv("TURSO_DATABASE_URL")
+TURSO_AUTH_TOKEN = os.getenv("TURSO_AUTH_TOKEN")
+
+dbUrl = f"sqlite+{TURSO_DATABASE_URL}/?authToken={TURSO_AUTH_TOKEN}&secure=true"
+
+engine = create_engine(dbUrl, connect_args={'check_same_thread': False}, echo=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
+
+def create_db_and_tables():
+    Base.metadata.create_all(bind=engine)

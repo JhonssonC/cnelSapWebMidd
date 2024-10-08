@@ -1,25 +1,24 @@
 from fastapi import APIRouter, HTTPException
-from ..models import UserValidationRequest
+from fastapi.responses import JSONResponse
+
+from app.models import UserValidation
+from ..schemas import ImputUser
 from ..utils import generate_key, hash_password
-from ..database import get_db_connection
+from ..database import SessionLocal, engine, base
 
 router = APIRouter()
 
 # Endpoint para registrar un nuevo usuario
 @router.post("/registrar/")
-def registrar_usuario(data: UserValidationRequest):
-    conn = get_db_connection()
-    cursor = conn.cursor()
+def registrar_usuario(data: ImputUser):
+     # creo una session para conectarme a la BD
+    db = SessionLocal()
+    new_usr = UserValidation(**ImputUser.model())
+    new_usr.llave=hash_password(data.clave)
+    db.add(new_usr)
+    db.commit()
+    return JSONResponse(status_code=201, content={"message": "Se ha regitrado Usuario"})
     
-    hashed_password = hash_password(data.clave)
-    llave_inicial = generate_key()
-    
-    cursor.execute('INSERT INTO usuarios (usuario, clave, llave) VALUES (?, ?, ?)', 
-                   (data.usuario, hashed_password, llave_inicial))
-    conn.commit()
-    conn.close()
-    
-    return {"message": "Usuario registrado con éxito", "usuario": data.usuario, "llave": llave_inicial}
 
 # Endpoint para regenerar la llave
 @router.post("/regenerar/")

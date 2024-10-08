@@ -1,6 +1,6 @@
 import os
 from fastapi import APIRouter, HTTPException
-from ..models import ApiRequestModel
+from ..schemas import ApiRequestModel
 from ..utils import validar_llave, registrar_peticion
 import requests
 import ssl

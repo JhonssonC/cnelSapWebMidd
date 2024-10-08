@@ -1,6 +1,11 @@
 import hashlib
 import os
 import uuid
+
+from sqlalchemy import func
+from sqlalchemy.orm import Session
+
+from app import models
 from .database import get_db_connection
 
 # Helper para crear la llave (usando UUID)
