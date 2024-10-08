@@ -17,7 +17,7 @@ def registrar_usuario(data: ImputUser):
     new_usr.llave=hash_password(data.clave)
     db.add(new_usr)
     db.commit()
-    return JSONResponse(status_code=201, content={"message": "Se ha regitrado Usuario"})
+    return JSONResponse(status_code=201, content={"message": "Se ha regitrado Usuario", "data":data})
     
 
 # Endpoint para regenerar la llave
