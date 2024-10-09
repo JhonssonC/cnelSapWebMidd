@@ -9,12 +9,21 @@ class ImputUser(BaseModel):
 class UserValidationRequest(ImputUser):
     llave: str
 
-
-class ApiRequestModel(BaseModel):
+# Esquema de Pydantic para la tabla de ApiRequestModel
+class ApiRequestModelBase(BaseModel):
     usuario_api: str
     clave_api: str
     endpoint: str
-    data: dict = None  # Para las solicitudes POST
+    
+class ApiRequestModel(ApiRequestModelBase):
+    data: dict = None
+    usuario_id: int
+    status: int
+    
+class ApiRequestModelSave(ApiRequestModelBase):
+    data: str
+    usuario_id: int
+    status: int
 
 # Esquema de Pydantic para la tabla de secuencias
 class SequenceBase(BaseModel):

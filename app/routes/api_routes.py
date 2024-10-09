@@ -1,7 +1,7 @@
 import os
 from fastapi import APIRouter, HTTPException
 from ..schemas import ApiRequestModel
-from ..utils import validate_key, registrar_peticion
+from ..utils import validate_key, register_request
 import requests
 import ssl
 from urllib3 import PoolManager
@@ -50,16 +50,16 @@ def middleware_get(api_request: ApiRequestModel, llave: str):
     try:
         usuario_id = validate_key(llave)
         response = session.request("GET", api_request.endpoint, headers=HEADERS)
-        status_api = "Success" if response.status_code == 200 else "Failed"
+        status_api = response.status_code
         
         # Registrar la petición
-        registrar_peticion(usuario_id.id, api_request.usuario_api, api_request.clave_api, api_request.endpoint, status_api)
+        register_request(usuario_id.id, api_request, status_api)
         
         
         return {"status": response.status_code, "data": response.json()}
 
     except Exception as e:
-        #registrar_peticion(usuario_id, api_request.usuario_api, api_request.clave_api, api_request.endpoint, "Error")
+        register_request(usuario_id, api_request, 500)
         raise HTTPException(status_code=500, detail=str(e))
     
     
@@ -69,7 +69,6 @@ def login(api_request: ApiRequestModel, llave: str):
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Usuario='{api_request.usuario_api}',Password='{api_request.clave_api}')"
         return middleware_get(api_request, llave)
     except Exception as e:
-        #registrar_peticion(usuario_id, api_request.usuario_api, api_request.clave_api, api_request.endpoint, "Error")
         raise HTTPException(status_code=500, detail=str(e))
     
     
@@ -79,15 +78,15 @@ def login(api_request: ApiRequestModel, llave: str):
 @router.post("/post/")
 def middleware_post(api_request: ApiRequestModel, llave: str):
     try:
-        usuario_id = validar_llave(llave)
+        usuario_id = validate_key(llave)
         response = requests.post(api_request.endpoint, json=api_request.data, auth=(api_request.usuario_api, api_request.clave_api))
-        status_api = "Success" if response.status_code == 200 else "Failed"
+        status_api = response.status_code
         
         # Registrar la petición
-        registrar_peticion(usuario_id, api_request.usuario_api, api_request.clave_api, api_request.endpoint, status_api)
+        register_request(usuario_id.id, api_request, status_api)
         
         return {"status": response.status_code, "data": response.json()}
     
     except Exception as e:
-        registrar_peticion(usuario_id, api_request.usuario_api, api_request.clave_api, api_request.endpoint, "Error")
+        register_request(usuario_id, api_request, 500)
         raise HTTPException(status_code=500, detail=str(e))

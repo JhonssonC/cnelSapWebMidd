@@ -6,7 +6,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app import models
-from app.schemas import ImputUser, UserValidationRequest
+from app.schemas import ApiRequestModel, EndApiRequestModel, ImputUser, UserValidationRequest
 from .database import SessionLocal
 
 # Helper para crear la llave (usando UUID)
@@ -45,16 +45,21 @@ def validate_user(usuario: str, clave: str):
     
 
 # Registrar la petición en la tabla de peticiones
-def registrar_peticion(usuario_id: int, usuario_api: str, clave_api: str, request_api: str, status_api: str):
+def register_request(usuario_id: int, api_request: ApiRequestModel, status_api: int):
 
     db = SessionLocal()
-    new_usr = models.ApiRequest(usuario_api=usuario_api, clave_api=clave_api, endpoint)
-    new_usr.clave=hash_password(data.clave)
-    new_usr.llave=generate_key()
-    db.add(new_usr)
+    
+    end_api_request = EndApiRequestModel(
+        **api_request.model_copy().model_dump(),
+        usuario_id=usuario_id,
+        status=status_api
+    )
+    
+    new_req = models.ApiRequest(**api_request.model())
+    db.add(new_req)
     db.commit()
-    usr = UserValidationRequest(usuario=data.usuario, clave=data.clave, llave=new_usr.clave)
-    return usr
+
+    return end_api_request
 
     db = SessionLocal()
     
