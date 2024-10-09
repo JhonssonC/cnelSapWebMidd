@@ -9,6 +9,7 @@ class ImputUser(BaseModel):
 class UserValidationRequest(ImputUser):
     llave: str
 
+
 class ApiRequestModel(BaseModel):
     usuario_api: str
     clave_api: str

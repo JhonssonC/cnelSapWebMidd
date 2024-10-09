@@ -34,6 +34,7 @@ class ApiRequest(Base):
     __tablename__ = "PeticionesApiSapWeb"
     
     id = Column(Integer, primary_key=True, index=True)
+    usuario_id = Column(Integer, nullable=False)
     usuario_api = Column(String, nullable=False)
     clave_api = Column(String, nullable=False)
     endpoint = Column(String, nullable=False)

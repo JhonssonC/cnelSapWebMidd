@@ -1,7 +1,7 @@
 import os
 from fastapi import APIRouter, HTTPException
 from ..schemas import ApiRequestModel
-from ..utils import validar_llave, registrar_peticion
+from ..utils import validate_key, registrar_peticion
 import requests
 import ssl
 from urllib3 import PoolManager
@@ -48,12 +48,12 @@ HEADERS = {
 
 def middleware_get(api_request: ApiRequestModel, llave: str):
     try:
-        usuario_id = validar_llave(llave)
+        usuario_id = validate_key(llave)
         response = session.request("GET", api_request.endpoint, headers=HEADERS)
         status_api = "Success" if response.status_code == 200 else "Failed"
         
         # Registrar la petición
-        registrar_peticion(usuario_id, api_request.usuario_api, api_request.clave_api, api_request.endpoint, status_api)
+        registrar_peticion(usuario_id.id, api_request.usuario_api, api_request.clave_api, api_request.endpoint, status_api)
         
         
         return {"status": response.status_code, "data": response.json()}
