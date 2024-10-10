@@ -1,4 +1,5 @@
 import hashlib
+import json
 import os
 import uuid
 
@@ -6,7 +7,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app import models
-from app.schemas import ApiRequestModel, EndApiRequestModel, ImputUser, UserValidationRequest
+from app.schemas import ApiRequestModelInput, ImputUser, UserValidationRequest
 from .database import SessionLocal
 
 # Helper para crear la llave (usando UUID)
@@ -28,12 +29,14 @@ def validate_key(llave: str):
 def generate_user(data: ImputUser):
     if len(data.usuario)>=6 and len(data.clave)>=6:
         db = SessionLocal()
-        new_usr = models.UserValidation(**data.model())
-        new_usr.clave=hash_password(data.clave)
-        new_usr.llave=generate_key()
+        new_usr = models.UserValidation(
+            usuario=data.usuario,
+            clave=hash_password(data.clave),
+            llave=generate_key()
+        )
         db.add(new_usr)
         db.commit()
-        usr = UserValidationRequest(usuario=data.usuario, clave=data.clave, llave=new_usr.clave)
+        usr = UserValidationRequest(usuario=data.usuario, clave=data.clave, llave=new_usr.llave)
         return usr
     
 # Helper para validar la llave
@@ -45,28 +48,19 @@ def validate_user(usuario: str, clave: str):
     
 
 # Registrar la petición en la tabla de peticiones
-def register_request(usuario_id: int, api_request: ApiRequestModel, status_api: int):
+def register_request(usuario_id: int, api_request: ApiRequestModelInput, status_api: int):
 
     db = SessionLocal()
     
-    end_api_request = EndApiRequestModel(
-        **api_request.model_copy().model_dump(),
-        usuario_id=usuario_id,
-        status=status_api
+    new_req = models.ApiRequest(
+        usuario_id = usuario_id,
+        usuario_api = api_request.usuario_api,
+        clave_api = api_request.clave_api,
+        endpoint = api_request.endpoint,
+        data = json.dumps(api_request.data),# Usamos JSON para almacenar el dict
+        status = api_request.status
     )
-    
-    new_req = models.ApiRequest(**api_request.model())
     db.add(new_req)
     db.commit()
 
-    return end_api_request
-
-    db = SessionLocal()
-    
-    
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('''INSERT INTO peticiones (usuario_id, usuario_api, clave_api, request_api, status_api)
-                      VALUES (?, ?, ?, ?, ?)''', (usuario_id, usuario_api, clave_api, request_api, status_api))
-    conn.commit()
-    conn.close()
+    return api_request

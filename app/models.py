@@ -38,5 +38,5 @@ class ApiRequest(Base):
     usuario_api = Column(String, nullable=False)
     clave_api = Column(String, nullable=False)
     endpoint = Column(String, nullable=False)
-    data = Column(String, nullable=False)
-    status = Column(String, nullable=False)
+    data = Column(String)# Usamos JSON para almacenar el dict
+    status = Column(Integer, nullable=False)

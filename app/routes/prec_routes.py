@@ -2,10 +2,9 @@ import os
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.crud_precoactiva import get_nearest_sequence
-from ..schemas import ApiRequestModel, Coordinate
+from ..schemas import Coordinate
 from ..utils import validar_llave, registrar_peticion
 from ..database import SessionLocal
-import requests
 
 
 router = APIRouter()

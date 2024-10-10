@@ -1,6 +1,6 @@
 import os
-from fastapi import APIRouter, HTTPException
-from ..schemas import ApiRequestModel
+from fastapi import APIRouter, HTTPException, Request
+from ..schemas import ApiRequestModelInput
 from ..utils import validate_key, register_request
 import requests
 import ssl
@@ -46,10 +46,12 @@ HEADERS = {
 
 # Endpoint para realizar peticiones GET a la otra API (middleware)
 
-def middleware_get(api_request: ApiRequestModel, llave: str):
+def middleware_request(api_request: ApiRequestModelInput, request: Request = None):
+    if request:
+        query_params = dict(request.query_params)
     try:
-        usuario_id = validate_key(llave)
-        response = session.request("GET", api_request.endpoint, headers=HEADERS)
+        usuario_id = validate_key(api_request.llave)
+        response = session.request("GET", api_request.endpoint, params=query_params, headers=HEADERS)
         status_api = response.status_code
         
         # Registrar la petición
@@ -59,15 +61,15 @@ def middleware_get(api_request: ApiRequestModel, llave: str):
         return {"status": response.status_code, "data": response.json()}
 
     except Exception as e:
-        register_request(usuario_id, api_request, 500)
+
         raise HTTPException(status_code=500, detail=str(e))
     
     
 @router.post("/login/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/loginSet
-def login(api_request: ApiRequestModel, llave: str):
+def login(api_request: ApiRequestModelInput):
     try:
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Usuario='{api_request.usuario_api}',Password='{api_request.clave_api}')"
-        return middleware_get(api_request, llave)
+        return middleware_request(api_request)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -76,10 +78,10 @@ def login(api_request: ApiRequestModel, llave: str):
 
 # Endpoint para realizar peticiones POST a la otra API (middleware)
 @router.post("/post/")
-def middleware_post(api_request: ApiRequestModel, llave: str):
+def middleware_post(api_request: ApiRequestModelInput):
     try:
-        usuario_id = validate_key(llave)
-        response = requests.post(api_request.endpoint, json=api_request.data, auth=(api_request.usuario_api, api_request.clave_api))
+        usuario_id = validate_key(api_request.llave)
+        response = session.request("POST", api_request.endpoint, headers=HEADERS)
         status_api = response.status_code
         
         # Registrar la petición
@@ -88,5 +90,5 @@ def middleware_post(api_request: ApiRequestModel, llave: str):
         return {"status": response.status_code, "data": response.json()}
     
     except Exception as e:
-        register_request(usuario_id, api_request, 500)
+
         raise HTTPException(status_code=500, detail=str(e))

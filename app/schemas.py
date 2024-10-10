@@ -15,16 +15,18 @@ class ApiRequestModelBase(BaseModel):
     clave_api: str
     endpoint: str
     
-class ApiRequestModel(ApiRequestModelBase):
+class ApiRequestModelInput(ApiRequestModelBase):
+    llave: str
     data: dict = None
+
+class ApiRequestModel(ApiRequestModelBase):
     usuario_id: int
+    data: str
     status: int
     
-class ApiRequestModelSave(ApiRequestModelBase):
-    data: str
-    usuario_id: int
-    status: int
-
+    class Config:
+        orm_mode = True
+    
 # Esquema de Pydantic para la tabla de secuencias
 class SequenceBase(BaseModel):
     x: float

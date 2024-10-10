@@ -26,22 +26,3 @@ def regenerar_llave(data: ImputUser):
         return JSONResponse(status_code=404, content={'message': 'Usuario o clave incorrecta'})
     return JSONResponse(status_code=200, content={'key': n_key})
     
-    
-    # conn = get_db_connection()
-    # cursor = conn.cursor()
-    
-    # hashed_password = hash_password(data.clave)
-    # cursor.execute('SELECT * FROM usuarios WHERE usuario = ? AND clave = ?', 
-    #                (data.usuario, hashed_password))
-    # user = cursor.fetchone()
-    
-    # if user:
-    #     nueva_llave = generate_key()
-    #     cursor.execute('UPDATE usuarios SET llave = ? WHERE usuario = ? AND clave = ?', 
-    #                    (nueva_llave, data.usuario, hashed_password))
-    #     conn.commit()
-    #     conn.close()
-    #     return {"message": "Llave regenerada con éxito", "nueva_llave": nueva_llave}
-    # else:
-    #     conn.close()
-    #     raise HTTPException(status_code=401, detail="Usuario o clave incorrecta")
