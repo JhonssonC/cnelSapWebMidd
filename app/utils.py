@@ -46,6 +46,23 @@ def validate_user(usuario: str, clave: str):
     if user:
         return user
     
+# Helper para validar si existe el usuario
+def exists_user(usuario: str):
+    db = SessionLocal()
+    user = db.query(models.UserValidation).filter(models.UserValidation.usuario == usuario).first()
+    if user:
+        return user
+
+# Helper para regenerar llave
+def regenerate_key(usuario: str, clave: str):
+    db = SessionLocal()
+    user = db.query(models.UserValidation).filter(models.UserValidation.usuario == usuario, models.UserValidation.clave == hash_password(clave)).first()
+    if user:
+        nueva_llave= generate_key()
+        user.llave = nueva_llave
+        return {"usuario": usuario, "llave": nueva_llave}
+    
+    
 
 # Registrar la petición en la tabla de peticiones
 def register_request(usuario_id: int, api_request: ApiRequestModelInput, status_api: int):

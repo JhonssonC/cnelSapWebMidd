@@ -8,6 +8,10 @@ class ImputUser(BaseModel):
     
 class UserValidationRequest(ImputUser):
     llave: str
+    superuser: Optional[bool] = False
+    
+    class Config:
+        from_attributes = True
 
 # Esquema de Pydantic para la tabla de ApiRequestModel
 class ApiRequestModelBase(BaseModel):
@@ -25,7 +29,7 @@ class ApiRequestModel(ApiRequestModelBase):
     status: int
     
     class Config:
-        orm_mode = True
+        from_attributes = True
     
 # Esquema de Pydantic para la tabla de secuencias
 class SequenceBase(BaseModel):
@@ -42,7 +46,7 @@ class Sequence(SequenceBase):
     id: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 # Esquema de Pydantic para la tabla de tramitaciones
 class TramitacionBase(BaseModel):
@@ -59,7 +63,7 @@ class Tramitacion(TramitacionBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         
         
         

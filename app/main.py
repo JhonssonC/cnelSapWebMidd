@@ -1,14 +1,15 @@
 from fastapi import FastAPI
 
-from app.routes import prec_routes
-from .database import init_db
-from .routes import auth_routes, api_routes
+from app.routes import prec_routes, auth_routes, api_routes
+from .database import create_db_and_tables
 
 # Crear la aplicación de FastAPI
 app = FastAPI()
 
-# Inicializar la base de datos
-init_db()
+@app.on_event("startup")
+def startup():
+    create_db_and_tables()
+
 
 # Incluir las rutas de autenticación y API
 app.include_router(auth_routes.router, prefix="/auth")

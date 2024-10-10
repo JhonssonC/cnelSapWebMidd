@@ -29,6 +29,7 @@ class UserValidation(Base):
     usuario= Column(String, nullable=False)
     clave= Column(String, nullable=False)
     llave= Column(String, nullable=False)
+    superuser= Column(Boolean, nullable=False, default=False)
 
 class ApiRequest(Base):
     __tablename__ = "PeticionesApiSapWeb"
