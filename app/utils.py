@@ -51,16 +51,17 @@ def exists_user(usuario: str):
     db = SessionLocal()
     user = db.query(models.UserValidation).filter(models.UserValidation.usuario == usuario).first()
     if user:
-        return user
+        return True
+    return False
 
 # Helper para regenerar llave
-def regenerate_key(usuario: str, clave: str):
+def regenerate_key(data: ImputUser):
     db = SessionLocal()
-    user = db.query(models.UserValidation).filter(models.UserValidation.usuario == usuario, models.UserValidation.clave == hash_password(clave)).first()
+    user = db.query(models.UserValidation).filter(models.UserValidation.usuario == data.usuario, models.UserValidation.clave == hash_password(data.clave)).first()
     if user:
         nueva_llave= generate_key()
         user.llave = nueva_llave
-        return {"usuario": usuario, "llave": nueva_llave}
+        return {"usuario": data.usuario, "llave": nueva_llave}
     
     
 

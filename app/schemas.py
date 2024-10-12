@@ -9,6 +9,7 @@ class ImputUser(BaseModel):
 class UserValidationRequest(ImputUser):
     llave: str
     superuser: Optional[bool] = False
+    habilitado: Optional[bool] = False
     
     class Config:
         from_attributes = True

@@ -3,8 +3,6 @@ from fastapi import APIRouter, HTTPException, Request
 from ..schemas import ApiRequestModelInput
 from ..utils import validate_key, register_request
 import requests
-import ssl
-from urllib3 import PoolManager
 import urllib3
 from urllib3.util import create_urllib3_context
 from dotenv import load_dotenv

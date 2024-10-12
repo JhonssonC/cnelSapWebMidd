@@ -1,9 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
-
-from app.models import UserValidation
 from ..schemas import ImputUser
-from ..utils import exists_user, hash_password, validate_user, generate_user
+from ..utils import exists_user, validate_user, generate_user, regenerate_key
 
 
 router = APIRouter()
@@ -25,8 +23,11 @@ def registrar_usuario(data: ImputUser):
 @router.post("/regenerar/")
 def regenerar_llave(data: ImputUser):
 
-    n_key = validate_user(data)
-    if not n_key:
+    usr_valid = validate_user(data)
+    if not usr_valid:
         return JSONResponse(status_code=404, content={'message': 'Usuario o clave incorrecta'})
-    return JSONResponse(status_code=200, content={'key': n_key})
+    reg_key = regenerate_key(data)
+    if not regenerate_key:
+        return JSONResponse(status_code=400, content={'message': 'No se pudo generar llave'})
+    return JSONResponse(status_code=200, content={'new key': reg_key})
     
