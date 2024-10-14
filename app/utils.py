@@ -1,14 +1,31 @@
+import base64
 import hashlib
 import json
 import os
 import uuid
-
-from sqlalchemy import func
-from sqlalchemy.orm import Session
-
 from app import models
 from app.schemas import ApiRequestModelInput, ImputUser, UserValidationRequest
 from .database import SessionLocal
+
+
+#Helper de codificacion de contraseña - Sap
+def encode(p):
+    
+    def do_modifica_char(str):
+        if '=' in str:
+            str = str.replace('=', '¬')
+        if '+' in str:
+            str = str.replace('+', '¥')
+        if '/' in str:
+            str = str.replace('/', '†')
+        return str
+    
+    dataBytes = p.encode("utf-8")
+    strb64 = str(base64.b64encode(dataBytes))
+    toenconded = strb64[2:len(strb64)-1]
+    encoded = do_modifica_char(toenconded)
+    print('Contraseña codificada:', encoded)
+    return encoded
 
 # Helper para crear la llave (usando UUID)
 def generate_key():
@@ -76,7 +93,7 @@ def register_request(usuario_id: int, api_request: ApiRequestModelInput, status_
         clave_api = api_request.clave_api,
         endpoint = api_request.endpoint,
         data = json.dumps(api_request.data),# Usamos JSON para almacenar el dict
-        status = api_request.status
+        status = status_api
     )
     db.add(new_req)
     db.commit()

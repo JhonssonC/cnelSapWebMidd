@@ -1,7 +1,7 @@
 import os
 from fastapi import APIRouter, HTTPException, Request
 from ..schemas import ApiRequestModelInput
-from ..utils import validate_key, register_request
+from ..utils import validate_key, register_request, encode
 import requests
 import urllib3
 from urllib3.util import create_urllib3_context
@@ -45,6 +45,7 @@ HEADERS = {
 # Endpoint para realizar peticiones GET a la otra API (middleware)
 
 def middleware_request(api_request: ApiRequestModelInput, request: Request = None):
+    query_params={}
     if request:
         query_params = dict(request.query_params)
     try:
@@ -66,7 +67,7 @@ def middleware_request(api_request: ApiRequestModelInput, request: Request = Non
 @router.post("/login/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/loginSet
 def login(api_request: ApiRequestModelInput):
     try:
-        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Usuario='{api_request.usuario_api}',Password='{api_request.clave_api}')"
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Usuario='{api_request.usuario_api}',Password='{encode(api_request.clave_api)}')"
         return middleware_request(api_request)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
