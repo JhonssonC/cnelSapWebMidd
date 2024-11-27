@@ -1,16 +1,17 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from ..schemas import ImputUser
 from ..utils import exists_user, validate_user, generate_user, regenerate_key
-
+from sqlalchemy.orm import Session
+from app.database import get_db
 
 router = APIRouter()
 
 # Endpoint para registrar un nuevo usuario
 @router.post("/registrar/")
-def registrar_usuario(data: ImputUser):
-    if not exists_user(data.usuario):
-        usr = generate_user(data)
+def registrar_usuario(data: ImputUser , db: Session = Depends(get_db)):
+    if not exists_user(data.usuario, db):
+        usr = generate_user(data, db)
         if not usr:
             return JSONResponse(status_code=404, content={'message': 'No se pudo generar el Usuario'})
         print('Usuario Creado', usr)
@@ -21,9 +22,9 @@ def registrar_usuario(data: ImputUser):
     
 # Endpoint para regenerar la llave
 @router.post("/regenerar/")
-def regenerar_llave(data: ImputUser):
+def regenerar_llave(data: ImputUser , db: Session = Depends(get_db)):
 
-    usr_valid = validate_user(data)
+    usr_valid = validate_user(data.usuario, data.clave, db)
     if not usr_valid:
         return JSONResponse(status_code=404, content={'message': 'Usuario o clave incorrecta'})
     reg_key = regenerate_key(data)
