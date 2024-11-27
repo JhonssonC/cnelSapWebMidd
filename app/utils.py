@@ -5,7 +5,7 @@ import os
 import uuid
 from app import models
 from app.schemas import ApiRequestModelInput, ImputUser, UserValidationRequest
-from .database import SessionLocal
+from sqlalchemy.orm import Session
 
 
 #Helper de codificacion de contraseña - Sap
@@ -36,16 +36,17 @@ def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode()).hexdigest()
 
 # Helper para validar la llave
-def validate_key(llave: str):
-    db = SessionLocal()
+def validate_key(llave: str, db: Session):
+    
     user = db.query(models.UserValidation).filter(models.UserValidation.llave == llave).first()
+    print(user.usuario)
     if user:
         return user
 
 # Helper para guardar un Cliente Nuevo
-def generate_user(data: ImputUser):
+def generate_user(data: ImputUser, db: Session):
     if len(data.usuario)>=6 and len(data.clave)>=6:
-        db = SessionLocal()
+        
         new_usr = models.UserValidation(
             usuario=data.usuario,
             clave=hash_password(data.clave),
@@ -57,23 +58,23 @@ def generate_user(data: ImputUser):
         return usr
     
 # Helper para validar la llave
-def validate_user(usuario: str, clave: str):
-    db = SessionLocal()
+def validate_user(usuario: str, clave: str, db: Session):
+    
     user = db.query(models.UserValidation).filter(models.UserValidation.usuario == usuario, models.UserValidation.clave == hash_password(clave)).first()
     if user:
         return user
     
 # Helper para validar si existe el usuario
-def exists_user(usuario: str):
-    db = SessionLocal()
+def exists_user(usuario: str, db: Session):
+    
     user = db.query(models.UserValidation).filter(models.UserValidation.usuario == usuario).first()
     if user:
         return True
     return False
 
 # Helper para regenerar llave
-def regenerate_key(data: ImputUser):
-    db = SessionLocal()
+def regenerate_key(data: ImputUser, db: Session):
+    
     user = db.query(models.UserValidation).filter(models.UserValidation.usuario == data.usuario, models.UserValidation.clave == hash_password(data.clave)).first()
     if user:
         nueva_llave= generate_key()
@@ -83,9 +84,7 @@ def regenerate_key(data: ImputUser):
     
 
 # Registrar la petición en la tabla de peticiones
-def register_request(usuario_id: int, api_request: ApiRequestModelInput, status_api: int):
-
-    db = SessionLocal()
+def register_request(usuario_id: int, api_request: ApiRequestModelInput, status_api: int, db: Session):
     
     new_req = models.ApiRequest(
         usuario_id = usuario_id,

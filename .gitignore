@@ -1,3 +1,6 @@
 database.db
+__pycache__/*.pyc
 app/__pycache__/*
 app/routes/__pycache__/*
+app/__pycache__/*.pyc
+app/routes/__pycache__/*.pyc

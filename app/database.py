@@ -1,20 +1,26 @@
+from contextlib import contextmanager
 import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# from dotenv import load_dotenv
-# load_dotenv()
-# TURSO_DATABASE_URL = os.getenv("TURSO_DATABASE_URL")
-# TURSO_AUTH_TOKEN = os.getenv("TURSO_AUTH_TOKEN")
-# dbUrl = f"sqlite+{TURSO_DATABASE_URL}/?authToken={TURSO_AUTH_TOKEN}&secure=true"
+load_dotenv()
+TURSO_DATABASE_URL = os.getenv("TURSO_DATABASE_URL")
+TURSO_AUTH_TOKEN = os.getenv("TURSO_AUTH_TOKEN")
+dbUrl = f"sqlite+{TURSO_DATABASE_URL}/?authToken={TURSO_AUTH_TOKEN}&secure=true"
 
-dbUrl = 'sqlite:///database.db'
+#dbUrl = 'sqlite:///database.db'
 
-engine = create_engine(dbUrl, connect_args={'check_same_thread': False}, echo=True)
+# Crea el motor de la base de datos
+engine = create_engine(dbUrl, connect_args={"check_same_thread": False})
+
+# Crea una fábrica de sesiones sincrónicas
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 Base = declarative_base()
+
 
 def create_db_and_tables():
     Base.metadata.create_all(bind=engine)
@@ -42,3 +48,11 @@ def init_db():
                 conn.commit()
     else:
         print(f"El archivo {SQL_FILE_PATH} no existe.")
+        
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

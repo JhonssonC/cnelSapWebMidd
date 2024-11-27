@@ -1,5 +1,7 @@
 import os
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
+from sqlalchemy.orm import Session
+from app.database import get_db
 from ..schemas import ApiRequestModelInput
 from ..utils import validate_key, register_request, encode
 import requests
@@ -44,7 +46,7 @@ HEADERS = {
 
 # Endpoint para realizar peticiones GET a la otra API (middleware)
 
-def middleware_request(api_request: ApiRequestModelInput, request: Request = None):
+def middleware_request(api_request: ApiRequestModelInput, db: Session, request: Request = None):
     query_params={}
     if request:
         query_params = dict(request.query_params)
@@ -54,7 +56,7 @@ def middleware_request(api_request: ApiRequestModelInput, request: Request = Non
         status_api = response.status_code
         
         # Registrar la petición
-        register_request(usuario_id.id, api_request, status_api)
+        register_request(usuario_id.id, api_request, status_api, db)
         
         
         return {"status": response.status_code, "data": response.json()}
@@ -65,26 +67,32 @@ def middleware_request(api_request: ApiRequestModelInput, request: Request = Non
     
     
 @router.post("/login/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/loginSet
-def login(api_request: ApiRequestModelInput):
+def login(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Usuario='{api_request.usuario_api}',Password='{encode(api_request.clave_api)}')"
-        return middleware_request(api_request)
+        return middleware_request(api_request, db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-    
+@router.post("/order/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
+def order(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Aufnr='{api_request.data.orden}',Clase='{api_request.data.clase}',Usuario='{api_request.usuario_api}',Password='{encode(api_request.clave_api)}')"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
 
 # Endpoint para realizar peticiones POST a la otra API (middleware)
 @router.post("/post/")
-def middleware_post(api_request: ApiRequestModelInput):
+def middleware_post(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
-        usuario_id = validate_key(api_request.llave)
+        usuario_id = validate_key(api_request.llave, db)
         response = session.request("POST", api_request.endpoint, headers=HEADERS)
         status_api = response.status_code
         
         # Registrar la petición
-        register_request(usuario_id.id, api_request, status_api)
+        register_request(usuario_id.id, api_request, status_api, db)
         
         return {"status": response.status_code, "data": response.json()}
     
