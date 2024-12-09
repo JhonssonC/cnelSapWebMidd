@@ -1,0 +1,33 @@
+[
+    {
+        "usuario_api": "0705698470",
+        "clave_api": "051190AL",
+        "endpoint": "sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderopSet",
+        "llave": "4b0aaad5-2485-4a9b-97f1-991ab84f47bf",
+        "data": {"orden": "44269331"}
+    },
+    {
+        "status": 200,
+        "data": {
+          "d": {
+            "results": [
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderopSet(Aufnr='000044269331',Password='',Usuario='',Lifnr='1000001435')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderopSet(Aufnr='000044269331',Password='',Usuario='',Lifnr='1000001435')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.orderop"
+                },
+                "Aufnr": "000044269331",
+                "Password": "",
+                "Usuario": "",
+                "PasswordRet": "",
+                "UsuarioRet": "",
+                "Lifnr": "1000001435",
+                "Konnr": "4600001307",
+                "Ktpnr": "00010"
+              }
+            ]
+          }
+        }
+    }
+]

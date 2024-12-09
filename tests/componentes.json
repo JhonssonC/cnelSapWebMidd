@@ -1,0 +1,90 @@
+[
+    {
+        "usuario_api": "0705698470",
+        "clave_api": "051190AL",
+        "endpoint": "sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/ordercoSet",
+        "llave": "4b0aaad5-2485-4a9b-97f1-991ab84f47bf",
+        "data": {"orden": "44264647"}
+    },
+    {
+        "status": 200,
+        "data": {
+          "d": {
+            "results": [
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/ordercoSet(Aufnr='000044264647',Password='',Usuario='',Posnr='0010')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/ordercoSet(Aufnr='000044264647',Password='',Usuario='',Posnr='0010')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.orderco"
+                },
+                "Aufnr": "000044264647",
+                "Password": "",
+                "Usuario": "",
+                "PasswordRet": "",
+                "UsuarioRet": "",
+                "Posnr": "0010",
+                "Matnr": "600000598",
+                "Matxt": "ElectroniLCD-Dir-Bor-Activa-2F3H-100A RF",
+                "Menge": "1.000",
+                "Einheit": "C/U",
+                "Postp": "L",
+                "Ptext": "Posición de almacén",
+                "Lgort": "",
+                "Werks": "1008",
+                "SobkzD": "",
+                "Vornr": "0010",
+                "Charg": "NUEVO-MNB"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/ordercoSet(Aufnr='000044264647',Password='',Usuario='',Posnr='0020')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/ordercoSet(Aufnr='000044264647',Password='',Usuario='',Posnr='0020')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.orderco"
+                },
+                "Aufnr": "000044264647",
+                "Password": "",
+                "Usuario": "",
+                "PasswordRet": "",
+                "UsuarioRet": "",
+                "Posnr": "0020",
+                "Matnr": "650000004",
+                "Matxt": "Sello-policarbonato_blanco",
+                "Menge": "1.000",
+                "Einheit": "C/U",
+                "Postp": "L",
+                "Ptext": "Posición de almacén",
+                "Lgort": "",
+                "Werks": "1008",
+                "SobkzD": "",
+                "Vornr": "0010",
+                "Charg": ""
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/ordercoSet(Aufnr='000044264647',Password='',Usuario='',Posnr='0030')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/ordercoSet(Aufnr='000044264647',Password='',Usuario='',Posnr='0030')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.orderco"
+                },
+                "Aufnr": "000044264647",
+                "Password": "",
+                "Usuario": "",
+                "PasswordRet": "",
+                "UsuarioRet": "",
+                "Posnr": "0030",
+                "Matnr": "600000394",
+                "Matxt": "Caja de polica anhur monofa c/tap segur",
+                "Menge": "1.000",
+                "Einheit": "C/U",
+                "Postp": "L",
+                "Ptext": "Posición de almacén",
+                "Lgort": "",
+                "Werks": "1008",
+                "SobkzD": "",
+                "Vornr": "0010",
+                "Charg": ""
+              }
+            ]
+          }
+        }
+    }
+]

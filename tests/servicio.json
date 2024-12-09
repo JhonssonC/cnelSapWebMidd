@@ -1,0 +1,81 @@
+[
+    {
+        "usuario_api": "0705698470",
+        "clave_api": "051190AL",
+        "endpoint": "sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderserSet",
+        "llave": "4b0aaad5-2485-4a9b-97f1-991ab84f47bf",
+        "data": {"orden": "44269331"}
+    },
+    {
+        "status": 200,
+        "data": {
+            "d": {
+            "results": [
+                {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderserSet(Aufnr='000044269331',Password='',Usuario='',Extrow='10')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderserSet(Aufnr='000044269331',Password='',Usuario='',Extrow='10')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.orderser"
+                },
+                "Aufnr": "000044269331",
+                "Password": "",
+                "Usuario": "",
+                "Agreement": "",
+                "AgmtItem": "",
+                "PasswordRet": "",
+                "UsuarioRet": "",
+                "Extrow": "10",
+                "Srvpos": "3001476",
+                "Ktext1": "CAMBIO S/M (C/P+MED+BREA+ACOM+KIT) RURAL",
+                "Menge": "1.0000",
+                "Meins": "C/U",
+                "Tbtwr": "18.640",
+                "Waers": "USD"
+                },
+                {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderserSet(Aufnr='000044269331',Password='',Usuario='',Extrow='20')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderserSet(Aufnr='000044269331',Password='',Usuario='',Extrow='20')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.orderser"
+                },
+                "Aufnr": "000044269331",
+                "Password": "",
+                "Usuario": "",
+                "Agreement": "",
+                "AgmtItem": "",
+                "PasswordRet": "",
+                "UsuarioRet": "",
+                "Extrow": "20",
+                "Srvpos": "3001497",
+                "Ktext1": "INGRESO DE INFORMACION AL SIST COMERCIAL",
+                "Menge": "1.0000",
+                "Meins": "C/U",
+                "Tbtwr": "0.590",
+                "Waers": "USD"
+                },
+                {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderserSet(Aufnr='000044269331',Password='',Usuario='',Extrow='30')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderserSet(Aufnr='000044269331',Password='',Usuario='',Extrow='30')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.orderser"
+                },
+                "Aufnr": "000044269331",
+                "Password": "",
+                "Usuario": "",
+                "Agreement": "",
+                "AgmtItem": "",
+                "PasswordRet": "",
+                "UsuarioRet": "",
+                "Extrow": "30",
+                "Srvpos": "3001498",
+                "Ktext1": "INGRESO DE INFORMACION AL SISTEMA GIS",
+                "Menge": "1.0000",
+                "Meins": "C/U",
+                "Tbtwr": "0.670",
+                "Waers": "USD"
+                }
+            ]
+            }
+        }
+    }
+]
