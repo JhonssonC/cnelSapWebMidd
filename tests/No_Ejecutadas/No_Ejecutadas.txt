@@ -1,0 +1,732 @@
+codigo grupo
+    Req:
+        https://WMWEBCON:Q1p0w2o9@sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet?$skip=0&$top=3&$filter=IAuart%20eq%20%27NLEC%27
+        $skip: 0
+        $top: 3
+        $filter: IAuart eq 'NLEC'
+    Response:
+        {
+            "d": {
+                "results": [
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='EJECUTSN')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='EJECUTSN')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmgrp"
+                        },
+                        "IAuart": "NLEC",
+                        "Codegruppe": "EJECUTSN",
+                        "Kurztext": "EJECUTADA SIN NOVEDAD"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='NOEJECUT')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='NOEJECUT')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmgrp"
+                        },
+                        "IAuart": "NLEC",
+                        "Codegruppe": "NOEJECUT",
+                        "Kurztext": "NO EJECUTADA PARA CIERRE DE ORDEN"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='NOEJEREP')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='NOEJEREP')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmgrp"
+                        },
+                        "IAuart": "NLEC",
+                        "Codegruppe": "NOEJEREP",
+                        "Kurztext": "NO EJECUTADA PARA REPLANIFICAR"
+                    }
+                ]
+            }
+        }
+
+observacion
+    Solo Cargar el texto de la observacion
+
+
+codigo cierre
+    Req:
+        https://WMWEBCON:Q1p0w2o9@sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet?$skip=0&$top=13&$filter=IAuart%20eq%20%27NLEC%27%20and%20Codegruppe%20eq%20%27NOEJECUT%27
+        $skip: 0
+        $top: 13
+        $filter: IAuart eq 'NLEC' and Codegruppe eq 'NOEJECUT'
+    Response:
+        {
+            "d": {
+                "results": [
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE01')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE01')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE01",
+                        "Kurztext": "SE REQUIERE NUEVA RECEPCION DE TABLERO"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE02')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE02')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE02",
+                        "Kurztext": "NO DAN RAZON DEL SOLICITANTE"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE03')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE03')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE03",
+                        "Kurztext": "DIRECCIÓN INCOMPLETA O ERRADA"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE04')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE04')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE04",
+                        "Kurztext": "NO PERMITEN REALIZAR EL TRABAJO"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE05')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE05')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE05",
+                        "Kurztext": "TABLERO O CAJA EN MAL ESTADO"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE06')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE06')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE06",
+                        "Kurztext": "TARIFA MAL APLICADA"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE08')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE08')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE08",
+                        "Kurztext": "FALTA OBRAS CIVILES"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE09')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE09')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE09",
+                        "Kurztext": "NO ES NECESARIO CAMBIO DE MEDIDOR"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE10')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE10')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE10",
+                        "Kurztext": "NO ES NECESARIO REUBICACION DE MEDIDOR"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE11')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE11')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE11",
+                        "Kurztext": "NO ES NECESARIO CAMBIO DE ACOMETIDA"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE12')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE12')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE12",
+                        "Kurztext": "MEDIDOR UBICADO CORRECTAMENTE"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE13')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE13')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE13",
+                        "Kurztext": "DOMICILIO CERRADO - ABANDONADO"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE14')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE14')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                        },
+                        "Codegruppe": "NOEJECUT",
+                        "IAuart": "NLEC",
+                        "Code": "NE14",
+                        "Kurztext": "NO ES NECESSARIO CAMBIO DE TARIFA"
+                    }
+                ]
+            }
+        }
+
+responsables
+    Trasladar:
+        Fecha
+        Hora Inicio
+        Hora Fin
+
+operaciones
+    Req-Response:
+        1. (interesa el Lifnr)
+            https://WMWEBCON:Q1p0w2o9@sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet?$filter=Aufnr%20eq%20%27000044337229%27%20and%20Clase%20eq%20%27NLEC%27%20and%20Usuario%20eq%20%270705698470%27%20and%20Password%20eq%20%27MDUxMTkwQUw%C2%AC%27&$expand=NavMatRet,NavDanEqu,NavCenso,NavSellos,NavCompo,NavOpera,NavServi
+            $filter: Aufnr eq '000044337229' and Clase eq 'NLEC' and Usuario eq '0705698470' and Password eq 'MDUxMTkwQUw¬'
+            $expand: NavMatRet,NavDanEqu,NavCenso,NavSellos,NavCompo,NavOpera,NavServi
+
+            ver: orderSet(expand).json
+            
+        2.
+            https://WMWEBCON:Q1p0w2o9@sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet?$skip=0&$top=2&$filter=Searchhelp%20eq%20%27OUTLL%27%20and%20Werks%20eq%20%271008%27%20and%20Lifnr%20eq%20%271000001435%27
+            $skip: 0
+            $top: 2
+            $filter: Searchhelp eq 'OUTLL' and Werks eq '1008' and Lifnr eq '1000001435'
+
+            {
+                "d": {
+                    "results": [
+                        {
+                            "__metadata": {
+                                "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet('4600001307')",
+                                "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet('4600001307')",
+                                "type": "ZWMGS_ORDER_GEST_SRV.contrato"
+                            },
+                            "Searchhelp": "",
+                            "Werks": "1008",
+                            "Lifnr": "",
+                            "Ebeln": "4600001307",
+                            "Txz01": "CONTRATO Nro. 249-2022"
+                        },
+                        {
+                            "__metadata": {
+                                "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet('4600001330')",
+                                "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet('4600001330')",
+                                "type": "ZWMGS_ORDER_GEST_SRV.contrato"
+                            },
+                            "Searchhelp": "",
+                            "Werks": "1008",
+                            "Lifnr": "",
+                            "Ebeln": "4600001330",
+                            "Txz01": "CONTRATO Nro. 059-2023"
+                        }
+                    ]
+                }
+            }
+
+        3.
+            https://WMWEBCON:Q1p0w2o9@sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/posContSet?$skip=0&$top=1&$filter=Searchhelp%20eq%20%27OUTLL%27%20and%20Werks%20eq%20%271008%27%20and%20Lifnr%20eq%20%271000001435%27%20and%20Ebeln%20eq%20%274600001307%27
+            $skip: 0
+            $top: 1
+            $filter: Searchhelp eq 'OUTLL' and Werks eq '1008' and Lifnr eq '1000001435' and Ebeln eq '4600001307'
+
+            {
+                "d": {
+                    "results": [
+                        {
+                            "__metadata": {
+                                "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/posContSet('00010')",
+                                "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/posContSet('00010')",
+                                "type": "ZWMGS_ORDER_GEST_SRV.posCont"
+                            },
+                            "Searchhelp": "",
+                            "Werks": "1008",
+                            "Lifnr": "",
+                            "Ebeln": "4600001307",
+                            "Ebelp": "00010",
+                            "Txz01": "CONTRATO Nro. 249-2022"
+                        }
+                    ]
+                }
+            }
+
+
+
+servicios (3001444, 3001497)
+    Req: ( Ebeln  viene de contratoSet, Ebelp viene de posContSet )
+        https://WMWEBCON:Q1p0w2o9@sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet?$skip=0&$top=64&$filter=Ebeln%20eq%20%274600001307%27%20and%20Ebelp%20eq%20%2710%27
+        $skip: 0
+        $top: 64
+        $filter: Ebeln eq '4600001307' and Ebelp eq '10'
+    Response:
+        ver: rubros.json
+
+
+guardar
+    Req (post):
+        https://WMWEBCON:Q1p0w2o9@sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet
+        Payload
+            ver: payload.json
+    Response:
+        {
+            "d": {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet(Aufnr='',Pascons='',Usrcons='')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet(Aufnr='',Pascons='',Usrcons='')",
+                    "type": "ZWMGS_ORDEN_MOD_SRV_02.ordenCab"
+                },
+                "AccionMedidor": "",
+                "Aufnr": "",
+                "Building": "",
+                "CalAcom": "",
+                "CalAcomRet": "",
+                "CargaFlucVer": "0.00",
+                "CargaNormVer": "0.00",
+                "CargaProt": "",
+                "CasTab": "",
+                "CircInstClte": "",
+                "City1": "",
+                "City2": "",
+                "ClaseRed": "",
+                "ConstTab": "",
+                "Country": "",
+                "CredMesplazoCe": "",
+                "DemAcom": "0.00",
+                "DemMaxTaraE": "",
+                "DemMaxTaraI": "",
+                "DemMaxTaraR": "",
+                "DemMaxTarbE": "",
+                "DemMaxTarbI": "",
+                "DemMaxTarbR": "",
+                "DemMaxTarcE": "",
+                "DemMaxTarcI": "",
+                "DemMaxTarcR": "",
+                "DemMaxTardE": "",
+                "DemMaxTardI": "",
+                "DemMaxTardR": "",
+                "DenTab": "",
+                "EstInstInt": "",
+                "FactDiver": "0.000",
+                "FasesAcom": "",
+                "FasesMed": "",
+                "FecEjecTrab": "",
+                "FecFinInsCir": "",
+                "FecIniInsCir": "",
+                "FecRestSrv": "",
+                "Floor": "",
+                "GridLevel": "",
+                "GridName": "",
+                "HomeCity": "",
+                "HoraFinTrab": "",
+                "HoraIniTrab": "",
+                "HorRestSrv": "",
+                "HouseNum1": "",
+                "HouseNum2": "",
+                "LecEnerActE": "",
+                "LecEnerActI": "",
+                "LecEnerActR": "",
+                "LecEnerActTaraE": "",
+                "LecEnerActTaraI": "",
+                "LecEnerActTaraR": "",
+                "LecEnerActTarbE": "",
+                "LecEnerActTarbI": "",
+                "LecEnerActTarbR": "",
+                "LecEnerActTarcE": "",
+                "LecEnerActTarcI": "",
+                "LecEnerActTarcR": "",
+                "LecEnerActTardE": "",
+                "LecEnerActTardI": "",
+                "LecEnerActTardR": "",
+                "LecEnerReaE": "",
+                "LecEnerReaI": "",
+                "LecEnerReaR": "",
+                "Location": "",
+                "LongAcom": "0.00",
+                "LongAcomRet": "0.000",
+                "LongFachada": "0.00",
+                "LongitudCe": "0.000",
+                "MarcaCa": "",
+                "MarcaCo": "",
+                "MatAcom": "",
+                "MediAnt": "",
+                "MediPost": "",
+                "ModeloCa": "",
+                "ModeloCo": "",
+                "MontoCe": "0.000",
+                "NroEquipoE": "",
+                "NroEquipoI": "",
+                "NroEquipoR": "",
+                "NroProyecto": "",
+                "NroSerieCa": "",
+                "NroSerieCo": "",
+                "NroTab": "",
+                "Observaciones": "",
+                "OrigFina": "",
+                "Pascons": "",
+                "PerdTrans": "",
+                "PotenciaCa": "0",
+                "PotenciaCo": "0",
+                "ProteccionCe": "",
+                "ProtInd": "",
+                "ProtPpalTab": "",
+                "Qmcod": "",
+                "Qmgrp": "",
+                "Region": "",
+                "Remark": "",
+                "Roomnumber": "",
+                "SecFases": "",
+                "SecFasesAcom": "",
+                "Street": "",
+                "StrSuppl1": "",
+                "StrSuppl2": "",
+                "StrSuppl3": "",
+                "TabCentral": "",
+                "Tarverif": "",
+                "Tc1E": "",
+                "Tc1flagE": "",
+                "Tc1I": "",
+                "Tc1R": "",
+                "Tc2E": "",
+                "Tc2flagE": "",
+                "Tc2I": "",
+                "Tc2R": "",
+                "Tc3E": "",
+                "Tc3flagE": "",
+                "Tc3I": "",
+                "Tc3R": "",
+                "TipoAcom": "",
+                "TipoAcomRet": "",
+                "TipoConductorCe": "",
+                "TipoEquipoCa": "",
+                "TipoEquipoCo": "",
+                "TipoProt": "",
+                "TipoRed": "",
+                "TmixE": "",
+                "TmixflagE": "",
+                "TmixI": "",
+                "TmixR": "",
+                "TomacorienteCe": "",
+                "Tp1E": "",
+                "Tp1flagE": "",
+                "Tp1I": "",
+                "Tp1R": "",
+                "Tp2E": "",
+                "Tp2flagE": "",
+                "Tp2I": "",
+                "Tp2R": "",
+                "Tp3E": "",
+                "Tp3flagE": "",
+                "Tp3I": "",
+                "Tp3R": "",
+                "UbicMedidor": "",
+                "UbicTab": "",
+                "UpdCompo": "",
+                "UpdDanEqui": "",
+                "UpdMatret": "",
+                "UpdOper": "",
+                "UpdSellos": "",
+                "UpdServ": "",
+                "Usrcons": "",
+                "UsrstCcla": "",
+                "UsrstScla": "",
+                "Zposte": "",
+                "Zzlat": "",
+                "Zzlon": "",
+                "FecImpre": "",
+                "HoraImpre": "",
+                "ORDENSERV": null,
+                "ORDENOPER": null,
+                "ORDENCOMPO": null,
+                "ORDENSELLOS": null,
+                "ORDENMATRET": null,
+                "ORDENDANEQUI": null,
+                "ORDENCENSO": {
+                    "__deferred": {
+                        "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet(Aufnr='',Pascons='',Usrcons='')/ORDENCENSO"
+                    }
+                },
+                "ORDENCNR": null
+            }
+        }
+
+Estado de Usr. Con Num. Clasif. (noej)
+    Req:
+        https://WMWEBCON:Q1p0w2o9@sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/usrstcclaSet?$skip=0&$top=3
+        $skip: 0
+        $top: 3
+    Response:
+        {
+            "d": {
+                "results": [
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/usrstcclaSet('E0001')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/usrstcclaSet('E0001')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.usrstccla"
+                        },
+                        "UsrstCcla": "E0001",
+                        "UsrstCclaTxt": "REPR Orden reprogramada"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/usrstcclaSet('E0007')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/usrstcclaSet('E0007')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.usrstccla"
+                        },
+                        "UsrstCcla": "E0007",
+                        "UsrstCclaTxt": "FINA Orden finalizada"
+                    },
+                    {
+                        "__metadata": {
+                            "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/usrstcclaSet('E0014')",
+                            "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/usrstcclaSet('E0014')",
+                            "type": "ZWMGS_ORDER_GEST_SRV.usrstccla"
+                        },
+                        "UsrstCcla": "E0014",
+                        "UsrstCclaTxt": "NOEJ Orden No ejecutada"
+                    }
+                ]
+            }
+        }
+    
+
+guardar
+    Req (post):
+        https://WMWEBCON:Q1p0w2o9@sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet
+    Response:
+        {
+            "d": {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet(Aufnr='',Pascons='',Usrcons='')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet(Aufnr='',Pascons='',Usrcons='')",
+                    "type": "ZWMGS_ORDEN_MOD_SRV_02.ordenCab"
+                },
+                "AccionMedidor": "",
+                "Aufnr": "",
+                "Building": "",
+                "CalAcom": "",
+                "CalAcomRet": "",
+                "CargaFlucVer": "0.00",
+                "CargaNormVer": "0.00",
+                "CargaProt": "",
+                "CasTab": "",
+                "CircInstClte": "",
+                "City1": "",
+                "City2": "",
+                "ClaseRed": "",
+                "ConstTab": "",
+                "Country": "",
+                "CredMesplazoCe": "",
+                "DemAcom": "0.00",
+                "DemMaxTaraE": "",
+                "DemMaxTaraI": "",
+                "DemMaxTaraR": "",
+                "DemMaxTarbE": "",
+                "DemMaxTarbI": "",
+                "DemMaxTarbR": "",
+                "DemMaxTarcE": "",
+                "DemMaxTarcI": "",
+                "DemMaxTarcR": "",
+                "DemMaxTardE": "",
+                "DemMaxTardI": "",
+                "DemMaxTardR": "",
+                "DenTab": "",
+                "EstInstInt": "",
+                "FactDiver": "0.000",
+                "FasesAcom": "",
+                "FasesMed": "",
+                "FecEjecTrab": "",
+                "FecFinInsCir": "",
+                "FecIniInsCir": "",
+                "FecRestSrv": "",
+                "Floor": "",
+                "GridLevel": "",
+                "GridName": "",
+                "HomeCity": "",
+                "HoraFinTrab": "",
+                "HoraIniTrab": "",
+                "HorRestSrv": "",
+                "HouseNum1": "",
+                "HouseNum2": "",
+                "LecEnerActE": "",
+                "LecEnerActI": "",
+                "LecEnerActR": "",
+                "LecEnerActTaraE": "",
+                "LecEnerActTaraI": "",
+                "LecEnerActTaraR": "",
+                "LecEnerActTarbE": "",
+                "LecEnerActTarbI": "",
+                "LecEnerActTarbR": "",
+                "LecEnerActTarcE": "",
+                "LecEnerActTarcI": "",
+                "LecEnerActTarcR": "",
+                "LecEnerActTardE": "",
+                "LecEnerActTardI": "",
+                "LecEnerActTardR": "",
+                "LecEnerReaE": "",
+                "LecEnerReaI": "",
+                "LecEnerReaR": "",
+                "Location": "",
+                "LongAcom": "0.00",
+                "LongAcomRet": "0.000",
+                "LongFachada": "0.00",
+                "LongitudCe": "0.000",
+                "MarcaCa": "",
+                "MarcaCo": "",
+                "MatAcom": "",
+                "MediAnt": "",
+                "MediPost": "",
+                "ModeloCa": "",
+                "ModeloCo": "",
+                "MontoCe": "0.000",
+                "NroEquipoE": "",
+                "NroEquipoI": "",
+                "NroEquipoR": "",
+                "NroProyecto": "",
+                "NroSerieCa": "",
+                "NroSerieCo": "",
+                "NroTab": "",
+                "Observaciones": "",
+                "OrigFina": "",
+                "Pascons": "",
+                "PerdTrans": "",
+                "PotenciaCa": "0",
+                "PotenciaCo": "0",
+                "ProteccionCe": "",
+                "ProtInd": "",
+                "ProtPpalTab": "",
+                "Qmcod": "",
+                "Qmgrp": "",
+                "Region": "",
+                "Remark": "",
+                "Roomnumber": "",
+                "SecFases": "",
+                "SecFasesAcom": "",
+                "Street": "",
+                "StrSuppl1": "",
+                "StrSuppl2": "",
+                "StrSuppl3": "",
+                "TabCentral": "",
+                "Tarverif": "",
+                "Tc1E": "",
+                "Tc1flagE": "",
+                "Tc1I": "",
+                "Tc1R": "",
+                "Tc2E": "",
+                "Tc2flagE": "",
+                "Tc2I": "",
+                "Tc2R": "",
+                "Tc3E": "",
+                "Tc3flagE": "",
+                "Tc3I": "",
+                "Tc3R": "",
+                "TipoAcom": "",
+                "TipoAcomRet": "",
+                "TipoConductorCe": "",
+                "TipoEquipoCa": "",
+                "TipoEquipoCo": "",
+                "TipoProt": "",
+                "TipoRed": "",
+                "TmixE": "",
+                "TmixflagE": "",
+                "TmixI": "",
+                "TmixR": "",
+                "TomacorienteCe": "",
+                "Tp1E": "",
+                "Tp1flagE": "",
+                "Tp1I": "",
+                "Tp1R": "",
+                "Tp2E": "",
+                "Tp2flagE": "",
+                "Tp2I": "",
+                "Tp2R": "",
+                "Tp3E": "",
+                "Tp3flagE": "",
+                "Tp3I": "",
+                "Tp3R": "",
+                "UbicMedidor": "",
+                "UbicTab": "",
+                "UpdCompo": "",
+                "UpdDanEqui": "",
+                "UpdMatret": "",
+                "UpdOper": "",
+                "UpdSellos": "",
+                "UpdServ": "",
+                "Usrcons": "",
+                "UsrstCcla": "",
+                "UsrstScla": "",
+                "Zposte": "",
+                "Zzlat": "",
+                "Zzlon": "",
+                "FecImpre": "",
+                "HoraImpre": "",
+                "ORDENSERV": null,
+                "ORDENOPER": null,
+                "ORDENCOMPO": null,
+                "ORDENSELLOS": null,
+                "ORDENMATRET": null,
+                "ORDENDANEQUI": null,
+                "ORDENCENSO": {
+                    "__deferred": {
+                        "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet(Aufnr='',Pascons='',Usrcons='')/ORDENCENSO"
+                    }
+                },
+                "ORDENCNR": null
+            }
+        }
+
+cierretec
+    Req (post):
+        https://WMWEBCON:Q1p0w2o9@sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet
+        Payload:
+            {
+                "IAufnr":"000044337229",
+                "Pascons":"MDUxMTkwQUw¬",
+                "Usrcons":"0705698470"
+            }
+    Response:
+        {
+            "d": {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet(IAufnr='000044337229',Pascons='MDUxMTkwQUw%C2%AC',Usrcons='0705698470')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet(IAufnr='000044337229',Pascons='MDUxMTkwQUw%C2%AC',Usrcons='0705698470')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.cierreOrden"
+                },
+                "IAufnr": "000044337229",
+                "Pascons": "MDUxMTkwQUw¬",
+                "Usrcons": "0705698470",
+                "ESysStatus": "CTEC IMPR DMNV KKMP"
+            }
+        }
+    

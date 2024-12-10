@@ -1,0 +1,902 @@
+{
+    "d": {
+        "results": [
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002132')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002132')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3002132",
+                "Ktext1": "INSP+INST S/M (C/P-B/S+MED+KIT+ACO) -URB",
+                "Tbtwr": "13.12",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002133')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002133')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3002133",
+                "Ktext1": "INSP+INST S/M (C/P-B/S+MED+KIT+ACO) -RUR",
+                "Tbtwr": "15.15",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002134')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002134')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3002134",
+                "Ktext1": "INST S/M (C/P-B/S+MED+KIT+ACO) - URBANA",
+                "Tbtwr": "15.81",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002135')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002135')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3002135",
+                "Ktext1": "INST S/M (C/P-B/S+MED+KIT+ACO) - RURAL",
+                "Tbtwr": "16.16",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001556')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001556')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001556",
+                "Ktext1": "REUB S/M (C/P+MED+BREA+ACO+KIT) URBANA",
+                "Tbtwr": "17.67",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001555')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001555')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001555",
+                "Ktext1": "REUB S/M (C/P+MED+BREA+ACO+KIT) RURAL",
+                "Tbtwr": "22.78",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001477')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001477')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001477",
+                "Ktext1": "CAMBIO S/M (C/P+MED+BREA+ACOM+KIT) URBAN",
+                "Tbtwr": "13.01",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001476')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001476')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001476",
+                "Ktext1": "CAMBIO S/M (C/P+MED+BREA+ACOM+KIT) RURAL",
+                "Tbtwr": "18.64",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001480')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001480')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001480",
+                "Ktext1": "CAMBIO o INST ACOM A/H o MULT - RURAL",
+                "Tbtwr": "8.80",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001481')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001481')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001481",
+                "Ktext1": "CAMBIO o INST ACOM A/H o MULT - URBANA",
+                "Tbtwr": "10.09",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001927')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001927')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001927",
+                "Ktext1": "CAMBIO o INST ACOM SUBTERRANEA o BLINDAD",
+                "Tbtwr": "15.15",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3000674')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3000674')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3000674",
+                "Ktext1": "INST BASE SOCKET (4-5 T) Y MEDIDOR 1F",
+                "Tbtwr": "8.09",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001747')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001747')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001747",
+                "Ktext1": "CAMBIO BASE SOCKET (4-5 T) Y MEDIDOR",
+                "Tbtwr": "9.25",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3000631')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3000631')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3000631",
+                "Ktext1": "CAMBIO DE BASE SOCKET DE 4 Y 5 TERMINALE",
+                "Tbtwr": "5.56",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001928')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001928')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001928",
+                "Ktext1": "INST B/S 4-5T + MED Y ACO ANTIF o MULT",
+                "Tbtwr": "10.10",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001929')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001929')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001929",
+                "Ktext1": "INST B/S 4-5T + MED Y ACO SUBT o BLIND",
+                "Tbtwr": "10.09",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001930')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001930')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001930",
+                "Ktext1": "INST MED (B/S Y ACOM EXISTENTES)",
+                "Tbtwr": "8.47",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001931')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001931')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001931",
+                "Ktext1": "INST MED (B/S EXIST) Y ACOM ANTIF o MULT",
+                "Tbtwr": "8.80",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001932')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001932')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001932",
+                "Ktext1": "INST MED (B/S EXIST) Y ACOM SUBT o BLIND",
+                "Tbtwr": "12.11",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001473')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001473')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001473",
+                "Ktext1": "CAMBIO MEDIDOR (B/S Y ACOM EXISTENTES)",
+                "Tbtwr": "8.28",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001475')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001475')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001475",
+                "Ktext1": "CAMBIO MEDIDOR (C/P EXISTENTE) - URBANA",
+                "Tbtwr": "7.25",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001474')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001474')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001474",
+                "Ktext1": "CAMBIO MEDIDOR (C/P EXISTENTE) - RURAL",
+                "Tbtwr": "8.28",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001472')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001472')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001472",
+                "Ktext1": "CAMBIO MED (B/S) Y ACOM A/H o MULT URBAN",
+                "Tbtwr": "8.27",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001471')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001471')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001471",
+                "Ktext1": "CAMBIO MED (B/S) Y ACOM A/H o MULT RURAL",
+                "Tbtwr": "9.64",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001935')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001935')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001935",
+                "Ktext1": "RETIRO MED+ACO ANTIFRA O MULTIPL - URBAN",
+                "Tbtwr": "10.37",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001936')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001936')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001936",
+                "Ktext1": "RETIRO MED+ACO ANTIFRA O MULTIPL - RURAL",
+                "Tbtwr": "12.05",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001440')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001440')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001440",
+                "Ktext1": "RETIRO S/M (CAJA+MED+BREA+ACO) URBANA",
+                "Tbtwr": "10.87",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001441')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001441')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001441",
+                "Ktext1": "RETIRO S/M (CAJA+MED+BREA+ACO) RURAL",
+                "Tbtwr": "7.24",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3000177')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3000177')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3000177",
+                "Ktext1": "RETIRO DE MEDIDOR SECTOR URBANO",
+                "Tbtwr": "6.68",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3000176')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3000176')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3000176",
+                "Ktext1": "RETIRO DE MEDIDOR SECTOR RURAL",
+                "Tbtwr": "7.81",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001869')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001869')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001869",
+                "Ktext1": "RETIRO DE CAJA DE DISTRIBUCION - URBANA",
+                "Tbtwr": "5.12",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001940')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001940')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001940",
+                "Ktext1": "RETIRO DE CAJA DE DISTRIBUCION - RURAL",
+                "Tbtwr": "8.06",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001941')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001941')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001941",
+                "Ktext1": "RETIRO DE TUBO POSTE - URBANA",
+                "Tbtwr": "5.13",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001942')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001942')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001942",
+                "Ktext1": "RETIRO DE TUBO POSTE - RURAL",
+                "Tbtwr": "8.08",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001540')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001540')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001540",
+                "Ktext1": "RETIRO ACOMET ANTIFRAU O MULTIPL - URBAN",
+                "Tbtwr": "8.09",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001539')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001539')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001539",
+                "Ktext1": "RETIRO ACOMET ANTIFRAU O MULTIPL - RURAL",
+                "Tbtwr": "8.08",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001444')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001444')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001444",
+                "Ktext1": "LEVANT INF O INSP MEDIDORES (URBANA)",
+                "Tbtwr": "2.72",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001445')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001445')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001445",
+                "Ktext1": "LEVANT INF O INSP MEDIDORES (RURAL)",
+                "Tbtwr": "3.81",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001735')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001735')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001735",
+                "Ktext1": "CAMBIO o INST CONJUNTO CONECTOR - URBANA",
+                "Tbtwr": "2.02",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001736')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001736')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001736",
+                "Ktext1": "CAMBIO o INST CONJUNTO CONECTOR - RURAL",
+                "Tbtwr": "3.03",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001801')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001801')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001801",
+                "Ktext1": "CAMBIO FUSIBLES ACOMETIDA RED PR URBANO",
+                "Tbtwr": "4.43",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001802')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001802')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001802",
+                "Ktext1": "CAMBIO FUSIBLES ACOMETIDA RED PR RURAL",
+                "Tbtwr": "4.03",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001452')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001452')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001452",
+                "Ktext1": "INSTALACION KIT P/TIERRA a S/M - URBANA",
+                "Tbtwr": "4.14",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001453')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001453')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001453",
+                "Ktext1": "INSTALACION KIT P/TIERRA a S/M - RURAL",
+                "Tbtwr": "4.66",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001484')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001484')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001484",
+                "Ktext1": "CAMBIO o INST C/D EN FACHADA - URBANA",
+                "Tbtwr": "5.17",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001483')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001483')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001483",
+                "Ktext1": "CAMBIO o INST C/D EN FACHADA - RURAL",
+                "Tbtwr": "5.17",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001446')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001446')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001446",
+                "Ktext1": "CAMB O INST BREAKER (CAJA EXIST) URBANA",
+                "Tbtwr": "2.90",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001439')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001439')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001439",
+                "Ktext1": "CAMBIO O REUBICACION (CAJA EXIS) - RURAL",
+                "Tbtwr": "3.42",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001519')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001519')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001519",
+                "Ktext1": "INST TUBO GALV 2 1/2 o 3 - URBANA",
+                "Tbtwr": "12.42",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001517')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001517')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001517",
+                "Ktext1": "INST TUBO GALV 2 1/2 o 3 - RURAL",
+                "Tbtwr": "15.53",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001497')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001497')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001497",
+                "Ktext1": "INGRESO DE INFORMACION AL SIST COMERCIAL",
+                "Tbtwr": "0.59",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001498')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001498')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001498",
+                "Ktext1": "INGRESO DE INFORMACION AL SISTEMA GIS",
+                "Tbtwr": "0.67",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002136')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002136')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3002136",
+                "Ktext1": "ACTIVACION DE SERVICIO AMI",
+                "Tbtwr": "5.04",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002157')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002157')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3002157",
+                "Ktext1": "UNIDAD GUARD EMER DIA ORD (7-15)/(15-23)",
+                "Tbtwr": "96.03",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001946')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001946')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001946",
+                "Ktext1": "UNIDAD GUARD EMER FDS (07-15 Y/O 15-23)",
+                "Tbtwr": "92.50",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001947')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001947')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001947",
+                "Ktext1": "UNIDAD GUARD EMER FDS (23-07)",
+                "Tbtwr": "190.00",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001503')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001503')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001503",
+                "Ktext1": "INSTALACION KIT ACOM PREENSAM - URBANA",
+                "Tbtwr": "2.07",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001502')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001502')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001502",
+                "Ktext1": "INSTALACION KIT ACOM PREENSAM - RURAL",
+                "Tbtwr": "3.10",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001948')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001948')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001948",
+                "Ktext1": "INSTALACION PORTAFUSIBLES AEREO - URBANA",
+                "Tbtwr": "4.44",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001949')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001949')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001949",
+                "Ktext1": "INSTALACION PORTAFUSIBLES AEREO - RURAL",
+                "Tbtwr": "5.78",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001507')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001507')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001507",
+                "Ktext1": "INST MED C-A/H sin ACOM (PUENTEAD) URBAN",
+                "Tbtwr": "7.24",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001506')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3001506')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3001506",
+                "Ktext1": "INST MED C-A/H sin ACOM (PUENTEAD) RURAL",
+                "Tbtwr": "10.35",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002158')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002158')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3002158",
+                "Ktext1": "CAMBIO O INST CAJA POLICAR PROT - URBANA",
+                "Tbtwr": "7.25",
+                "Waers": "USD",
+                "Meins": "C/U"
+            },
+            {
+                "__metadata": {
+                    "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002159')",
+                    "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet('3002159')",
+                    "type": "ZWMGS_ORDER_GEST_SRV.numservice"
+                },
+                "Ebeln": "",
+                "Ebelp": "",
+                "Srvpos": "3002159",
+                "Ktext1": "CAMBIO O INST CAJA POLICAR PROT - RURAL",
+                "Tbtwr": "8.28",
+                "Waers": "USD",
+                "Meins": "C/U"
+            }
+        ]
+    }
+}
