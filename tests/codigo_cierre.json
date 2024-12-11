@@ -1,0 +1,164 @@
+[
+    {
+        "usuario_api": "0705698470",
+        "clave_api": "051190AL",
+        "endpoint": "sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet",
+        "llave": "4b0aaad5-2485-4a9b-97f1-991ab84f47bf",
+        "data": {
+          "clase": "NLEC",
+          "codigo_grupo": "NOEJECUT"
+        }
+    },
+    {
+        "status": 200,
+        "data": {
+          "d": {
+            "results": [
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE01')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE01')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE01",
+                "Kurztext": "SE REQUIERE NUEVA RECEPCION DE TABLERO"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE02')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE02')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE02",
+                "Kurztext": "NO DAN RAZON DEL SOLICITANTE"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE03')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE03')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE03",
+                "Kurztext": "DIRECCIÓN INCOMPLETA O ERRADA"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE04')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE04')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE04",
+                "Kurztext": "NO PERMITEN REALIZAR EL TRABAJO"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE05')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE05')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE05",
+                "Kurztext": "TABLERO O CAJA EN MAL ESTADO"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE06')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE06')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE06",
+                "Kurztext": "TARIFA MAL APLICADA"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE08')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE08')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE08",
+                "Kurztext": "FALTA OBRAS CIVILES"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE09')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE09')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE09",
+                "Kurztext": "NO ES NECESARIO CAMBIO DE MEDIDOR"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE10')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE10')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE10",
+                "Kurztext": "NO ES NECESARIO REUBICACION DE MEDIDOR"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE11')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE11')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE11",
+                "Kurztext": "NO ES NECESARIO CAMBIO DE ACOMETIDA"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE12')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE12')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE12",
+                "Kurztext": "MEDIDOR UBICADO CORRECTAMENTE"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE13')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE13')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE13",
+                "Kurztext": "DOMICILIO CERRADO - ABANDONADO"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE14')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet(Codegruppe='NOEJECUT',IAuart='NLEC',Code='NE14')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmcod"
+                },
+                "Codegruppe": "NOEJECUT",
+                "IAuart": "NLEC",
+                "Code": "NE14",
+                "Kurztext": "NO ES NECESSARIO CAMBIO DE TARIFA"
+              }
+            ]
+          }
+        }
+    }
+]

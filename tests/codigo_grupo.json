@@ -1,0 +1,48 @@
+[
+    {
+        "usuario_api": "0705698470",
+        "clave_api": "051190AL",
+        "endpoint": "sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet",
+        "llave": "4b0aaad5-2485-4a9b-97f1-991ab84f47bf",
+        "data": {"clase": "NLEC"}
+    },
+    {
+        "status": 200,
+        "data": {
+          "d": {
+            "results": [
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='EJECUTSN')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='EJECUTSN')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmgrp"
+                },
+                "IAuart": "NLEC",
+                "Codegruppe": "EJECUTSN",
+                "Kurztext": "EJECUTADA SIN NOVEDAD"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='NOEJECUT')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='NOEJECUT')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmgrp"
+                },
+                "IAuart": "NLEC",
+                "Codegruppe": "NOEJECUT",
+                "Kurztext": "NO EJECUTADA PARA CIERRE DE ORDEN"
+              },
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='NOEJEREP')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet(IAuart='NLEC',Codegruppe='NOEJEREP')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.qmgrp"
+                },
+                "IAuart": "NLEC",
+                "Codegruppe": "NOEJEREP",
+                "Kurztext": "NO EJECUTADA PARA REPLANIFICAR"
+              }
+            ]
+          }
+        }
+    }      
+]

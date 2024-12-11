@@ -206,12 +206,13 @@ def order_in_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(ge
 @router.post("/order/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
 def order(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     print(api_request)
-    clase = api_request.data['clase']
     try:
-        if int(clase)>0:
-            clase = TIPO_ORDENES[clase]
+        clase = int(api_request.data['clase'])
+        if clase>0:
+            clase = TIPO_ORDENES[str(clase)]
     except Exception as e:
-        pass
+        print (f"Clase: {api_request.data['clase']}")
+        clase = api_request.data['clase']
     
     try:
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Aufnr='{api_request.data['orden']}',Clase='{clase}',Usuario='{api_request.usuario_api}',Password='{encode(api_request.clave_api)}')"
@@ -271,6 +272,40 @@ def operaciones(api_request: ApiRequestModelInput, db: Session = Depends(get_db)
         raise HTTPException(status_code=500, detail=str(e))
     
     
+    
+@router.post("/codigo_grupo/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet
+def codigo_grupo(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    print(api_request)
+    try:
+        clase = int(api_request.data['clase'])
+        if clase>0:
+            clase = TIPO_ORDENES[str(clase)]
+    except Exception as e:
+        print (f"Clase: {api_request.data['clase']}")
+        clase = api_request.data['clase']
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=IAuart eq '{clase}'"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    
+    
+@router.post("/codigo_cierre/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet
+def codigo_cierre(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    print(api_request)
+    try:
+        clase = int(api_request.data['clase'])
+        if clase>0:
+            clase = TIPO_ORDENES[str(clase)]
+    except Exception as e:
+        print (f"Clase: {api_request.data['clase']}")
+        clase = api_request.data['clase']
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=IAuart eq '{clase}' and Codegruppe eq '{api_request.data['codigo_grupo']}'"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
 
 # Endpoint para realizar peticiones POST a la otra API (middleware)
