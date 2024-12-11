@@ -1,7 +1,9 @@
+import json
 import os
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from app.database import get_db
+from app.models import Grupo
 from ..schemas import ApiRequestModelInput
 from ..utils import validate_key, register_request, encode
 import requests
@@ -276,6 +278,7 @@ def operaciones(api_request: ApiRequestModelInput, db: Session = Depends(get_db)
 @router.post("/codigo_grupo/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet
 def codigo_grupo(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     print(api_request)
+    
     try:
         clase = int(api_request.data['clase'])
         if clase>0:
@@ -283,9 +286,48 @@ def codigo_grupo(api_request: ApiRequestModelInput, db: Session = Depends(get_db
     except Exception as e:
         print (f"Clase: {api_request.data['clase']}")
         clase = api_request.data['clase']
+        
+    
+    """
+    Sincroniza los datos de grupos. Si no están en la base local,
+    los obtiene desde una API externa y los agrega.
+    """
     try:
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=IAuart eq '{clase}'"
-        return middleware_request(api_request, db)
+        d = middleware_request(api_request, db)['data']
+        print (d)
+        grupos = json.loads(str(d))
+        grupos = {Grupo(clase=g['IAuart'], codigo_grupo=g['Codegruppe'], desc_cod_grup=g['Kurztext']) for g in grupos['d']['results']}
+        # Consulta local
+        grupos_local = db.query(Grupo).filter(Grupo.clase.in_(clase)).all()
+        
+        grupos_faltantes = grupos - grupos_local
+
+        # Resultados iniciales
+        grupos_result = grupos_local
+
+        # Consulta externa si hay faltantes
+        if grupos_faltantes:
+            try:
+                # Procesar datos de la API externa
+                for grupo_data in grupos_faltantes:
+                    grupo = Grupo(**grupo_data)
+                    db.add(grupo)
+                    grupos_result.append(grupo)
+
+                # Confirmar cambios
+                db.commit()
+
+            except requests.RequestException as e:
+                raise HTTPException(status_code=500, detail=f"Error: {e}")
+
+        # Respuesta consolidada
+        
+        return {"status": 200, "data": grupos_result.json()}
+        
+        
+        
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     

@@ -1,4 +1,5 @@
-from sqlalchemy import Column, DateTime, Float, Integer, String, Boolean
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Boolean
+from sqlalchemy.orm import relationship
 from .database import Base
 
 class Sequence(Base):
@@ -54,3 +55,25 @@ class ApiRequest(Base):
     endpoint = Column(String, nullable=False)
     data = Column(String)# Usamos JSON para almacenar el dict
     status = Column(Integer, nullable=False)
+    
+    
+    
+#Codigos
+
+class Grupo(Base):
+    __tablename__ = "grupo"
+    
+    clase = Column(String, nullable=False)
+    codigo_grupo = Column(String, primary_key=True, index=True)  # Clave primaria
+    desc_cod_grup = Column(String, nullable=False)
+    
+    cierres = relationship("Cierre", back_populates="grupo")  # Relación con Cierre
+
+class Cierre(Base):
+    __tablename__ = "cierre"
+    
+    codigo_cierre = Column(String, primary_key=True, index=True)  # Clave primaria
+    desc_cod_cierr = Column(String, nullable=False)
+    codigo_grupo = Column(String, ForeignKey("grupo.codigo_grupo"), nullable=False)  # Clave foránea
+    
+    grupo = relationship("Grupo", back_populates="cierres")  # Relación con Grupo

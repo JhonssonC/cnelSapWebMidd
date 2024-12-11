@@ -85,3 +85,22 @@ class Tramitacion(TramitacionBase):
 class Coordinate(BaseModel):
     x: float
     y: float
+    
+    
+## Codigos
+
+class Grupo_sch(BaseModel):
+    clase: str
+    codigo_grupo: str
+    desc_cod_grup: str
+
+    class Config:
+        orm_mode = True
+        
+class Cierre_sch(BaseModel):
+    codigo_cierre: str
+    desc_cod_cierr: str
+    codigo_grupo: str  # Relación con Grupo
+    
+    class Config:
+        orm_mode = True
