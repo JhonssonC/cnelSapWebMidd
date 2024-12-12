@@ -95,7 +95,7 @@ class Grupo_sch(BaseModel):
     desc_cod_grup: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
         
 class Cierre_sch(BaseModel):
     codigo_cierre: str
@@ -103,4 +103,4 @@ class Cierre_sch(BaseModel):
     codigo_grupo: str  # Relación con Grupo
     
     class Config:
-        orm_mode = True
+        from_attributes = True

@@ -63,17 +63,17 @@ class ApiRequest(Base):
 class Grupo(Base):
     __tablename__ = "grupo"
     
+    id = Column(Integer, primary_key=True, index=True)
     clase = Column(String, nullable=False)
-    codigo_grupo = Column(String, primary_key=True, index=True)  # Clave primaria
+    codigo_grupo = Column(String)  
     desc_cod_grup = Column(String, nullable=False)
     
-    cierres = relationship("Cierre", back_populates="grupo")  # Relación con Cierre
 
 class Cierre(Base):
     __tablename__ = "cierre"
     
-    codigo_cierre = Column(String, primary_key=True, index=True)  # Clave primaria
+    id = Column(Integer, primary_key=True, index=True)
+    clase = Column(String, nullable=False)
+    codigo_cierre = Column(String)  
     desc_cod_cierr = Column(String, nullable=False)
     codigo_grupo = Column(String, ForeignKey("grupo.codigo_grupo"), nullable=False)  # Clave foránea
-    
-    grupo = relationship("Grupo", back_populates="cierres")  # Relación con Grupo

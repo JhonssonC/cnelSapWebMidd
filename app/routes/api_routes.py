@@ -3,13 +3,14 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.models import Grupo
+from app.models import Cierre, Grupo
 from ..schemas import ApiRequestModelInput
 from ..utils import validate_key, register_request, encode
 import requests
 import urllib3
 from urllib3.util import create_urllib3_context
 from dotenv import load_dotenv
+from dataclasses import asdict
 
 load_dotenv()
 
@@ -175,7 +176,8 @@ def middleware_request(api_request: ApiRequestModelInput, db: Session, request: 
         register_request(usuario_id.id, api_request, status_api, db)
         
         
-        return {"status": response.status_code, "data": response.json()}
+        
+        return {"status": response.status_code, "data": json.loads(response.text)}
 
     except Exception as e:
 
@@ -280,74 +282,132 @@ def codigo_grupo(api_request: ApiRequestModelInput, db: Session = Depends(get_db
     print(api_request)
     
     try:
-        clase = int(api_request.data['clase'])
-        if clase>0:
-            clase = TIPO_ORDENES[str(clase)]
-    except Exception as e:
-        print (f"Clase: {api_request.data['clase']}")
-        clase = api_request.data['clase']
-        
-    
-    """
-    Sincroniza los datos de grupos. Si no están en la base local,
-    los obtiene desde una API externa y los agrega.
-    """
-    try:
+        # Obtener y procesar el tipo de clase
+        try:
+            clase = int(api_request.data['clase'])
+            clase = TIPO_ORDENES.get(str(clase), api_request.data['clase'])
+        except ValueError:
+            clase = api_request.data['clase']
+
+        # Construcción de la URL para la consulta externa
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=IAuart eq '{clase}'"
-        d = middleware_request(api_request, db)['data']
-        print (d)
-        grupos = json.loads(str(d))
-        grupos = {Grupo(clase=g['IAuart'], codigo_grupo=g['Codegruppe'], desc_cod_grup=g['Kurztext']) for g in grupos['d']['results']}
-        # Consulta local
-        grupos_local = db.query(Grupo).filter(Grupo.clase.in_(clase)).all()
-        
-        grupos_faltantes = grupos - grupos_local
 
-        # Resultados iniciales
-        grupos_result = grupos_local
+        # Consulta a la API externa
+        external_response = middleware_request(api_request, db)
+        external_data = external_response.get('data', {})
 
-        # Consulta externa si hay faltantes
+        grupos = [
+            {
+                "clase": str(g['IAuart']),
+                "codigo_grupo": str(g['Codegruppe']),
+                "desc_cod_grup": str(g['Kurztext'])
+            } for g in external_data.get('d', {}).get('results', [])
+        ]
+
+        # Consulta local a la base de datos
+        grupos_local = db.query(Grupo).filter(Grupo.clase == clase).all()
+        grupos_local_dict = [
+            {
+                "clase": gl.clase,
+                "codigo_grupo": gl.codigo_grupo,
+                "desc_cod_grup": gl.desc_cod_grup
+            } for gl in grupos_local
+        ]
+
+        # Identificar grupos faltantes
+        grupos_local_keys = {gl["codigo_grupo"] for gl in grupos_local_dict}
+        grupos_faltantes = [g for g in grupos if g["codigo_grupo"] not in grupos_local_keys]
+
+        # Agregar grupos faltantes a la base de datos
         if grupos_faltantes:
-            try:
-                # Procesar datos de la API externa
-                for grupo_data in grupos_faltantes:
-                    grupo = Grupo(**grupo_data)
-                    db.add(grupo)
-                    grupos_result.append(grupo)
+            nuevos_grupos = [
+                Grupo(
+                    clase=gf['clase'],
+                    codigo_grupo=gf['codigo_grupo'],
+                    desc_cod_grup=gf['desc_cod_grup']
+                ) for gf in grupos_faltantes
+            ]
+            db.bulk_save_objects(nuevos_grupos)
+            db.commit()
 
-                # Confirmar cambios
-                db.commit()
-
-            except requests.RequestException as e:
-                raise HTTPException(status_code=500, detail=f"Error: {e}")
+            # Actualizar grupos locales
+            grupos_local_dict.extend(grupos_faltantes)
 
         # Respuesta consolidada
-        
-        return {"status": 200, "data": grupos_result.json()}
-        
-        
-        
+        return {"status": 200, "data": grupos_local_dict}
+
+    except requests.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Error al consultar la API externa: {str(e)}")
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
-    
+        raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
     
 @router.post("/codigo_cierre/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet
 def codigo_cierre(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     print(api_request)
     try:
-        clase = int(api_request.data['clase'])
-        if clase>0:
-            clase = TIPO_ORDENES[str(clase)]
-    except Exception as e:
-        print (f"Clase: {api_request.data['clase']}")
-        clase = api_request.data['clase']
-    try:
+        # Obtener y procesar el tipo de clase
+        try:
+            clase = int(api_request.data['clase'])
+            clase = TIPO_ORDENES.get(str(clase), api_request.data['clase'])
+        except ValueError:
+            clase = api_request.data['clase']
+
+        # Construcción de la URL para la consulta externa
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=IAuart eq '{clase}' and Codegruppe eq '{api_request.data['codigo_grupo']}'"
-        return middleware_request(api_request, db)
+
+        # Consulta a la API externa
+        external_response = middleware_request(api_request, db)
+        external_data = external_response.get('data', {})
+
+        cierres = [
+            {
+                "clase": str(c['IAuart']),
+                "codigo_cierre": str(c['Code']),
+                "desc_cod_cierr": str(c['Kurztext']),
+                "codigo_grupo": str(c['Codegruppe'])
+            } for c in external_data.get('d', {}).get('results', [])
+        ]
+
+        # Consulta local a la base de datos
+        cierres_local = db.query(Cierre).filter(Cierre.clase == clase).all()
+        cierres_local_dict = [
+            {
+                "clase": cl.clase,
+                "codigo_cierre": cl.codigo_cierre,
+                "desc_cod_cierr": cl.desc_cod_cierr,
+                "codigo_grupo": cl.codigo_grupo
+            } for cl in cierres_local
+        ]
+
+        # Identificar cierres faltantes
+        cierres_local_keys = {cl["codigo_cierre"] for cl in cierres_local_dict}
+        cierres_faltantes = [c for c in cierres if c["codigo_cierre"] not in cierres_local_keys]
+
+        # Agregar cierres faltantes a la base de datos
+        if cierres_faltantes:
+            nuevos_cierres = [
+                Cierre(
+                    clase=cf['clase'],
+                    codigo_cierre=cf['codigo_cierre'],
+                    desc_cod_cierr=cf['desc_cod_cierr'],
+                    codigo_grupo=cf['codigo_grupo']
+                ) for cf in cierres_faltantes
+            ]
+            db.bulk_save_objects(nuevos_cierres)
+            db.commit()
+
+            # Actualizar cierres locales
+            cierres_local_dict.extend(cierres_faltantes)
+
+        # Respuesta consolidada
+        return {"status": 200, "data": cierres_local_dict}
+
+    except requests.RequestException as e:
+        raise HTTPException(status_code=500, detail=f"Error al consultar la API externa: {str(e)}")
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
     
 
 # Endpoint para realizar peticiones POST a la otra API (middleware)
