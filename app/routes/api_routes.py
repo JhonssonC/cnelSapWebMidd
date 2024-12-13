@@ -183,6 +183,25 @@ def middleware_request(api_request: ApiRequestModelInput, db: Session, request: 
 
         raise HTTPException(status_code=500, detail=str(e))
     
+# Endpoint para realizar peticiones POST a la otra API (middleware)
+@router.post("/post/")
+def middleware_post(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        usuario_id = validate_key(api_request.llave, db)
+        response = session.request("POST", api_request.endpoint, headers=HEADERS)
+        status_api = response.status_code
+        
+        # Registrar la petición
+        register_request(usuario_id.id, api_request, status_api, db)
+        
+        return {"status": response.status_code, "data": response.json()}
+    
+    except Exception as e:
+
+        raise HTTPException(status_code=500, detail=str(e))
+
+########################################################################################################
+    
     
 @router.post("/login/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/loginSet
 def login(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
@@ -220,6 +239,25 @@ def order(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     
     try:
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Aufnr='{api_request.data['orden']}',Clase='{clase}',Usuario='{api_request.usuario_api}',Password='{encode(api_request.clave_api)}')"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    
+    
+@router.post("/order_expandida/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
+def order_expandida(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    print(api_request)
+    try:
+        clase = int(api_request.data['clase'])
+        if clase>0:
+            clase = TIPO_ORDENES[str(clase)]
+    except Exception as e:
+        print (f"Clase: {api_request.data['clase']}")
+        clase = api_request.data['clase']
+    
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter= Aufnr eq '{api_request.data['orden']}' and Clase eq '{clase}' and Usuario eq '{api_request.usuario_api}' and Password eq '{encode(api_request.clave_api)}'&$expand=NavMatRet,NavDanEqu,NavCenso,NavSellos,NavCompo,NavOpera,NavServi"
         return middleware_request(api_request, db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -409,20 +447,36 @@ def codigo_cierre(api_request: ApiRequestModelInput, db: Session = Depends(get_d
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
     
-
-# Endpoint para realizar peticiones POST a la otra API (middleware)
-@router.post("/post/")
-def middleware_post(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+#RETORNO DE TABLAS TOTALES
+@router.post("/tipos_admitidos/")#endpoint: "Tipos Admitidos"
+def tipos_admitidos(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    
     try:
         usuario_id = validate_key(api_request.llave, db)
-        response = session.request("POST", api_request.endpoint, headers=HEADERS)
-        status_api = response.status_code
         
         # Registrar la petición
-        register_request(usuario_id.id, api_request, status_api, db)
-        
-        return {"status": response.status_code, "data": response.json()}
+        register_request(usuario_id.id, api_request, 200, db)
+
+        return {"status": 200, "data": TIPO_ORDENES}
+
+    except Exception as e:
+
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/clases_admitidas/")#endpoint: "Clases Admitidas"
+def clases_admitidas(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     
+    try:
+        usuario_id = validate_key(api_request.llave, db)
+        
+        # Registrar la petición
+        register_request(usuario_id.id, api_request, 200, db)
+        clases=[]
+        for clase in TIPO_ORDENES.values():
+            if not clase in clases:    
+                clases.append(clase)
+        return {"status": 200, "data": clases}
+
     except Exception as e:
 
         raise HTTPException(status_code=500, detail=str(e))

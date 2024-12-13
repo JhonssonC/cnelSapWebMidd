@@ -211,7 +211,7 @@ responsables
 
 operaciones
     Req-Response:
-        1. (interesa el Lifnr)
+        1. (interesa el Lifnr) - en orderset expand
             https://WMWEBCON:Q1p0w2o9@sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet?$filter=Aufnr%20eq%20%27000044337229%27%20and%20Clase%20eq%20%27NLEC%27%20and%20Usuario%20eq%20%270705698470%27%20and%20Password%20eq%20%27MDUxMTkwQUw%C2%AC%27&$expand=NavMatRet,NavDanEqu,NavCenso,NavSellos,NavCompo,NavOpera,NavServi
             $filter: Aufnr eq '000044337229' and Clase eq 'NLEC' and Usuario eq '0705698470' and Password eq 'MDUxMTkwQUw¬'
             $expand: NavMatRet,NavDanEqu,NavCenso,NavSellos,NavCompo,NavOpera,NavServi
@@ -234,7 +234,7 @@ operaciones
                                 "type": "ZWMGS_ORDER_GEST_SRV.contrato"
                             },
                             "Searchhelp": "",
-                            "Werks": "1008",
+                            "Werks": "1008", (en login)
                             "Lifnr": "",
                             "Ebeln": "4600001307",
                             "Txz01": "CONTRATO Nro. 249-2022"
