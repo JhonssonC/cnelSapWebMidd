@@ -58,6 +58,57 @@ class ApiRequest(Base):
     
     
     
+#Usuario para SAP
+
+class UsuarioSap(Base):
+    __tablename__ = "usuariosap"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    usuario = Column(String, nullable=False)
+    nombre = Column(String)
+    searchhelp = Column(String)
+    werks = Column(String, nullable=False)
+    tipo = Column(String) 
+    tipotxt = Column(String)
+    clase = Column(String)
+    clasetxt = Column(String)
+    bukrs = Column(String)
+    butxt = Column(String)
+    gsber = Column(String)
+    gtext = Column(String)
+    name1 = Column(String)
+    arbpl = Column(String)
+    activo = Column(String)
+    
+    
+class ContratoSap(Base):
+    __tablename__ = "contratosap"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    usuario = Column(String, nullable=False)
+    searchhelp = Column(String)
+    usuario_web_orden = Column(String, nullable=False) #UsuarioWebOrden# Werk
+    usuario_web_orden_desc = Column(String)
+    acreedor = Column(String, nullable=False) #Acreedor# Lifnr
+    acreedor_desc = Column(String)
+    contrato = Column(String, nullable=False) #contrato# Ebeln
+    contrato_desc = Column(String)
+    posicion_cont = Column(String, nullable=False) #posicion Contable# Ebelp
+    posicion_cont_desc = Column(String)
+    
+    
+class ServiciosSap(Base):
+    __tablename__ = "serviciosap"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    ebeln = Column(String, nullable=False)
+    ebelp = Column(String, nullable=False)
+    srvpos = Column(String)
+    tbtwr = Column(String)
+    waers = Column(String)
+    meins = Column(String)
+    descripcion = Column(String)
+    
 #Codigos
 
 class Grupo(Base):
@@ -76,4 +127,4 @@ class Cierre(Base):
     clase = Column(String, nullable=False)
     codigo_cierre = Column(String)  
     desc_cod_cierr = Column(String, nullable=False)
-    codigo_grupo = Column(String, ForeignKey("grupo.codigo_grupo"), nullable=False)  # Clave foránea
+    codigo_grupo = Column(String, nullable=False)  # Clave foránea

@@ -2,6 +2,7 @@ import json
 import os
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
+from app.crud_api_sap import create_usuariosap, getCierres, getGrupos, saveCierres, saveGroups
 from app.database import get_db
 from app.models import Cierre, Grupo
 from ..schemas import ApiRequestModelInput
@@ -175,8 +176,6 @@ def middleware_request(api_request: ApiRequestModelInput, db: Session, request: 
         # Registrar la petición
         register_request(usuario_id.id, api_request, status_api, db)
         
-        
-        
         return {"status": response.status_code, "data": json.loads(response.text)}
 
     except Exception as e:
@@ -208,7 +207,11 @@ def login(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
         #print(api_request)
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Usuario='{api_request.usuario_api}',Password='{encode(api_request.clave_api)}')"
-        return middleware_request(api_request, db)
+        usuarioSap = middleware_request(api_request, db)
+        
+        create_usuariosap(usuarioSap['data']['d'], db)
+        
+        return usuarioSap
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -224,6 +227,18 @@ def order_in_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(ge
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+
+
+@router.post("/fists_in_bandeja/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet
+def order_in_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        print (api_request)
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$skip=0&$top={encode(api_request.data['top'])}&$filter=Usrcons eq '{api_request.usuario_api}' and Password eq '{encode(api_request.clave_api)}')"
+        print (api_request.endpoint)
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
     
     
 @router.post("/order/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
@@ -317,7 +332,6 @@ def operaciones(api_request: ApiRequestModelInput, db: Session = Depends(get_db)
     
 @router.post("/codigo_grupo/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmgrpSet
 def codigo_grupo(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
-    print(api_request)
     
     try:
         # Obtener y procesar el tipo de clase
@@ -343,7 +357,8 @@ def codigo_grupo(api_request: ApiRequestModelInput, db: Session = Depends(get_db
         ]
 
         # Consulta local a la base de datos
-        grupos_local = db.query(Grupo).filter(Grupo.clase == clase).all()
+        grupos_local = getGrupos(clase, db)
+        
         grupos_local_dict = [
             {
                 "clase": gl.clase,
@@ -365,8 +380,8 @@ def codigo_grupo(api_request: ApiRequestModelInput, db: Session = Depends(get_db
                     desc_cod_grup=gf['desc_cod_grup']
                 ) for gf in grupos_faltantes
             ]
-            db.bulk_save_objects(nuevos_grupos)
-            db.commit()
+            
+            saveGroups(nuevos_grupos, db)
 
             # Actualizar grupos locales
             grupos_local_dict.extend(grupos_faltantes)
@@ -382,7 +397,7 @@ def codigo_grupo(api_request: ApiRequestModelInput, db: Session = Depends(get_db
     
 @router.post("/codigo_cierre/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/qmcodSet
 def codigo_cierre(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
-    print(api_request)
+
     try:
         # Obtener y procesar el tipo de clase
         try:
@@ -391,8 +406,10 @@ def codigo_cierre(api_request: ApiRequestModelInput, db: Session = Depends(get_d
         except ValueError:
             clase = api_request.data['clase']
 
+        grupo_cod=api_request.data['codigo_grupo']
+        
         # Construcción de la URL para la consulta externa
-        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=IAuart eq '{clase}' and Codegruppe eq '{api_request.data['codigo_grupo']}'"
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=IAuart eq '{clase}' and Codegruppe eq '{grupo_cod}'"
 
         # Consulta a la API externa
         external_response = middleware_request(api_request, db)
@@ -408,7 +425,7 @@ def codigo_cierre(api_request: ApiRequestModelInput, db: Session = Depends(get_d
         ]
 
         # Consulta local a la base de datos
-        cierres_local = db.query(Cierre).filter(Cierre.clase == clase).all()
+        cierres_local = getCierres(clase, grupo_cod, db)
         cierres_local_dict = [
             {
                 "clase": cl.clase,
@@ -432,8 +449,7 @@ def codigo_cierre(api_request: ApiRequestModelInput, db: Session = Depends(get_d
                     codigo_grupo=cf['codigo_grupo']
                 ) for cf in cierres_faltantes
             ]
-            db.bulk_save_objects(nuevos_cierres)
-            db.commit()
+            saveCierres(nuevos_cierres, db)
 
             # Actualizar cierres locales
             cierres_local_dict.extend(cierres_faltantes)
@@ -479,4 +495,22 @@ def clases_admitidas(api_request: ApiRequestModelInput, db: Session = Depends(ge
 
     except Exception as e:
 
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+@router.post("/contrato_data/")#endpoint: "Clases Admitidas"
+def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    
+    try:
+        print(api_request)
+        #Obtener Usuaio
+        usuario = login(api_request, db)
+        
+        #Obtener 1 registro de usuario
+        
+        
+        
+        
+        return usuario
+    except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
