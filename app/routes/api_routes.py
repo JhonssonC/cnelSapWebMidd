@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from app.crud_api_sap import create_usuariosap, getCierres, getGrupos, saveCierres, saveGroups
 from app.database import get_db
-from app.models import Cierre, Grupo
-from ..schemas import ApiRequestModelInput
+from app.models import Cierre, ContratoSap, Grupo
+from ..schemas import ApiRequestModelInput, Contratosap
 from ..utils import validate_key, register_request, encode
 import requests
 import urllib3
@@ -500,11 +500,15 @@ def clases_admitidas(api_request: ApiRequestModelInput, db: Session = Depends(ge
 
 @router.post("/contrato_data/")#endpoint: "Clases Admitidas"
 def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
-    
+    contrato = Contratosap()
     try:
         print(api_request)
         #Obtener Usuaio
-        usuario = login(api_request, db)
+        if api_request['endpoint']:
+            api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/loginSet'
+        usuario = login(api_request, db)['data']['d']
+        contrato.usuario=usuario['Usuario']
+        
         
         #Obtener 1 registro de usuario
         

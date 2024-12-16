@@ -104,3 +104,20 @@ class Cierre_sch(BaseModel):
     
     class Config:
         from_attributes = True
+        
+##Contrato
+class Contratosap(BaseModel):
+    usuario :str
+    searchhelp :str
+    usuario_web_orden :str #UsuarioWebOrden# Werk
+    usuario_web_orden_desc :str
+    acreedor :str #Acreedor# Lifnr
+    acreedor_desc :str
+    contrato :str #contrato# Ebeln
+    contrato_desc :str
+    posicion_cont :str #posicion Contable# Ebelp
+    posicion_cont_desc :str
+    
+    class Config:
+        from_attributes = True
+        
