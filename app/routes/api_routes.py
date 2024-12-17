@@ -229,11 +229,16 @@ def order_in_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(ge
     
 
 
-@router.post("/fists_in_bandeja/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet
-def order_in_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+@router.post("/firsts_in_bandeja/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet
+def firsts_in_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
         print (api_request)
-        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$skip=0&$top={encode(api_request.data['top'])}&$filter=Usrcons eq '{api_request.usuario_api}' and Password eq '{encode(api_request.clave_api)}')"
+        
+        if api_request.data['top']:
+            top = api_request.data['top']
+        else:
+            top = 10
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$skip=0&$top={top}&$filter=Usrcons eq '{api_request.usuario_api}' and Password eq '{encode(api_request.clave_api)}' and endswith(Orden,'')"
         print (api_request.endpoint)
         return middleware_request(api_request, db)
     except Exception as e:
@@ -327,6 +332,17 @@ def operaciones(api_request: ApiRequestModelInput, db: Session = Depends(get_db)
         return middleware_request(api_request, db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+    
+    
+@router.post("/acreedor/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/acreedorSet
+def acreedor(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}('{api_request.data['acreedor']}')"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
     
     
     
@@ -508,11 +524,29 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
             api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/loginSet'
         usuario = login(api_request, db)['data']['d']
         contrato.usuario=usuario['Usuario']
-        
+        contrato.searchhelp='OUTLL'
+        contrato.usuario_web_orden=usuario['Werks']
+        contrato.usuario_web_orden_desc=usuario['Name1']
         
         #Obtener 1 registro de usuario
-        
-        
+        #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet
+        api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet'
+        api_request.data['top']=1
+        first_order = firsts_in_bandeja(api_request, db)
+        first_order=first_order['data']['d']['results']
+        if len(first_order)==1:
+            first_order=first_order[0]
+            first_order=first_order['Orden']
+            clase=first_order['Auart']
+            
+            #Obtener Orden Expandida
+            #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
+            api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet'
+            api_request.data['orden']=first_order
+            api_request.data['clase']=clase
+            order_expandida = order_expandida(api_request, db)
+            order_expandida = order_expandida['data']['d']['results'][0]
+            contrato.acreedor=order_expandida['NavOpera']['results'][0]['Lifnr']
         
         
         return usuario
