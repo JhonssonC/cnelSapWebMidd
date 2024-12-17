@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session
 
 from app.utils import validate_key
 from . import models
-from app.models import Cierre, Grupo, Tramitacion, UsuarioSap
-from .schemas import Coordinate, TramitacionCreate
+from app.models import Cierre, ContratoSap, Grupo, Tramitacion, UsuarioSap
+from .schemas import Contratosap, Coordinate, TramitacionCreate
 
 
 # Operaciones CRUD 
@@ -24,6 +24,13 @@ def getCierres(clase:str, grupo:str, db:Session):
 def saveCierres(cierres, db:Session):
     db.bulk_save_objects(cierres)
     db.commit()
+    
+def saveContrato(contrato: Contratosap, db: Session):
+    dictContrato = contrato.model_dump()
+    new_contrato = ContratoSap(**dictContrato)
+    db.add(new_contrato)
+    db.commit()
+    db.refresh(new_contrato)
 
 def create_usuariosap(dataSap:dict, db: Session):
 

@@ -1,0 +1,31 @@
+[
+    {
+        "usuario_api": "0705698470",
+        "clave_api": "051190AL",
+        "endpoint": "sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/posContSet",
+        "llave": "4b0aaad5-2485-4a9b-97f1-991ab84f47bf",
+        "data": {"searchhelp": "OUTLL", "usuario_web_orden": "1008", "acreedor": "1000001435", "contrato": "4600001307"}
+    },
+    {
+        "status": 200,
+        "data": {
+          "d": {
+            "results": [
+              {
+                "__metadata": {
+                  "id": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/posContSet('00010')",
+                  "uri": "https://sapgw.redenergia.gob.ec:8200/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/posContSet('00010')",
+                  "type": "ZWMGS_ORDER_GEST_SRV.posCont"
+                },
+                "Searchhelp": "",
+                "Werks": "1008",
+                "Lifnr": "",
+                "Ebeln": "4600001307",
+                "Ebelp": "00010",
+                "Txz01": "CONTRATO Nro. 249-2022"
+              }
+            ]
+          }
+        }
+      }
+]

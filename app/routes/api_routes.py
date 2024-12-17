@@ -2,7 +2,7 @@ import json
 import os
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
-from app.crud_api_sap import create_usuariosap, getCierres, getGrupos, saveCierres, saveGroups
+from app.crud_api_sap import create_usuariosap, getCierres, getGrupos, saveCierres, saveContrato, saveGroups
 from app.database import get_db
 from app.models import Cierre, ContratoSap, Grupo
 from ..schemas import ApiRequestModelInput, Contratosap
@@ -336,13 +336,36 @@ def operaciones(api_request: ApiRequestModelInput, db: Session = Depends(get_db)
     
     
 @router.post("/acreedor/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/acreedorSet
-def acreedor(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+def acreedor_sap(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
-        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}('{api_request.data['acreedor']}')"
+        all_acreedores={}
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=Bukrs eq '{api_request.data['instancia']}'"
+        if api_request.data['acreedor']:
+            all_acreedores = middleware_request(api_request, db)['data']['d']['results']
+            for acreedor in all_acreedores:
+                #print(acreedor['Lifnr'], api_request.data['acreedor'])
+                if str(acreedor['Lifnr']) == api_request.data['acreedor']:
+                    return {"status": 200, "data": acreedor}
+            
+        return all_acreedores
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/contrato/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet
+def contrato_sap(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=Searchhelp eq '{api_request.data['searchhelp']}' and Werks eq '{api_request.data['usuario_web_orden']}' and Lifnr eq '{api_request.data['acreedor']}'"
         return middleware_request(api_request, db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+@router.post("/posicion_cont/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/posContSet
+def posicion_cont(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=Searchhelp eq '{api_request.data['searchhelp']}' and Werks eq '{api_request.data['usuario_web_orden']}' and Lifnr eq '{api_request.data['acreedor']}' and Ebeln eq '{api_request.data['contrato']}'"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
     
     
@@ -514,6 +537,7 @@ def clases_admitidas(api_request: ApiRequestModelInput, db: Session = Depends(ge
         raise HTTPException(status_code=500, detail=str(e))
     
 
+
 @router.post("/contrato_data/")#endpoint: "Clases Admitidas"
 def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     contrato = Contratosap()
@@ -544,10 +568,46 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
             api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet'
             api_request.data['orden']=first_order
             api_request.data['clase']=clase
-            order_expandida = order_expandida(api_request, db)
-            order_expandida = order_expandida['data']['d']['results'][0]
-            contrato.acreedor=order_expandida['NavOpera']['results'][0]['Lifnr']
-        
+            order_expand = order_expandida(api_request, db)
+            order_expand = order_expand['data']['d']['results'][0]
+            contrato.acreedor=order_expand['NavOpera']['results'][0]['Lifnr']
+            
+            #acreedor Lifnr
+            #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/acreedorSet
+            api_request.data['instancia']=usuario['Bukrs']
+            api_request.data['acreedor']=contrato.acreedor
+            api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/acreedorSet'
+            acreedor = acreedor_sap(api_request, db)
+            acreedor = acreedor['data']
+            contrato.acreedor_desc=acreedor['Name1']
+            
+            #contrato Ebeln
+            api_request.data['searchhelp']=contrato.searchhelp
+            api_request.data['usuario_web_orden']=contrato.usuario_web_orden
+            api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet'
+            contratos = contrato_sap(api_request, db)
+            contratos = contrato['data']['d']['results']
+            
+            for dictContrato in contratos:
+                contrato.contrato=dictContrato['Ebeln']
+                contrato.contrato_desc=dictContrato['Txz01']
+                
+                #posicion Contable  Ebelp
+                api_request.data['contrato']=contrato.contrato
+                api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/posContSet'
+                posiciones = posicion_cont(api_request, db)
+                posiciones = posiciones['data']['d']['results']
+                
+                for dictPocision in posiciones:
+                    contrato.posicion_cont = dictPocision['Ebelp']
+                    contrato.posicion_cont_desc = dictPocision['Txz01']
+                
+                    saveContrato(contrato, db)
+            
+            
+            
+            api_request.data['contrato']=usuario['Bukrs']
+            
         
         return usuario
     except Exception as e:
