@@ -9,8 +9,8 @@ from app.schemas import Coordinate, TramitacionCreate
 router = APIRouter()
 
 @router.post("/route/")
-def get_route(coordinate: Coordinate):
-    result = get_nearest_sequence(coordinate.x, coordinate.y)
+def get_route(coordinate: Coordinate, db: Session = Depends(get_db)):
+    result = get_nearest_sequence(coordinate.x, coordinate.y, db)
     if not result:
         raise HTTPException(status_code=404, detail="Sequence not found")
     return result

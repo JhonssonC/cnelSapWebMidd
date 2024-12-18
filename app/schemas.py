@@ -108,15 +108,15 @@ class Cierre_sch(BaseModel):
 ##Contrato
 class Contratosap(BaseModel):
     usuario :str
-    searchhelp :str
-    usuario_web_orden :str #UsuarioWebOrden# Werk
-    usuario_web_orden_desc :str
-    acreedor :str #Acreedor# Lifnr
-    acreedor_desc :str
-    contrato :str #contrato# Ebeln
-    contrato_desc :str
-    posicion_cont :str #posicion Contable# Ebelp
-    posicion_cont_desc :str
+    searchhelp :Optional[str]= 'OUTLL'
+    usuario_web_orden :Optional[str]= None #UsuarioWebOrden# Werk
+    usuario_web_orden_desc :Optional[str]= None
+    acreedor :Optional[str]= None #Acreedor# Lifnr
+    acreedor_desc :Optional[str]= None
+    contrato :Optional[str]= None #contrato# Ebeln
+    contrato_desc :Optional[str]= None
+    posicion_cont :Optional[str]= None #posicion Contable# Ebelp
+    posicion_cont_desc :Optional[str]= None
     
     class Config:
         from_attributes = True

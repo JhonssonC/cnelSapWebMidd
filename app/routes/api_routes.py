@@ -164,19 +164,39 @@ HEADERS = {
 
 # Endpoint para realizar peticiones GET a la otra API (middleware)
 
-def middleware_request(api_request: ApiRequestModelInput, db: Session, request: Request = None):
+def middleware_request(api_request: ApiRequestModelInput, db: Session, request: Request = None, max_retries=3):
+    
     query_params={}
     if request:
         query_params = dict(request.query_params)
     try:
+        
+        retry_count = 0
+        error_strings = ["connection reset", "connection abort"]  # Cadenas a buscar en el texto de respuesta
+        
         usuario_id = validate_key(api_request.llave, db)
-        response = session.request("GET", api_request.endpoint, params=query_params, headers=HEADERS)
-        status_api = response.status_code
-        
-        # Registrar la petición
-        register_request(usuario_id.id, api_request, status_api, db)
-        
-        return {"status": response.status_code, "data": json.loads(response.text)}
+
+        while retry_count < max_retries:
+            
+            try:
+                response = session.request("GET", api_request.endpoint, params=query_params, headers=HEADERS) # Realiza la solicitud
+                
+                if not any(error in response.text.lower() for error in error_strings):
+                    
+                    status_api = response.status_code 
+                    # Registrar la petición
+                    register_request(usuario_id.id, api_request, status_api, db)
+                    return {"status": status_api, "data": json.loads(response.text)}  # Devuelve la respuesta si no se encuentran las cadenas
+                
+                else:
+                    print(f"Intento {retry_count + 1}: Encontró cadenas prohibidas en la respuesta. Reintentando...")
+                    
+            except requests.RequestException as e:
+                print(f"Intento {retry_count + 1}: Error durante la solicitud - {e}. Reintentando...")
+            
+            retry_count += 1
+
+        raise Exception(f"No se pudo completar la solicitud después de {max_retries} intentos.")
 
     except Exception as e:
 
@@ -209,7 +229,10 @@ def login(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Usuario='{api_request.usuario_api}',Password='{encode(api_request.clave_api)}')"
         usuarioSap = middleware_request(api_request, db)
         
-        create_usuariosap(usuarioSap['data']['d'], db)
+        try:
+          create_usuariosap(usuarioSap['data']['d'], db)
+        except:
+          pass  
         
         return usuarioSap
     except Exception as e:
@@ -538,14 +561,16 @@ def clases_admitidas(api_request: ApiRequestModelInput, db: Session = Depends(ge
     
 
 
-@router.post("/contrato_data/")#endpoint: "Clases Admitidas"
+@router.post("/contrato_data/")#endpoint: "Contrato Data"
 def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
-    contrato = Contratosap()
+    list_contratos=[]
+    contrato = Contratosap(**{'usuario':api_request.usuario_api})
     try:
         print(api_request)
         #Obtener Usuaio
-        if api_request['endpoint']:
-            api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/loginSet'
+        if api_request.endpoint:
+            api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/loginSet'
+            
         usuario = login(api_request, db)['data']['d']
         contrato.usuario=usuario['Usuario']
         contrato.searchhelp='OUTLL'
@@ -554,18 +579,18 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
         
         #Obtener 1 registro de usuario
         #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet
-        api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet'
+        api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet'
         api_request.data['top']=1
         first_order = firsts_in_bandeja(api_request, db)
         first_order=first_order['data']['d']['results']
         if len(first_order)==1:
             first_order=first_order[0]
-            first_order=first_order['Orden']
             clase=first_order['Auart']
+            first_order=first_order['Orden']
             
             #Obtener Orden Expandida
             #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
-            api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet'
+            api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet'
             api_request.data['orden']=first_order
             api_request.data['clase']=clase
             order_expand = order_expandida(api_request, db)
@@ -576,7 +601,7 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
             #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/acreedorSet
             api_request.data['instancia']=usuario['Bukrs']
             api_request.data['acreedor']=contrato.acreedor
-            api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/acreedorSet'
+            api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/acreedorSet'
             acreedor = acreedor_sap(api_request, db)
             acreedor = acreedor['data']
             contrato.acreedor_desc=acreedor['Name1']
@@ -584,9 +609,10 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
             #contrato Ebeln
             api_request.data['searchhelp']=contrato.searchhelp
             api_request.data['usuario_web_orden']=contrato.usuario_web_orden
-            api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet'
+            api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet'
             contratos = contrato_sap(api_request, db)
-            contratos = contrato['data']['d']['results']
+            contratos = contratos['data']['d']['results']
+            print (contratos)
             
             for dictContrato in contratos:
                 contrato.contrato=dictContrato['Ebeln']
@@ -594,21 +620,18 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
                 
                 #posicion Contable  Ebelp
                 api_request.data['contrato']=contrato.contrato
-                api_request['endpoint']='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/posContSet'
+                api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/posContSet'
                 posiciones = posicion_cont(api_request, db)
                 posiciones = posiciones['data']['d']['results']
-                
+                print (posiciones)
                 for dictPocision in posiciones:
                     contrato.posicion_cont = dictPocision['Ebelp']
                     contrato.posicion_cont_desc = dictPocision['Txz01']
                 
                     saveContrato(contrato, db)
-            
-            
-            
-            api_request.data['contrato']=usuario['Bukrs']
-            
+                    list_contratos.append(contrato)
+
         
-        return usuario
+        return {"status": 200, "data": list_contratos}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
