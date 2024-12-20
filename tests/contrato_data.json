@@ -34,5 +34,48 @@
             "posicion_cont_desc": "CONTRATO Nro. 059-2023"
           }
         ]
-      }
+      },
+
+
+
+      {
+        "usuario_api": "0705698470",
+        "clave_api": "051190AL",
+        "endpoint": "Contrato Data",
+        "llave": "1d568dd4-7865-4995-949f-e291554f1cda",
+        "data": {
+          "ordenRef": "25353881",
+          "claseRef": "SOLI"
+        }
+    },
+    {
+      "status": 200,
+      "data": [
+        {
+          "usuario": "0705698470",
+          "searchhelp": "OUTLL",
+          "usuario_web_orden": "1008",
+          "usuario_web_orden_desc": "CNEL UN MANABÍ EP",
+          "acreedor": "1000001435",
+          "acreedor_desc": "CONIEL CIA LTDA",
+          "contrato": "4600001307",
+          "contrato_desc": "CONTRATO Nro. 249-2022",
+          "posicion_cont": "00010",
+          "posicion_cont_desc": "CONTRATO Nro. 249-2022"
+        },
+        {
+          "usuario": "0705698470",
+          "searchhelp": "OUTLL",
+          "usuario_web_orden": "1008",
+          "usuario_web_orden_desc": "CNEL UN MANABÍ EP",
+          "acreedor": "1000001435",
+          "acreedor_desc": "CONIEL CIA LTDA",
+          "contrato": "4600001330",
+          "contrato_desc": "CONTRATO Nro. 059-2023",
+          "posicion_cont": "00010",
+          "posicion_cont_desc": "CONTRATO Nro. 059-2023"
+        }
+      ]
+    }
+
 ]

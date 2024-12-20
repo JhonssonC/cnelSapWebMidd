@@ -579,10 +579,18 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
         
         #Obtener 1 registro de usuario
         #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet
-        api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet'
-        api_request.data['top']=1
-        first_order = firsts_in_bandeja(api_request, db)
-        first_order=first_order['data']['d']['results']
+        if not (api_request.data['ordenRef']) and not (api_request.data['claseRef']):
+            api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet'
+            api_request.data['top']=1
+            first_order = firsts_in_bandeja(api_request, db)
+            first_order=first_order['data']['d']['results']
+        else:
+            first_order = [
+                {
+                    'Auart': api_request.data['claseRef'],
+                    'Orden': api_request.data['ordenRef']
+                }
+            ]
         if len(first_order)==1:
             first_order=first_order[0]
             clase=first_order['Auart']
@@ -629,9 +637,18 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
                     contrato.posicion_cont_desc = dictPocision['Txz01']
                 
                     saveContrato(contrato, db)
-                    list_contratos.append(contrato)
+                    list_contratos.append(contrato.model_copy())
 
         
         return {"status": 200, "data": list_contratos}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+    
+@router.post("/rubros/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/numserviceSet
+def rubros(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=Ebeln eq '{api_request.data['contrato']}' and Ebelp eq '{api_request.data['pos_contable']}'"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))    
