@@ -111,6 +111,7 @@ class Contratosap(BaseModel):
     searchhelp :Optional[str]= 'OUTLL'
     usuario_web_orden :Optional[str]= None #UsuarioWebOrden# Werk
     usuario_web_orden_desc :Optional[str]= None
+    lote :Optional[str]= None #Lote# arbpl
     acreedor :Optional[str]= None #Acreedor# Lifnr
     acreedor_desc :Optional[str]= None
     contrato :Optional[str]= None #contrato# Ebeln

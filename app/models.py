@@ -77,7 +77,7 @@ class UsuarioSap(Base):
     gsber = Column(String)
     gtext = Column(String)
     name1 = Column(String)
-    arbpl = Column(String)
+    arbpl = Column(String) #lote
     activo = Column(String)
     
     
@@ -89,6 +89,7 @@ class ContratoSap(Base):
     searchhelp = Column(String)
     usuario_web_orden = Column(String, nullable=False) #UsuarioWebOrden# Werk
     usuario_web_orden_desc = Column(String)
+    lote = Column(String) #Lote# arbpl
     acreedor = Column(String, nullable=False) #Acreedor# Lifnr
     acreedor_desc = Column(String)
     contrato = Column(String, nullable=False) #contrato# Ebeln

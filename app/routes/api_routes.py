@@ -163,7 +163,6 @@ HEADERS = {
 }
 
 # Endpoint para realizar peticiones GET a la otra API (middleware)
-
 def middleware_request(api_request: ApiRequestModelInput, db: Session, request: Request = None, max_retries=3):
     
     query_params={}
@@ -203,21 +202,41 @@ def middleware_request(api_request: ApiRequestModelInput, db: Session, request: 
         raise HTTPException(status_code=500, detail=str(e))
     
 # Endpoint para realizar peticiones POST a la otra API (middleware)
-@router.post("/post/")
-def middleware_post(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+def middleware_post(api_request: ApiRequestModelInput, payload:dict, db: Session = Depends(get_db), max_retries=3):
+
     try:
+        
+        retry_count = 0
+        error_strings = ["connection reset", "connection abort"]  # Cadenas a buscar en el texto de respuesta
+        
         usuario_id = validate_key(api_request.llave, db)
-        response = session.request("POST", api_request.endpoint, headers=HEADERS)
-        status_api = response.status_code
-        
-        # Registrar la petición
-        register_request(usuario_id.id, api_request, status_api, db)
-        
-        return {"status": response.status_code, "data": response.json()}
-    
+
+        while retry_count < max_retries:
+            
+            try:
+                response = session.request("POST", api_request.endpoint, json=payload, headers=HEADERS)# Realiza la solicitud
+                
+                if not any(error in response.text.lower() for error in error_strings):
+                    
+                    status_api = response.status_code 
+                    # Registrar la petición
+                    register_request(usuario_id.id, api_request, status_api, db)
+                    return {"status": status_api, "data": json.loads(response.text)}  # Devuelve la respuesta si no se encuentran las cadenas
+                
+                else:
+                    print(f"Intento {retry_count + 1}: Encontró cadenas prohibidas en la respuesta. Reintentando...")
+                    
+            except requests.RequestException as e:
+                print(f"Intento {retry_count + 1}: Error durante la solicitud - {e}. Reintentando...")
+            
+            retry_count += 1
+
+        raise Exception(f"No se pudo completar la solicitud después de {max_retries} intentos.")
+
     except Exception as e:
 
         raise HTTPException(status_code=500, detail=str(e))
+    
 
 ########################################################################################################
     
@@ -652,3 +671,69 @@ def rubros(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
         return middleware_request(api_request, db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))    
+    
+
+@router.post("/materiales/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/matnrSet
+def materiales(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=Werks eq '{api_request.data['usuario_web_orden']}' and Arbpl eq '{api_request.data['lote']}' and Beber eq '{api_request.data['agencia']}'"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    
+@router.post("/agencias/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/beberSet
+def agencias(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=Werks eq '{api_request.data['usuario_web_orden']}'"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+ 
+@router.post("/tarifas/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/tipoTarifaSet
+def tarifas(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    
+@router.post("/estados_usuario/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/usrstcclaSet
+def estados_usuario(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    
+    
+#/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet
+@router.post("/guardar_noejecutada/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/usrstcclaSet
+def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    
+    def actualizar_json(base_json, cambios):
+        """
+        Actualiza un JSON base con los valores proporcionados en cambios, sin alterar las llaves originales.
+
+        :param base_json: dict, el JSON base que será actualizado.
+        :param cambios: dict, los valores que se deben actualizar en el JSON base.
+        :return: dict, el JSON actualizado.
+        """
+        for clave, valor in cambios.items():
+            if clave in base_json:
+                base_json[clave] = valor
+            else:
+                print(f"Advertencia: La llave '{clave}' no existe en el JSON base.")
+        return base_json
+    
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+    
+
