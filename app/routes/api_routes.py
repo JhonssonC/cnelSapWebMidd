@@ -595,10 +595,11 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
         contrato.searchhelp='OUTLL'
         contrato.usuario_web_orden=usuario['Werks']
         contrato.usuario_web_orden_desc=usuario['Name1']
+        contrato.lote=usuario['Arbpl']
         
         #Obtener 1 registro de usuario
         #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet
-        if not (api_request.data['ordenRef']) and not (api_request.data['claseRef']):
+        if not (api_request.data.get('ordenRef', False)) and not (api_request.data.get('claseRef', False)):
             api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet'
             api_request.data['top']=1
             first_order = firsts_in_bandeja(api_request, db)
@@ -710,18 +711,11 @@ def estados_usuario(api_request: ApiRequestModelInput, db: Session = Depends(get
     
     
     
-#/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet
-@router.post("/guardar_noejecutada/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/usrstcclaSet
+#sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet
+@router.post("/guardar_noejecutada/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet
 def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     
     def actualizar_json(base_json, cambios):
-        """
-        Actualiza un JSON base con los valores proporcionados en cambios, sin alterar las llaves originales.
-
-        :param base_json: dict, el JSON base que será actualizado.
-        :param cambios: dict, los valores que se deben actualizar en el JSON base.
-        :return: dict, el JSON actualizado.
-        """
         for clave, valor in cambios.items():
             if clave in base_json:
                 base_json[clave] = valor
@@ -731,9 +725,42 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
     
     try:
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}"
-        return middleware_request(api_request, db)
+        json_base=None
+        # Leer el archivo JSON base
+        with open("app/template_json/payload_save_order.json", 'r', encoding='utf-8') as archivo:
+            json_base = json.load(archivo)
+        
+        if json_base:
+            data_to_save = actualizar_json(json_base, api_request.data['pyload'])
+        
+        return data_to_save
+        #return middleware_post(api_request, data_to_save, db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
     
 
+#sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet
+@router.post("/cierre_tecnico/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet
+def cierre_tecnico(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}"
+        
+        data_to_save = {
+            "IAufnr":api_request.data['orden'],
+            "Pascons":encode(api_request.clave_api),
+            "Usrcons":api_request.usuario_api
+        }
+
+        #Payload:
+        #    {
+        #        "IAufnr":"orden",
+        #        "Pascons":"xxx",
+        #        "Usrcons":"0705698470"
+        #    }
+        
+        return data_to_save
+        #return middleware_post(api_request, data_to_save, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
