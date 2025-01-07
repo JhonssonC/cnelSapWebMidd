@@ -309,7 +309,7 @@ def order(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     
 @router.post("/order_expandida/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
 def order_expandida(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
-    print(api_request)
+    #print(api_request)
     try:
         clase = int(api_request.data['clase'])
         if clase>0:
@@ -717,22 +717,42 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
     
     def actualizar_json(base_json, cambios):
         for clave, valor in cambios.items():
-            if clave in base_json:
+            if clave in base_json and valor != None:
                 base_json[clave] = valor
-            else:
-                print(f"Advertencia: La llave '{clave}' no existe en el JSON base.")
+            #else:
+            #    print(f"Advertencia: La llave '{clave}' no existe en el JSON base.")
         return base_json
     
+    
+    
     try:
-        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}"
+        #print (api_request.data['pyload'])
         json_base=None
         # Leer el archivo JSON base
         with open("app/template_json/payload_save_order.json", 'r', encoding='utf-8') as archivo:
             json_base = json.load(archivo)
-        
-        if json_base:
-            data_to_save = actualizar_json(json_base, api_request.data['pyload'])
-        
+            
+        #Obtener Orden Expandida
+        #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
+        if  "sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet" == api_request.endpoint:
+            api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet'
+            #api_request.data['orden']=first_order
+            #api_request.data['clase']=clase
+            order_expand = order_expandida(api_request, db)
+            order_expand = order_expand['data']['d']['results'][0]
+            
+            order_expand['Usrcons'] = order_expand['Usuario']
+            order_expand['Pascons'] = order_expand['Password']
+            order_expand['Tarverif'] = order_expand['TarifVerif']
+            order_expand['Zzlon'] = order_expand['Zutmy']
+            order_expand['Zzlat'] = order_expand['Zutmx']
+            
+            if json_base:
+                json_base = actualizar_json(json_base, order_expand)
+                data_to_save = actualizar_json(json_base, api_request.data['pyload'])
+                
+                api_request.endpoint = f"{BASEURL}/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet"
+            
         return data_to_save
         #return middleware_post(api_request, data_to_save, db)
     except Exception as e:
