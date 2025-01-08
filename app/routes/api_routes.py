@@ -160,6 +160,7 @@ HEADERS = {
 'MaxDataServiceVersion': '2.0',
 'Authorization': 'Basic V01XRUJDT046UTFwMHcybzk=',
 'Connection': 'keep-alive',
+'x-csrf-token': 'fetch',
 }
 
 # Endpoint para realizar peticiones GET a la otra API (middleware)
@@ -179,13 +180,14 @@ def middleware_request(api_request: ApiRequestModelInput, db: Session, request: 
             
             try:
                 response = session.request("GET", api_request.endpoint, params=query_params, headers=HEADERS) # Realiza la solicitud
-                
+                #print (response.headers)
                 if not any(error in response.text.lower() for error in error_strings):
                     
                     status_api = response.status_code 
                     # Registrar la petición
                     register_request(usuario_id.id, api_request, status_api, db)
-                    return {"status": status_api, "data": json.loads(response.text)}  # Devuelve la respuesta si no se encuentran las cadenas
+                    
+                    return {"status": status_api, "data": json.loads(response.text), 'tkn':response.headers['x-csrf-token']}  # Devuelve la respuesta si no se encuentran las cadenas
                 
                 else:
                     print(f"Intento {retry_count + 1}: Encontró cadenas prohibidas en la respuesta. Reintentando...")
@@ -202,7 +204,7 @@ def middleware_request(api_request: ApiRequestModelInput, db: Session, request: 
         raise HTTPException(status_code=500, detail=str(e))
     
 # Endpoint para realizar peticiones POST a la otra API (middleware)
-def middleware_post(api_request: ApiRequestModelInput, payload:dict, db: Session = Depends(get_db), max_retries=3):
+def middleware_post(api_request: ApiRequestModelInput, payload:dict, db: Session = Depends(get_db), token=None, max_retries=3):
 
     try:
         
@@ -214,8 +216,12 @@ def middleware_post(api_request: ApiRequestModelInput, payload:dict, db: Session
         while retry_count < max_retries:
             
             try:
-                response = session.request("POST", api_request.endpoint, json=payload, headers=HEADERS)# Realiza la solicitud
-                
+                currentHeaders = HEADERS.copy()
+                if token != None:
+                    currentHeaders['x-csrf-token']=token
+                    print(token)
+                response = session.request("POST", api_request.endpoint, json=payload, headers=currentHeaders)# Realiza la solicitud
+                #print (response.text)
                 if not any(error in response.text.lower() for error in error_strings):
                     
                     status_api = response.status_code 
@@ -715,9 +721,9 @@ def estados_usuario(api_request: ApiRequestModelInput, db: Session = Depends(get
 @router.post("/guardar_noejecutada/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet
 def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     
-    def actualizar_json(base_json, cambios):
+    def actualizar_json(base_json, cambios, noConsiderar=[]):
         for clave, valor in cambios.items():
-            if clave in base_json and valor != None:
+            if clave in base_json and valor != None and not(clave in noConsiderar):
                 base_json[clave] = valor
             #else:
             #    print(f"Advertencia: La llave '{clave}' no existe en el JSON base.")
@@ -727,7 +733,11 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
     
     try:
         #print (api_request.data['pyload'])
+
+        data_to_save1=None
+        data_to_save2=None
         json_base=None
+        tkn=None
         # Leer el archivo JSON base
         with open("app/template_json/payload_save_order.json", 'r', encoding='utf-8') as archivo:
             json_base = json.load(archivo)
@@ -739,6 +749,7 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
             #api_request.data['orden']=first_order
             #api_request.data['clase']=clase
             order_expand = order_expandida(api_request, db)
+            tkn = order_expand['tkn']
             order_expand = order_expand['data']['d']['results'][0]
             
             order_expand['Usrcons'] = order_expand['Usuario']
@@ -747,14 +758,47 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
             order_expand['Zzlon'] = order_expand['Zutmy']
             order_expand['Zzlat'] = order_expand['Zutmx']
             
+            order_expand['Zposte'] = order_expand['Zzposte']
+            order_expand['Region'] = order_expand['PaRegion']
+            order_expand['City1'] = order_expand['PaCity1']
+            order_expand['City2'] = order_expand['PaCity2']
+            order_expand['Street'] = order_expand['PaStreet']
+            order_expand['HouseNum1'] = order_expand['PaHouseNum1']
+            order_expand['StrSuppl3'] = order_expand['PaStrSuppl3']
+            order_expand['Location'] = order_expand['PaLocation']
+            order_expand['StrSuppl1'] = order_expand['PaStrSuppl1']
+            order_expand['Building'] = order_expand['PaBuilding']
+            order_expand['StrSuppl2'] = order_expand['PaStrSuppl2']
+            order_expand['Floor'] = order_expand['PaFloor']
+            order_expand['Roomnumber'] = order_expand['PaRoomnumber']
+            order_expand['HomeCity'] = order_expand['PaHomeCity']
+            order_expand['HouseNum2'] = order_expand['PaHouseNum2']
+            order_expand['Remark'] = order_expand['PaRemark']
+            order_expand['TipoConductorCe'] = order_expand['TipoConductor']
+            order_expand['TomacorienteCe'] = order_expand['Tomacoriente']
+            order_expand['ProteccionCe'] = order_expand['Proteccion']
+            order_expand['LongitudCe'] = order_expand['Longitud']
+            order_expand['CredMesplazoCe'] = order_expand['CredMesplazoCi']
+            order_expand['MontoCe'] = order_expand['MontoCi']
+            order_expand['FecRestSrv'] = order_expand['FecRestServ']
+            order_expand['HorRestSrv'] = order_expand['HorRestServ']
+            
             if json_base:
                 json_base = actualizar_json(json_base, order_expand)
-                data_to_save = actualizar_json(json_base, api_request.data['pyload'])
-                
+                data_to_save1 = actualizar_json(json_base, api_request.data['pyload'], noConsiderar=["UsrstCcla"])
+                data_to_save2 = actualizar_json(json_base, api_request.data['pyload'], noConsiderar=[
+                    "UpdSellos","UpdDanEqui","UpdMatret","UpdCompo","UpdOper","UpdServ",
+                    "ORDENSELLOS","ORDENDANEQUI","ORDENMATRET","ORDENCOMPO","ORDENOPER","ORDENSERV"
+                ])
                 api_request.endpoint = f"{BASEURL}/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet"
             
-        return data_to_save
-        #return middleware_post(api_request, data_to_save, db)
+        #return data_to_save
+        objToRtrn = {}
+        print (data_to_save1)
+        print (data_to_save2)
+        #objToRtrn['firstSave'] = middleware_post(api_request, data_to_save1, db, token=tkn)
+        objToRtrn['secondSave'] = middleware_post(api_request, data_to_save2, db, token=tkn)
+        return objToRtrn
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -763,24 +807,25 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
 #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet
 @router.post("/cierre_tecnico/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet
 def cierre_tecnico(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
-
+    tkn=None
     try:
-        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}"
         
-        data_to_save = {
-            "IAufnr":api_request.data['orden'],
-            "Pascons":encode(api_request.clave_api),
-            "Usrcons":api_request.usuario_api
-        }
-
-        #Payload:
-        #    {
-        #        "IAufnr":"orden",
-        #        "Pascons":"xxx",
-        #        "Usrcons":"0705698470"
-        #    }
+        if  "sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet" == api_request.endpoint:
+            api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet'
+            #api_request.data['orden']=first_order
+            #api_request.data['clase']=clase
+            order_expand = order_expandida(api_request, db)
+            tkn = order_expand['tkn']
         
-        return data_to_save
-        #return middleware_post(api_request, data_to_save, db)
+            api_request.endpoint = f"{BASEURL}/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet"
+            
+            data_to_save = {
+                "IAufnr":api_request.data['orden'],
+                "Pascons":encode(api_request.clave_api),
+                "Usrcons":api_request.usuario_api
+            }
+            
+        #return data_to_save
+        return middleware_post(api_request, data_to_save, db, token=tkn)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
