@@ -734,8 +734,9 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
     try:
         #print (api_request.data['pyload'])
 
-        data_to_save1=None
-        data_to_save2=None
+        data_to_save = None
+        #data_to_save1=None
+        #data_to_save2=None
         json_base=None
         tkn=None
         # Leer el archivo JSON base
@@ -785,19 +786,23 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
             
             if json_base:
                 json_base = actualizar_json(json_base, order_expand)
-                data_to_save1 = actualizar_json(json_base, api_request.data['pyload'], noConsiderar=["UsrstCcla"])
-                data_to_save2 = actualizar_json(json_base, api_request.data['pyload'], noConsiderar=[
-                    "UpdSellos","UpdDanEqui","UpdMatret","UpdCompo","UpdOper","UpdServ",
-                    "ORDENSELLOS","ORDENDANEQUI","ORDENMATRET","ORDENCOMPO","ORDENOPER","ORDENSERV"
-                ])
+                data_to_save = actualizar_json(json_base, api_request.data['pyload'])
+                #data_to_save1 = actualizar_json(json_base.copy(), api_request.data['pyload'], noConsiderar=["UsrstCcla"])
+                #data_to_save2 = actualizar_json(json_base.copy(), api_request.data['pyload'], noConsiderar=[
+                #    "UpdSellos","UpdDanEqui","UpdMatret","UpdCompo","UpdOper","UpdServ",
+                #    "ORDENSELLO3S","ORDENDANEQUI","ORDENMATRET","ORDENCOMPO","ORDENOPER","ORDENSERV"
+                #])
                 api_request.endpoint = f"{BASEURL}/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet"
             
         #return data_to_save
         objToRtrn = {}
-        print (data_to_save1)
-        print (data_to_save2)
-        #objToRtrn['firstSave'] = middleware_post(api_request, data_to_save1, db, token=tkn)
-        objToRtrn['secondSave'] = middleware_post(api_request, data_to_save2, db, token=tkn)
+        
+        data_to_save['Aufnr'] = str(data_to_save['Aufnr']).zfill(12)
+        
+        objToRtrn['Payload'] = data_to_save
+        objToRtrn['Saved'] = middleware_post(api_request, data_to_save, db, token=tkn)
+        
+        #objToRtrn['secondSave'] = middleware_post(api_request, data_to_save2, db, token=tkn)
         return objToRtrn
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -808,6 +813,7 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
 @router.post("/cierre_tecnico/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet
 def cierre_tecnico(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     tkn=None
+    data_to_save=None
     try:
         
         if  "sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet" == api_request.endpoint:
@@ -820,7 +826,7 @@ def cierre_tecnico(api_request: ApiRequestModelInput, db: Session = Depends(get_
             api_request.endpoint = f"{BASEURL}/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet"
             
             data_to_save = {
-                "IAufnr":api_request.data['orden'],
+                "IAufnr":str(api_request.data['orden']).zfill(12),
                 "Pascons":encode(api_request.clave_api),
                 "Usrcons":api_request.usuario_api
             }
