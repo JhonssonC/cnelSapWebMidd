@@ -794,20 +794,31 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
                 #])
                 api_request.endpoint = f"{BASEURL}/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet"
             
-        #return data_to_save
         objToRtrn = {}
         
         data_to_save['Aufnr'] = str(data_to_save['Aufnr']).zfill(12)
         
         objToRtrn['Payload'] = data_to_save
         objToRtrn['Saved'] = middleware_post(api_request, data_to_save, db, token=tkn)
+
+        api_request.endpoint = "sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/messageSet"
         
-        #objToRtrn['secondSave'] = middleware_post(api_request, data_to_save2, db, token=tkn)
+        objToRtrn['Message'] = mensaje(api_request, db)
+        
         return objToRtrn
+    
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
     
+@router.post("/mensaje/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/messageSet
+def mensaje(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Zaufnr='{str(api_request.data['orden']).zfill(12)}',Zusuario='{api_request.usuario_api}')"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))    
+
 
 #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet
 @router.post("/cierre_tecnico/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/cierreOrdenSet
