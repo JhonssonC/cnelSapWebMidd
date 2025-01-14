@@ -697,20 +697,47 @@ def agencias(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
- 
-@router.post("/tarifas/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/tipoTarifaSet
-def tarifas(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
-    try:
-        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}"
-        return middleware_request(api_request, db)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+
     
     
-@router.post("/estados_usuario/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/usrstcclaSet
-def estados_usuario(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+"""
+tipoTarifaSet
+usrstcclaSet
+
+tipo_acomSet?$filter=NameChar eq 'ZTIPACO'--TIPOACOMETIDA
+tipo_acomSet?$filter=NameChar eq 'ZCALACO'--CALIBREACOMETIDA -- RETIRADA TAMBIEN
+tipo_acomSet?$filter=NameChar eq 'ZFASESACO'--FASESACOMETIDA
+tipo_acomSet?$filter=NameChar eq 'ZMAT'--MATERIALACOMETIDA
+tipo_acomSet?$filter=NameChar eq 'ZTIPACORETI'--TIPOACOMETIDARETIRADA
+tipo_acomSet?$filter=NameChar eq 'ZCLARED'--CLASERED
+tipo_acomSet?$filter=NameChar eq 'ZTIPRED'--TIPORED
+tipo_acomSet?$filter=NameChar eq 'ZORIGFINA'--ORIGENFINANCIAMIENTO
+tipo_acomSet?$filter=NameChar eq 'ZSECUFASEACO'--SECUENCIAFASESDEACOMETIDA
+tipo_acomSet?$filter=NameChar eq 'ZUBICATAB'--UBICACIONTABLERO
+tipo_acomSet?$filter=NameChar eq 'ZCONSTAB'--CONSTRUCTOR DE TABLERO
+tipo_acomSet?$filter=NameChar eq 'ZPROTABL'--PROTECCION PRINCIPAL DEL TABLERO -- PROTECCION INDIVIDUAL
+tipo_acomSet?$filter=NameChar eq 'ZTIPROTAB'--TIPO DE PROTECCION DE TABLERO
+tipo_acomSet?$filter=NameChar eq 'ZTIPROT'--TIPO DE PROTECCION INDIVIDUAL
+tipo_acomSet?$filter=NameChar eq 'ZFASESMED'--FASES DE MEDIDOR
+tipo_acomSet?$filter=NameChar eq 'ZSECUFASEMED'--SECUENCIA FASES MEDIDOR
+
+accionmedSet?&$filter=ZcodCred eq '' and Metodo eq '00'--ACCION SOBRE MEDIDOR
+tipo_acomSet?$filter=NameChar eq 'ZUBICATAB'--UBICACION DE MEDIDOR
+--ANTERIOR
+--POSTERIOR
+dominioSet?$filter=Domname eq 'ZD_TAB_CENTR'--MEDIDOR CENTRALIZADO
+--MEDIDOR INSTALADO
+
+tipoSelloSet --TIPO DE SELLO (VIEJO)
+tipoSelloSet?$filter=substringof('11-543380948',Scode)--QUE TIPO DE SELLO HAY PARA EL SELLO DIGITADO (VIEJO)
+ubicaSelloSet--UBICACIONES DE SELLO
+tipoSelloSet?$filter=substringof('',Scode)
+removeSelloSet
+"""
+@router.post("/opciones_varias/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/*
+def opciones_varias(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
-        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}"
+        api_request.endpoint = f"{BASEURL}/sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/{api_request.endpoint}"
         return middleware_request(api_request, db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
