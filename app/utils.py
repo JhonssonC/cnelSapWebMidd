@@ -6,7 +6,7 @@ import uuid
 from app import models
 from app.schemas import ApiRequestModelInput, ImputUser, UserValidationRequest
 from sqlalchemy.orm import Session
-
+from datetime import datetime
 
 #Helper de codificacion de contraseña - Sap
 def encode(p):
@@ -98,3 +98,99 @@ def register_request(usuario_id: int, api_request: ApiRequestModelInput, status_
     db.commit()
 
     return api_request
+
+
+#Validadores
+
+def validar_datos(datos):
+    mensaje = ""
+    error = {"value": "", "mensaje": ""}  # Se incluye el mensaje de error en el retorno
+    
+    def mostrar_mensaje(mensaje):
+        print(mensaje)  # Puedes reemplazar esto por un logger o cualquier otro mecanismo.
+
+    # Validar FecEjecTrab
+    if not datos.get("FecEjecTrab"):
+        mensaje = "Debe completar Fecha Ejecución Trabajo"
+        mostrar_mensaje(mensaje)
+        error["value"] = "X"
+        error["mensaje"] = mensaje
+        return error
+
+    # Validar formato de FechaIngreso
+    if not datos.get("FechaIngreso"):
+        mensaje = "Debe completar Fecha de ingreso"
+        mostrar_mensaje(mensaje)
+        error["value"] = "X"
+        error["mensaje"] = mensaje
+        return error
+    else:
+        fecha_ingreso = datos["FechaIngreso"]
+        if fecha_ingreso[2:3] != "-" or fecha_ingreso[5:6] != "-":
+            mensaje = "Formato de fecha de ingreso inválido"
+            mostrar_mensaje(mensaje)
+            error["value"] = "X"
+            error["mensaje"] = mensaje
+            return error
+
+    # Validar HoraFinTrab
+    if not datos.get("HoraFinTrab"):
+        mensaje = "Debe completar Hora fin de Trabajo"
+        mostrar_mensaje(mensaje)
+        error["value"] = "X"
+        error["mensaje"] = mensaje
+        return error
+
+    # Validar fechas (FechaIngreso, FecEjecTrab, FecImpre)
+    try:
+        fecha_ingreso_dt = datetime.strptime(datos["FechaIngreso"], "%d-%m-%Y")
+        fec_impre_dt = datetime.strptime(datos["FecImpre"], "%d-%m-%Y")
+        fec_ejec_trab_dt = datetime.strptime(datos["FecEjecTrab"], "%d-%m-%Y")
+    except ValueError:
+        mensaje = "Formato de fecha inválido"
+        mostrar_mensaje(mensaje)
+        error["value"] = "X"
+        error["mensaje"] = mensaje
+        return error
+
+    if fecha_ingreso_dt < fec_impre_dt:
+        mensaje = "Fecha de Ingreso no puede ser menor a Fecha Impresión"
+        mostrar_mensaje(mensaje)
+        error["value"] = "X"
+        error["mensaje"] = mensaje
+        return error
+
+    if fecha_ingreso_dt < fec_ejec_trab_dt:
+        mensaje = "Fecha de Ingreso no puede ser menor a Fecha Ejecución Trabajo"
+        mostrar_mensaje(mensaje)
+        error["value"] = "X"
+        error["mensaje"] = mensaje
+        return error
+
+    # Validar horas (HoraIniTrab, HoraFinTrab, HoraIngreso)
+    try:
+        hora_ini_trab = datetime.strptime(datos["HoraIniTrab"], "%H:%M")
+        hora_fin_trab = datetime.strptime(datos["HoraFinTrab"], "%H:%M")
+        hora_ingreso = datetime.strptime(datos["HoraIngreso"], "%H:%M")
+    except ValueError:
+        mensaje = "Formato de hora inválido"
+        mostrar_mensaje(mensaje)
+        error["value"] = "X"
+        error["mensaje"] = mensaje
+        return error
+
+    if hora_ini_trab > hora_fin_trab:
+        mensaje = "Hora Inicio de trabajo no puede ser mayor a Hora Fin de trabajo"
+        mostrar_mensaje(mensaje)
+        error["value"] = "X"
+        error["mensaje"] = mensaje
+        return error
+
+    if fecha_ingreso_dt == fec_ejec_trab_dt and hora_ingreso <= hora_fin_trab:
+        mensaje = "Hora de ingreso debe ser mayor a Hora fin de Trabajo"
+        mostrar_mensaje(mensaje)
+        error["value"] = "X"
+        error["mensaje"] = mensaje
+        return error
+
+    return error
