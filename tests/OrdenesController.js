@@ -5072,75 +5072,6 @@ sap.ui.controller("ordenes.OrdenModif", {
       this._valueHelpSelectDialog.open();
     },
   
-    doValidaFechas: function(FecEjecTrab,HoraIniTrab,HoraFinTrab,FechaIngreso,FecImpre,HoraIngreso, error){
-  
-      var mensaje;
-  
-      if(!FecEjecTrab){
-        mensaje = "Debe completar Fecha Ejecuci�n Trabajo";
-        sap.ui.getCore().byId("idOrdenMod").getController().doMostrarMensaje(mensaje);
-        error.value = "X";
-        return;
-      }else{
-        if(FechaIngreso.substring(2, 3) != "-" || FechaIngreso.substring(5, 6) != "-" ){
-          mensaje = "Formato de fecha ejecucion trabajo invalido";
-            sap.ui.getCore().byId("idOrdenMod").getController().doMostrarMensaje(mensaje);
-            error.value = "X";
-            return;
-        }
-  
-      }
-      
-      
-      
-      if(!HoraFinTrab){
-        mensaje = "Debe completar Hora fin de Trabajo";
-        sap.ui.getCore().byId("idOrdenMod").getController().doMostrarMensaje(mensaje);
-        error.value = "X";
-        return;
-      }
-      if(!FechaIngreso){
-        mensaje = "Debe completar Fecha de ingreso";
-        sap.ui.getCore().byId("idOrdenMod").getController().doMostrarMensaje(mensaje);
-        error.value = "X";
-        return;
-      }else{
-        if(FechaIngreso.substring(2, 3) != "-" || FechaIngreso.substring(5, 6) != "-" ){
-          mensaje = "Formato de fecha de ingreso invalido";
-            sap.ui.getCore().byId("idOrdenMod").getController().doMostrarMensaje(mensaje);
-            error.value = "X";
-            return;
-        }
-  
-      }
-      
-      if(Date.parse(FechaIngreso.replace( /(\d{2})-(\d{2})-(\d{4})/, "$3-$2-$1")) < Date.parse(FecImpre.replace( /(\d{2})-(\d{2})-(\d{4})/, "$3-$2-$1"))){
-        mensaje = "Fecha de Ingreso no puede ser menor a Fecha Impresi�n";
-        sap.ui.getCore().byId("idOrdenMod").getController().doMostrarMensaje(mensaje);
-        error.value = "X";
-        return;
-      }
-      if(Date.parse(FechaIngreso.replace( /(\d{2})-(\d{2})-(\d{4})/, "$3-$2-$1")) < Date.parse(FecEjecTrab.replace( /(\d{2})-(\d{2})-(\d{4})/, "$3-$2-$1"))){
-        mensaje = "Fecha de Ingreso no puede ser menor a Fecha Ejecuci�n Trabajo";
-        sap.ui.getCore().byId("idOrdenMod").getController().doMostrarMensaje(mensaje);
-        error.value = "X";
-        return;
-      }
-      if(HoraIniTrab > HoraFinTrab){
-        mensaje = "Hora Inicio de trabajo no puede ser mayor a Hora Fin de trabajo";
-        sap.ui.getCore().byId("idOrdenMod").getController().doMostrarMensaje(mensaje);
-        error.value = "X";
-        return;
-      }
-      if(Date.parse(FechaIngreso) == Date.parse(FecEjecTrab)){
-        if(HoraIngreso <= HoraFinTrab){
-          mensaje = "Hora de ingreso debe ser mayor a Hora fin de Trabajo";
-          sap.ui.getCore().byId("idOrdenMod").getController().doMostrarMensaje(mensaje);
-          error.value = "X";
-          return;
-        }
-      }
-    },
   
     //Verifica cambios en los campos de Equipo
     doChangeNroSello: function(oEvent){
@@ -5149,23 +5080,6 @@ sap.ui.controller("ordenes.OrdenModif", {
   
     },
   
-    doValidaSellos: function(sellos){
-      var rows = sellos.getRows();
-      var row0 = rows[0].getCells();
-      var nroSello  = row0[0].getValue();
-      var tipoSello = row0[1].getValue();
-      for (var i = 1; i < rows.length; i++) {
-        var row = rows[i].getCells();
-        if(row[0].getValue()){
-          if  ( row[0].getValue() == nroSello &&
-            row[1].getValue() == tipoSello ){
-            mensaje = 'No se puede ingresar nro. de sellos y tipos duplicados';
-            sap.ui.getCore().byId("idOrdenMod").getController().doMostrarMensaje(mensaje);
-            return;
-          }
-        }
-      }
-    },
   
     doChangeDuplicateEqui: function(oEvent){
       //obtiene nro de equipo

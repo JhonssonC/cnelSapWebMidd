@@ -102,7 +102,7 @@ def register_request(usuario_id: int, api_request: ApiRequestModelInput, status_
 
 #Validadores
 
-def validar_datos(datos):
+def validar_fechas(datos):
     mensaje = ""
     error = {"value": "", "mensaje": ""}  # Se incluye el mensaje de error en el retorno
     
@@ -194,3 +194,25 @@ def validar_datos(datos):
         return error
 
     return error
+
+
+#Validacion de sellos
+def do_valida_sellos(sellos):
+    mensaje = ""
+    if not sellos or not isinstance(sellos, list) or len(sellos) == 0:
+        return {"error": False, "mensaje": ""}  # No hay sellos para validar
+
+    # Extraer la información de la primera fila
+    nro_sello = sellos[0].get("NroSello")
+    tipo_sello = sellos[0].get("Tipo")
+
+    # Iterar a partir del segundo elemento
+    for i in range(1, len(sellos)):
+        row = sellos[i]
+        if row.get("NroSello"):
+            if row.get("NroSello") == nro_sello and row.get("Tipo") == tipo_sello:
+                mensaje = "No se puede ingresar nro. de sellos y tipos duplicados"
+                print(mensaje)  # Simula mostrar el mensaje (puedes usar un logger aquí)
+                return {"error": True, "mensaje": mensaje}
+
+    return {"error": False, "mensaje": ""}  # No hay errores
