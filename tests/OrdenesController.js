@@ -1256,38 +1256,43 @@ sap.ui.controller("ordenes.OrdenModif", {
       // Estado de Usr. Sin Num. Clasif
       oEntry.UsrstScla    = sap.ui.getCore().byId("MOUsrStSclaTxt").getName();
   
+
+
       // CABECERA
       //Tarifa Verificada
       oEntry.Tarverif     = sap.ui.getCore().byId("MOTarifVerif").getName();
       //oEntry.Tarverif     = sap.ui.getCore().byId("MORamaEcon").getName();
   
-      // C�digo Grupo
+      // C�digo Grupo GF
       oEntry.Qmgrp      = sap.ui.getCore().byId("MOQktextgr").getName();  
-      // C�digo Cierre
+      // C�digo Cierre GG
       oEntry.Qmcod      = sap.ui.getCore().byId("MOKurztext").getName();
-      // Observaciones
+      // Observaciones GH
       oEntry.Observaciones  = sap.ui.getCore().byId("MOObservaciones").getValue();
   
+
+
+
       // RESPONSABLES
-      // Hora Inicio de Trabajo
+      // Hora Inicio de Trabajo GJ
       oEntry.HoraIniTrab    = sap.ui.getCore().byId("MOHoraIniTrab").getValue();
-      // Fecha Ejecuci�n Trabajo
+      // Fecha Ejecuci�n Trabajo GI
       oEntry.FecEjecTrab    = sap.ui.getCore().byId("MOFecEjecTrab").getValue();
-      // Hora fin de Trabajo
+      // Hora fin de Trabajo GK
       oEntry.HoraFinTrab    = sap.ui.getCore().byId("MOHoraFinTrab").getValue();
       // Ingresado Por
       //oEntry.IngresadoPor   = sap.ui.getCore().byId("MOIngresadoPor").getValue();
   
       // DATOS DE CONEXI�N
-      // Grado. Lon. Ubic. Geo.
+      // Grado. Lon. Ubic. Geo. U
       oEntry.Zzlon      = sap.ui.getCore().byId("MOZutmy").getValue();
-      // Grado. Lat. Ubic. Geo
+      // Grado. Lat. Ubic. Geo V
       oEntry.Zzlat      = sap.ui.getCore().byId("MOZutmx").getValue();
-      // Poste
+      // Poste GN
       oEntry.Zposte     = sap.ui.getCore().byId("MOZzposte").getValue();
-      // Punto de Red
+      // Punto de Red GO
       oEntry.GridName     = sap.ui.getCore().byId("MOGridName2").getName();
-      // Nivel de Red
+      // Nivel de Red GP
       oEntry.GridLevel    = sap.ui.getCore().byId("MOGridLevel").getName();
   
       // CARGA INSTALADA
