@@ -731,49 +731,138 @@ sap.ui.controller("ordenes.OrdenModif", {
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecOper");
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecServ");
       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       // se define la visualizacion en funcion de la clase
       switch (clase) {
-      case "INST":
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
-        break;
-      case "INSP":
-        if( claseAct != '032' ) {
+
+        case "DCDE":
           sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
-        }
-        if( claseAct == '032' ){
-          sap.ui.getCore().byId("MOZzposte").setEditable(true);
-          sap.ui.getCore().byId("MOZzposte").removeStyleClass("divInputOrden");
-          sap.ui.getCore().byId("MOZzposte").addStyleClass("divInputOrdenShEna");
-  
-          sap.ui.getCore().byId("MOGridName2").setShowValueHelp(true);
-          sap.ui.getCore().byId("MOGridName2").setValueHelpOnly(true);
-          sap.ui.getCore().byId("MOGridName2").setEditable(true);
-          sap.ui.getCore().byId("MOGridName2").removeStyleClass("divInputOrdenSh");
-          sap.ui.getCore().byId("MOGridName2").addStyleClass("divInputOrdenShEna");
-  
-          sap.ui.getCore().byId("MOGridLevel").setShowValueHelp(true);
-          sap.ui.getCore().byId("MOGridLevel").setValueHelpOnly(true);
-          sap.ui.getCore().byId("MOGridLevel").setEditable(true);
-          sap.ui.getCore().byId("MOGridLevel").removeStyleClass("divInputOrdenSh");
-          sap.ui.getCore().byId("MOGridLevel").addStyleClass("divInputOrdenShEna");
-  
-          sap.ui.getCore().byId("MOZutmy").setEditable(true);
-          sap.ui.getCore().byId("MOZutmx").setEditable(true);
-  
-  
-        }
-        sap.ui.getCore().byId("MOZzposte").addStyleClass("divInput");
-        sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormMedIns");
-        sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormTraIns");
-        sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormMedRet");
-        sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormTraRet");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
-        break;
+          sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormMedIns");
+          sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormTraIns");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
+          break;
+        case "EMER":
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
+          break;
+        case "INSP":
+            if( claseAct != '032' ) {
+              sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
+            }
+            if( claseAct == '032' ){
+              sap.ui.getCore().byId("MOZzposte").setEditable(true);
+              sap.ui.getCore().byId("MOZzposte").removeStyleClass("divInputOrden");
+              sap.ui.getCore().byId("MOZzposte").addStyleClass("divInputOrdenShEna");
+              sap.ui.getCore().byId("MOGridName2").setShowValueHelp(true);
+              sap.ui.getCore().byId("MOGridName2").setValueHelpOnly(true);
+              sap.ui.getCore().byId("MOGridName2").setEditable(true);
+              sap.ui.getCore().byId("MOGridName2").removeStyleClass("divInputOrdenSh");
+              sap.ui.getCore().byId("MOGridName2").addStyleClass("divInputOrdenShEna");
+              sap.ui.getCore().byId("MOGridLevel").setShowValueHelp(true);
+              sap.ui.getCore().byId("MOGridLevel").setValueHelpOnly(true);
+              sap.ui.getCore().byId("MOGridLevel").setEditable(true);
+              sap.ui.getCore().byId("MOGridLevel").removeStyleClass("divInputOrdenSh");
+              sap.ui.getCore().byId("MOGridLevel").addStyleClass("divInputOrdenShEna");
+              sap.ui.getCore().byId("MOZutmy").setEditable(true);
+              sap.ui.getCore().byId("MOZutmx").setEditable(true);
+            }
+          sap.ui.getCore().byId("MOZzposte").addStyleClass("divInput");
+          sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormMedIns");
+          sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormTraIns");
+          sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormMedRet");
+          sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormTraRet");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
+          break;
+        case "INST":
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
+          break;
+        case "INTE":
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
+          break;
+        case "NLEC":
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
+          break;
+        case "SOLI":
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
+          break;
+        case "PERC":
+          if( cnrMetodo != '03' ) { //censo de carga
+            sap.ui.getCore().byId("MOFormCnrCen").setVisible(false);
+            sap.ui.getCore().byId("MOTablaCe").setVisible(false);
+          }
+          if( cnrMetodo != '04' ) { //Porcentaje de error
+            sap.ui.getCore().byId("MOFormCnrPor").setVisible(false);
+          }
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
+          sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
+          break;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+      
       case "DC01":
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
         sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormMedIns");
@@ -794,20 +883,7 @@ sap.ui.controller("ordenes.OrdenModif", {
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
         break;
-      case "DCDE":
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
-        sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormMedIns");
-        sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormTraIns");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
-        break;
-      case "SOLI":
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
-        break;
+      
       case "RECL":
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
         sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormMedIns");
@@ -827,35 +903,14 @@ sap.ui.controller("ordenes.OrdenModif", {
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
         break;
-      case "EMER":
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
-        break;
+      
       case "OPEC":
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
         break;
-      case "PERC":
-        if( cnrMetodo != '03' ) { //censo de carga
-          sap.ui.getCore().byId("MOFormCnrCen").setVisible(false);
-          sap.ui.getCore().byId("MOTablaCe").setVisible(false);
-        }
-        if( cnrMetodo != '04' ) { //Porcentaje de error
-          sap.ui.getCore().byId("MOFormCnrPor").setVisible(false);
-        }
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
-        break;
-      case "NLEC":
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
-        break;
+      
+      
       case "INSE":
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
         sap.ui.getCore().byId("MOSecEquipo").removeContent("MOFormMedExi");
@@ -877,12 +932,7 @@ sap.ui.controller("ordenes.OrdenModif", {
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
         break;
-      case "INTE":
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDireccion");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecPec");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDanoequi");
-        sap.ui.getCore().byId("MOAcordion").removeSection("MOSecCnr");
-        break;
+      
       default:
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecDatPrin");
         sap.ui.getCore().byId("MOAcordion").removeSection("MOSecRespon");
