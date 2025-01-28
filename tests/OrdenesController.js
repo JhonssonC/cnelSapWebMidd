@@ -1301,6 +1301,8 @@ sap.ui.controller("ordenes.OrdenModif", {
       // Carga Fluctuante Verificada kW
       oEntry.CargaFlucVer   = sap.ui.getCore().byId("MOCargaFlucVer").getValue();
   
+
+
       // DIRECCI�N DE ORDEN
       // Provincia
       oEntry.Region     = sap.ui.getCore().byId("MOPaBezei").getName();
@@ -1333,6 +1335,9 @@ sap.ui.controller("ordenes.OrdenModif", {
       // Comentarios
       oEntry.Remark     = sap.ui.getCore().byId("MOPaRemark").getValue();
   
+
+
+
       // ACOMETIDA
       // Tipo de Acometida
       oEntry.TipoAcom     = sap.ui.getCore().byId("MOTipoAcomx").getName();
@@ -1392,6 +1397,12 @@ sap.ui.controller("ordenes.OrdenModif", {
       // Secuencia Fases Medidor
       oEntry.SecFases     = sap.ui.getCore().byId("MOSecFasesx").getName();
   
+
+
+
+
+
+      
       // EQUIPO
       // Acci�n sobre Medidor
       oEntry.AccionMedidor  = sap.ui.getCore().byId("MOAccionMedidor").getName();
