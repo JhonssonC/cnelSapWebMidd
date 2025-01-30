@@ -216,3 +216,33 @@ def do_valida_sellos(sellos):
                 return {"error": True, "mensaje": mensaje}
 
     return {"error": False, "mensaje": ""}  # No hay errores
+
+#Validar Editables
+def validar_campos_editables(clase, oEntry, config_json):
+    """
+    Valida que los campos editables en oEntry sean los permitidos según la clase de orden.
+
+    :param clase: (str) Clase de orden (ej. 'DCDE', 'EMER', etc.).
+    :param oEntry: (dict) Diccionario con los datos ingresados.
+    :param config_json: (dict) Diccionario con las clases de orden y sus campos permitidos.
+    :return: (bool, list) Retorna True si es válido, False y una lista de errores si hay campos inválidos.
+    """
+    errores = []
+    
+    # Verificar si la clase existe en la configuración
+    if clase not in config_json:
+        return False, [f"La clase '{clase}' no está definida en la configuración."]
+
+    # Obtener los campos permitidos para la clase
+    campos_no_permitidos = set(config_json[clase])
+
+    # Verificar que los campos en oEntry sean los permitidos
+    for campo in oEntry.keys():
+        if campo in campos_no_permitidos:
+            errores.append(f"Campo no permitido para {clase}: {campo}")
+
+    # Si hay errores, retornar False y la lista de errores
+    if errores:
+        return False, errores
+    
+    return True, []

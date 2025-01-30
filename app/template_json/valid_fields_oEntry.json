@@ -1,0 +1,6 @@
+{
+    "DCDE": ["Tarverif", "Observaciones", "HoraIniTrab", "FecEjecTrab", "HoraFinTrab"],
+    "EMER": ["Tarverif", "Observaciones", "HoraIniTrab", "FecEjecTrab", "HoraFinTrab"],
+    "INSP": ["Tarverif", "Observaciones", "HoraIniTrab", "FecEjecTrab", "HoraFinTrab", "Zzlon", "Zzlat"],
+    "PERC": ["Tarverif", "Observaciones", "HoraIniTrab", "FecEjecTrab", "HoraFinTrab", "Zzlon", "Zzlat", "AccionMedidor"]
+}
