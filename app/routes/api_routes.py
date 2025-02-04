@@ -6,7 +6,7 @@ from app.crud_api_sap import create_usuariosap, getCierres, getGrupos, saveCierr
 from app.database import get_db
 from app.models import Cierre, ContratoSap, Grupo
 from ..schemas import ApiRequestModelInput, Contratosap
-from ..utils import validate_key, register_request, encode
+from ..utils import validar_campos_editables, validate_key, register_request, encode, validar_fechas, do_valida_sellos
 import requests
 import urllib3
 from urllib3.util import create_urllib3_context
@@ -756,8 +756,6 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
             #    print(f"Advertencia: La llave '{clave}' no existe en el JSON base.")
         return base_json
     
-    
-    
     try:
         #print (api_request.data['pyload'])
 
@@ -766,9 +764,18 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
         #data_to_save2=None
         json_base=None
         tkn=None
+        valid_fields=None
+        es_valido_payload=True
+        errores=None
+        es_valido_fechas={"value": "" }
+        es_valido_sellos={"error": False }
+        
         # Leer el archivo JSON base
         with open("app/template_json/payload_save_order.json", 'r', encoding='utf-8') as archivo:
             json_base = json.load(archivo)
+            
+        with open("app/template_json/valid_fields_oEntry.json", 'r', encoding='utf-8') as archivo:
+            valid_fields = json.load(archivo)
             
         #Obtener Orden Expandida
         #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
@@ -811,14 +818,33 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
             order_expand['FecRestSrv'] = order_expand['FecRestServ']
             order_expand['HorRestSrv'] = order_expand['HorRestServ']
             
+            tipoOrden = int(order_expand['Ilart'])
+            clase = api_request.data['clase']
+            if (tipoOrden == 32 and (clase == "INSP" or clase == "insp")):
+                clase = "INSP32"
+            
+            es_valido_payload, errores = validar_campos_editables(clase, api_request.data['pyload'], valid_fields)
+            if not es_valido_payload:
+                objToRtrn['Message'] = {"Error": errores}
+                return objToRtrn
+            
+            es_valido_fechas = validar_fechas(api_request.data['pyload'])
+            if es_valido_fechas["value"] == "X":
+                objToRtrn['Message'] = {"Error": es_valido_fechas["mensaje"]}
+                return objToRtrn
+            
+            if api_request.data['pyload']['ORDENSELLOS']:
+                es_valido_sellos = do_valida_sellos(api_request.data['pyload']['ORDENSELLOS'])
+                if es_valido_sellos["error"]:
+                    objToRtrn['Message'] = {"Error": es_valido_sellos["mensaje"]}
+                    return objToRtrn
+            
+            
             if json_base:
                 json_base = actualizar_json(json_base, order_expand)
                 data_to_save = actualizar_json(json_base, api_request.data['pyload'])
-                #data_to_save1 = actualizar_json(json_base.copy(), api_request.data['pyload'], noConsiderar=["UsrstCcla"])
-                #data_to_save2 = actualizar_json(json_base.copy(), api_request.data['pyload'], noConsiderar=[
-                #    "UpdSellos","UpdDanEqui","UpdMatret","UpdCompo","UpdOper","UpdServ",
-                #    "ORDENSELLO3S","ORDENDANEQUI","ORDENMATRET","ORDENCOMPO","ORDENOPER","ORDENSERV"
-                #])
+
+
                 api_request.endpoint = f"{BASEURL}/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet"
             
         objToRtrn = {}
