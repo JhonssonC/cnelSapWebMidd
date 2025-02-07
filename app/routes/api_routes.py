@@ -698,6 +698,16 @@ def agencias(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
     
 
+@router.post("/search_med/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/beberSet
+def search_med(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=Sernr eq '{api_request.data['serie']}' and Mtart eq 'ZMED' and Werks eq '{api_request.data['user_web']}'"
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+    
+
     
     
 """
