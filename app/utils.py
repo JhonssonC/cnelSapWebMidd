@@ -7,6 +7,7 @@ from app import models
 from app.schemas import ApiRequestModelInput, ImputUser, UserValidationRequest
 from sqlalchemy.orm import Session
 from datetime import datetime
+import re
 
 #Helper de codificacion de contraseña - Sap
 def encode(p):
@@ -246,3 +247,45 @@ def validar_campos_editables(clase, oEntry, config_json):
         return False, errores
     
     return True, []
+
+
+
+def validar_y_convertir_numericos(diccionario):
+    """
+    Valida y convierte los valores numéricos en un diccionario.
+    - Elimina ceros a la izquierda en enteros.
+    - Asegura que el separador decimal sea un punto.
+    - Convierte strings numéricos a int o float.
+
+    :param diccionario: Diccionario con valores en formato string.
+    :return: Diccionario con valores corregidos o un diccionario de errores.
+    """
+    campos_numericos = {
+        "CargaNormDec", "CargaFlucDec", "CargaNormVer", "CargaFlucVer",
+        "Zutmx", "Zutmy", "LongAcom", "LongFachada", "DemAcom", "FactDiver",
+        "LongAcomRet", "DemandaKw", "PorcAct", "PorcDem", "PorcRea"
+    }
+    
+    errores = {}
+    convertido = {}
+
+    for campo, valor in diccionario.items():
+        if campo in campos_numericos:
+            # Validar que el valor sea un número válido
+            valor_str = valor.strip()
+            
+            # Reemplazar coma (,) por punto (.) si existe
+            valor_str = valor_str.replace(",", ".")
+            
+            # Validar formato numérico
+            if re.fullmatch(r"^-?\d+(\.\d+)?$", valor_str):
+                # Convertir a float si tiene punto decimal, de lo contrario a int
+                if "." in valor_str:
+                    convertido[campo] = float(valor_str)
+                else:
+                    convertido[campo] = int(valor_str.lstrip("0") or "0")  # Evita dejar vacío
+            else:
+                errores[campo] = valor  # Guarda los valores incorrectos
+
+    return convertido if not errores else {"errores": errores}
+
