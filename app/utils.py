@@ -145,7 +145,7 @@ def validar_fechas(datos):
     # Validar fechas (FechaIngreso, FecEjecTrab, FecImpre)
     try:
         fecha_ingreso_dt = datetime.strptime(datos["FechaIngreso"], "%d-%m-%Y")
-        fec_impre_dt = datetime.strptime(datos["FecImpre"], "%d-%m-%Y")
+        #fec_impre_dt = datetime.strptime(datos["FecImpre"], "%d-%m-%Y")
         fec_ejec_trab_dt = datetime.strptime(datos["FecEjecTrab"], "%d-%m-%Y")
     except ValueError:
         mensaje = "Formato de fecha inválido"
@@ -154,12 +154,12 @@ def validar_fechas(datos):
         error["mensaje"] = mensaje
         return error
 
-    if fecha_ingreso_dt < fec_impre_dt:
-        mensaje = "Fecha de Ingreso no puede ser menor a Fecha Impresión"
-        mostrar_mensaje(mensaje)
-        error["value"] = "X"
-        error["mensaje"] = mensaje
-        return error
+    #if fecha_ingreso_dt < fec_impre_dt:
+    #    mensaje = "Fecha de Ingreso no puede ser menor a Fecha Impresión"
+    #    mostrar_mensaje(mensaje)
+    #    error["value"] = "X"
+    #    error["mensaje"] = mensaje
+    #    return error
 
     if fecha_ingreso_dt < fec_ejec_trab_dt:
         mensaje = "Fecha de Ingreso no puede ser menor a Fecha Ejecución Trabajo"
@@ -170,9 +170,9 @@ def validar_fechas(datos):
 
     # Validar horas (HoraIniTrab, HoraFinTrab, HoraIngreso)
     try:
-        hora_ini_trab = datetime.strptime(datos["HoraIniTrab"], "%H:%M")
-        hora_fin_trab = datetime.strptime(datos["HoraFinTrab"], "%H:%M")
-        hora_ingreso = datetime.strptime(datos["HoraIngreso"], "%H:%M")
+        hora_ini_trab = datetime.strptime(datos["HoraIniTrab"], "%H:%M:%S")
+        hora_fin_trab = datetime.strptime(datos["HoraFinTrab"], "%H:%M:%S")
+        hora_ingreso = datetime.strptime(datos["HoraIngreso"], "%H:%M:%S")
     except ValueError:
         mensaje = "Formato de hora inválido"
         mostrar_mensaje(mensaje)

@@ -755,8 +755,8 @@ def opciones_varias(api_request: ApiRequestModelInput, db: Session = Depends(get
     
     
 #sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet
-@router.post("/guardar_noejecutada/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet
-def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+@router.post("/guardar_orden/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet
+def guardar_orden(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     
     def actualizar_json(base_json, cambios, noConsiderar=[]):
         for clave, valor in cambios.items():
@@ -786,7 +786,9 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
             
         with open("app/template_json/valid_fields_oEntry.json", 'r', encoding='utf-8') as archivo:
             valid_fields = json.load(archivo)
-            
+        
+        objToRtrn = {}
+          
         #Obtener Orden Expandida
         #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
         if  "sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet" == api_request.endpoint:
@@ -857,7 +859,7 @@ def guardar_noejecutada(api_request: ApiRequestModelInput, db: Session = Depends
 
                 api_request.endpoint = f"{BASEURL}/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet"
             
-        objToRtrn = {}
+        
         
         data_to_save['Aufnr'] = str(data_to_save['Aufnr']).zfill(12)
         
