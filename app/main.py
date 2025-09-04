@@ -2,7 +2,7 @@
 from fastapi import FastAPI
 from fastapi.concurrency import asynccontextmanager
 
-from app.routes import prec_routes, auth_routes, api_routes
+from app.routes import prec_routes, auth_routes, api_routes, aportal_routes
 from .database import create_db_and_tables, init_db
 
 # Crear la aplicación de FastAPI
@@ -22,3 +22,4 @@ def startup_event():
 app.include_router(auth_routes.router, prefix="/auth")
 app.include_router(api_routes.router, prefix="/middleware")
 app.include_router(prec_routes.router, prefix="/precoactiva")
+app.include_router(aportal_routes.router, prefix="/aportal")

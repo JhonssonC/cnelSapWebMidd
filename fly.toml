@@ -4,7 +4,7 @@
 #
 
 app = 'cnelsapwebmidd'
-primary_region = 'scl'
+primary_region = 'mia'
 
 [build]
 

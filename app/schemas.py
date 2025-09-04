@@ -7,6 +7,23 @@ class ImputUser(BaseModel):
     usuario: str
     clave: str
     
+class AportalUser(ImputUser):
+    llave: str
+    
+class ResumenDeGestion(AportalUser):
+    id_reporte: int = 915
+    id: int = 915
+    par_uni: str = '07'
+    par_pro: str = ''
+    par_can: str = ''
+    par_sec: str = ''
+    par_dep: str = ''
+    par_ges: str = ''
+    par_contra: str = '17312'
+    par_cua: str = ''
+    fec_ini: str = '01/05/2025'
+    fec_fin: str = '15/05/2025'
+    
 class UserValidationRequest(ImputUser):
     llave: str
     superuser: Optional[bool] = False
@@ -24,6 +41,10 @@ class ApiRequestModelBase(BaseModel):
 class ApiRequestModelInput(ApiRequestModelBase):
     llave: str
     data: dict = None
+    
+class AportalLogout(BaseModel):
+    llave: str
+    sessionDict: dict = None
 
 class ApiRequestModel(ApiRequestModelBase):
     usuario_id: int

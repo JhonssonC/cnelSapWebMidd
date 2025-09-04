@@ -8,12 +8,12 @@ from sqlalchemy.orm import sessionmaker
 load_dotenv()
 #TURSO_DATABASE_URL = os.getenv("TURSO_DATABASE_URL")
 #TURSO_AUTH_TOKEN = os.getenv("TURSO_AUTH_TOKEN")
-#dbUrl = f"sqlite+{TURSO_DATABASE_URL}/?authToken={TURSO_AUTH_TOKEN}&secure=true"
+#engine = create_engine(f"sqlite+{TURSO_DATABASE_URL}?secure=true",connect_args={"auth_token": TURSO_AUTH_TOKEN,})
 
 dbUrl = 'sqlite:///database.db'
+engine = create_engine(dbUrl, connect_args={"check_same_thread": False}, pool_pre_ping=True)
 
-# Crea el motor de la base de datos
-engine = create_engine(dbUrl, connect_args={"check_same_thread": False})
+
 
 # Crea una fábrica de sesiones sincrónicas
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
