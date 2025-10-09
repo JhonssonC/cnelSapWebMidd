@@ -1,6 +1,7 @@
+import os
 import time
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 
 from app.crud_aportal import *
 from ..schemas import ApiRequestModelInput, AportalLogout, AportalUser, ImputUser, ResumenDeGestion
@@ -68,6 +69,39 @@ def getKeys(api_request: AportalUser, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+    
+@router.post("/texto/")
+def descargar_texto(api_request: str, db: Session = Depends(get_db)):
+    """
+    Endpoint GET para enviar el contenido de un archivo de texto.
+    """
+    
+    try:
+        
+        usuario_id = validate_key(api_request, db)
+        
+        if not usuario_id:
+            raise HTTPException(status_code=401, detail="Invalid key")
+        
+        # Crear una sesión para mantener cookies
+    
+        # Crea un archivo de texto de ejemplo si no existe
+        if not os.path.exists("texto.txt"):
+            with open("texto.txt", "w") as f:
+                f.write("No Encontrado.\n")
+                
+        # 2. Leer el contenido del archivo de forma asíncrona
+        try:
+            with open("texto.txt", 'r', encoding='utf-8') as f:
+                contenido = f.read()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Error al leer el archivo: {e}")
+
+        # 3. Devolver el contenido como PlainTextResponse
+        return PlainTextResponse(content=contenido)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
 @router.post("/getResumenDeGestion/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet
 def getKeys(api_request: ResumenDeGestion, db: Session = Depends(get_db)):
