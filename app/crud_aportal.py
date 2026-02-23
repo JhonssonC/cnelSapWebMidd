@@ -10,7 +10,6 @@ headers = {
         'cache-control': 'no-cache',
         'content-type': 'application/x-www-form-urlencoded',
         'dnt': '1',
-        'origin': 'https://amobile.altura.systems',
         'pragma': 'no-cache',
         'priority': 'u=0, i',
         'sec-ch-ua': '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
@@ -155,8 +154,9 @@ def jsGenerate(session, id_reporte=915, id=915, PAR_UNI='07', PAR_PRO='', PAR_CA
             print("No se encontraron las cookies especificadas.")
     return session
 
-def getKey(session, key):
-    url = f"https://amobile.altura.systems/areports/l/es/accesoKey?key={key}&acceso=true"
+def getKey(session, key, url=""):
+    if url == "":
+        url = f"https://amobile.altura.systems/areports/l/es/accesoKey?key={key}&acceso=true"
     
     headers = {
     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -187,54 +187,94 @@ def getKey(session, key):
     if response:
         return session
     
-def loginAflowGetKey(session, key):
-    url = f"https://amobile.altura.systems/areports/l/es/login?version=aflow4&key={key}&acceso=true"
-    
-    headers = {
-    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-    'accept-language': 'es-ES,es;q=0.9',
-    'cache-control': 'no-cache',
-    'dnt': '1',
-    'pragma': 'no-cache',
-    'priority': 'u=0, i',
-    'referer': 'https://amobile.altura.systems/aportal/l/es/u/0/aportal.jsp',
-    'sec-ch-ua': '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"Windows"',
-    'sec-fetch-dest': 'iframe',
-    'sec-fetch-mode': 'navigate',
-    'sec-fetch-site': 'same-origin',
-    'sec-fetch-user': '?1',
-    'upgrade-insecure-requests': '1',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
-    }
-
-    response = session.get(url, headers=headers)
-    
-    print("\nHeaders getKey", session.cookies.get_dict())
-    
-    #print("Response getKeyHeaders:", response.headers)
-    print("\nResponse getKeyContent:", response.text)
-    
-    if response:
-        return session
-        
-def aPortal(session):
-    url = "https://amobile.altura.systems/aportal/l/es/u/0/index.jsp"
-
+def loginAflowGetKey(session, key, url=""):
     payload = {}
+    if url == "":
+        url = f"http://sar.cnel.gob.ec:9090/aflow/l/es/u/0/login?version=aflow4&key={key}&acceso=true"
 
+        headers = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Language': 'es-419,es;q=0.9',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+        'Pragma': 'no-cache',
+        'Referer': 'http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/aportal.jsp',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36',
+        }
+        
+    elif url=="aciis":
+        url=f"https://amobile.altura.systems/aflow4112/u/0/l/es/aflow4/main.jsp?ACORE.LANG=es&acceso=true&key={key}&key={key}&acceso=true"
+        headers = {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'es-419,es;q=0.9',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+            'DNT': '1',
+            'Pragma': 'no-cache',
+            'Referer': 'https://amobile.altura.systems/aportal/l/es/u/0/aportal.jsp',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36'
+        }
+    print (url)
     response = session.get(url, headers=headers, data=payload)
     
-    print("\nHeaders aPortal", session.cookies.get_dict(), response.status_code)
+    print (response)
     
+    print("\nHeaders getKey", session.cookies.get_dict())
+    
+    #print("Response getKeyHeaders:", response.headers)
+    #print("\nResponse getKeyContent:", response.text)
+
+    if len(session.cookies.get_dict()) > 0:
+        return session
+        
+def aPortal(session, url=""):
+    if url == "":
+        url = "https://amobile.altura.systems/aportal/l/es/u/0/aportal.jsp"
+        headers = {
+        'Host': 'amobile.altura.systems',
+        'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'accept-language': 'es-ES,es;q=0.9',
+        'cache-control': 'no-cache',
+        'content-type': 'application/x-www-form-urlencoded',
+        'dnt': '1',
+        'pragma': 'no-cache',
+        'priority': 'u=0, i',
+        'sec-ch-ua': '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'document',
+        'sec-fetch-mode': 'navigate',
+        'sec-fetch-site': 'same-origin',
+        'sec-fetch-user': '?1',
+        'upgrade-insecure-requests': '1',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36'
+        }
+    else:
+        headers = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Language': 'es-ES,es;q=0.9',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+        'DNT': '1',
+        'Pragma': 'no-cache',
+        'Referer': 'http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/index.jsp',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36'
+        }
+
+    response = session.get(url, headers=headers, data={})
+    
+    print("\nHeaders aPortal", session.cookies.get_dict(), response.status_code)
+    #print(response.text)
+
     tmpkey = response.text.split('".alencode();')[0]
     tmpkey = tmpkey.split('var key = "')[1]
-    
-    
+
     if response:
         # Llamar a la función para obtener cookies específicas
-        keys_to_extract = ['JSESSIONID', 'AJSESSIONID24', 'SSID']
+        keys_to_extract = ['JSESSIONID', 'AJSESSIONID', 'AJSESSIONID24', 'SSID']
         cookies = obtener_cookies(session.cookies.get_dict(), keys_to_extract)
 
         if cookies:
@@ -248,10 +288,41 @@ def aPortal(session):
     
 
 
-def acceso(session, u, c):
-    url = "https://amobile.altura.systems/aportal/l/es/u/0/accesoUsuario"
+def acceso(session, u, c, url=""):
+    if url == "":
+        url = "https://amobile.altura.systems/aportal/l/es/u/0/accesoUsuario"
+        headers = {
+        'Host': 'amobile.altura.systems',
+        'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'accept-language': 'es-ES,es;q=0.9',
+        'cache-control': 'no-cache',
+        'content-type': 'application/x-www-form-urlencoded',
+        'dnt': '1',
+        'pragma': 'no-cache',
+        'priority': 'u=0, i',
+        'sec-ch-ua': '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'document',
+        'sec-fetch-mode': 'navigate',
+        'sec-fetch-site': 'same-origin',
+        'sec-fetch-user': '?1',
+        'upgrade-insecure-requests': '1',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36'
+    }
+    else:
+        headers = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Language': 'es-ES,es;q=0.9',
+        'Connection': 'keep-alive',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'DNT': '1',
+        'Origin': 'http://sar.cnel.gob.ec:9090',
+        'Referer': 'http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/index.jsp',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36'
+        }
 
-    #payload = f'accion=login&v=-1&u=0705343275&c=Gt0705343275&action='
     payload = f'accion=login&v=-1&u={u}&c={c}&action='
 
     response = session.post(url, headers=headers, data=payload)
@@ -260,18 +331,48 @@ def acceso(session, u, c):
     
     if response:
         # Llamar a la función para obtener cookies específicas
-        keys_to_extract = ['JSESSIONID', 'AJSESSIONID24', 'SSID']
+        keys_to_extract = ['JSESSIONID', 'AJSESSIONID', 'AJSESSIONID24', 'SSID']
         cookies = obtener_cookies(session.cookies.get_dict(), keys_to_extract)
 
         if cookies:
-            #print("Cookies encontradas:", cookies)
             return session
         else:
             print("No se encontraron las cookies especificadas.")
 
 
-def index(session):
-    url = "https://amobile.altura.systems/aportal/"
+def index(session, url=""):
+    if url == "":
+        url = "https://amobile.altura.systems/aportal/"
+        headers = {
+            'Host': 'amobile.altura.systems',
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'accept-language': 'es-ES,es;q=0.9',
+            'cache-control': 'no-cache',
+            'content-type': 'application/x-www-form-urlencoded',
+            'dnt': '1',
+            'pragma': 'no-cache',
+            'priority': 'u=0, i',
+            'sec-ch-ua': '"Chromium";v="136", "Google Chrome";v="136", "Not.A/Brand";v="99"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'same-origin',
+            'sec-fetch-user': '?1',
+            'upgrade-insecure-requests': '1',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36'
+        }
+    else:
+        headers = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'Accept-Language': 'es-ES,es;q=0.9,und;q=0.8,en;q=0.7',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+        'DNT': '1',
+        'Pragma': 'no-cache',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36'
+        }
 
     response = session.get(url, headers=headers)
     
@@ -279,10 +380,11 @@ def index(session):
 
     if response:
         # Llamar a la función para obtener cookies específicas
-        keys_to_extract = ['JSESSIONID', 'AJSESSIONID24', 'SSID']
+        keys_to_extract = ['JSESSIONID', 'AJSESSIONID', 'AJSESSIONID24', 'SSID']
         cookies = obtener_cookies(session.cookies.get_dict(), keys_to_extract)
 
         if cookies:
+            print("Cookies encontradas:", cookies)
             return session
         else:
             print("No se encontraron las cookies especificadas.")

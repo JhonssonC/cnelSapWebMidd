@@ -1,5 +1,6 @@
 import datetime
 from typing import Optional
+from datetime import datetime
 from pydantic import BaseModel
 
     
@@ -74,7 +75,7 @@ class Sequence(SequenceBase):
 # Esquema de Pydantic para la tabla de tramitaciones
 class TramitacionBase(BaseModel):
 
-    fechahora: datetime.datetime
+    fechahora: datetime
     cuadrilla: str
     ccontrato: str 
     orden: str
@@ -142,4 +143,17 @@ class Contratosap(BaseModel):
     
     class Config:
         from_attributes = True
-        
+
+class AportalCookiesBase(BaseModel):
+    llave: str
+    app: str = 'ACIIS'
+    cookies_json: Optional[str] = None
+    last_saved: Optional[datetime] = None
+    last_used: Optional[datetime] = None
+
+class AportalCookiesCreate(AportalCookiesBase):
+    pass
+
+class AportalCookiesOut(AportalCookiesBase):
+    class Config:
+        from_attributes = True

@@ -2,6 +2,12 @@
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "$schema": "vscode://schemas/launch",
+     // Nota: `--workers` de Uvicorn crea procesos (mejor para CPU-bound).
+     // Si quieres hilos en vez de procesos:
+     // - Usa Gunicorn con el worker de Uvicorn y `--threads N` (ej: `gunicorn -k uvicorn.workers.UvicornWorker --workers 1 --threads 8 app.main:app`)
+     // - O maneja un ThreadPoolExecutor dentro de tus endpoints para tareas bloqueantes.
+     // Para I/O-bound usa async/await; para CPU-bound prefiere procesos o un pool de procesos.
     "version": "0.2.0",
     "configurations": [
         {
@@ -15,8 +21,13 @@
                 "0.0.0.0",
                 "--port",
                 "8080",
-                "--reload"
+                //"--reload",
+                "--workers",
+                "3" // ejecuta 3 procesos trabajadores (mejor para concurrencia en CPU-bound)
             ],
+            "env": {
+                "UVICORN_WORKERS": "3" // opcional, algunas herramientas leen esta variable
+            },
             "jinja": true
         }
     ]

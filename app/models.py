@@ -1,6 +1,7 @@
-from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Boolean
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Boolean, Text
 from sqlalchemy.orm import relationship
 from .database import Base
+from datetime import datetime
 
 class Sequence(Base):
     __tablename__ = "sequences"
@@ -129,3 +130,22 @@ class Cierre(Base):
     codigo_cierre = Column(String)  
     desc_cod_cierr = Column(String, nullable=False)
     codigo_grupo = Column(String, nullable=False)  # Clave foránea
+
+class AportalCookies(Base):
+    __tablename__ = "aportal_cookies"
+
+    id = Column(Integer, primary_key=True, index=True)
+    llave = Column(String)
+    app = Column(String)  # 'ACIIS' o 'SAR'
+    cookies_json = Column(Text, nullable=True)
+    last_saved = Column(DateTime, nullable=True)
+    last_used = Column(DateTime, nullable=True)
+
+    def as_dict(self):
+        return {
+            "llave": self.llave,
+            "app": self.app,
+            "cookies_json": self.cookies_json,
+            "last_saved": self.last_saved.isoformat() if self.last_saved else None,
+            "last_used": self.last_used.isoformat() if self.last_used else None
+        }
