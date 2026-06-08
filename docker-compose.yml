@@ -1,0 +1,9 @@
+services:
+  middleware:
+    build: .
+    container_name: cnel-sap-web-midd-container
+    ports:
+      - "8080:8080"
+    restart: always
+    env_file:
+      - .env

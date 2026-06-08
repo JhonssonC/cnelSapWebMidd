@@ -204,7 +204,7 @@ def loginAflowGetKey(session, key, url=""):
         }
         
     elif url=="aciis":
-        url=f"https://amobile.altura.systems/aflow4112/u/0/l/es/aflow4/main.jsp?ACORE.LANG=es&acceso=true&key={key}&key={key}&acceso=true"
+        url=f"https://amobile.altura.systems/aflow/u/0/l/es/aflow4/main.jsp?ACORE.LANG=es&acceso=true&key={key}&key={key}&acceso=true"
         headers = {
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
             'Accept-Language': 'es-419,es;q=0.9',
@@ -231,7 +231,7 @@ def loginAflowGetKey(session, key, url=""):
         
 def aPortal(session, url=""):
     if url == "":
-        url = "https://amobile.altura.systems/aportal/l/es/u/0/aportal.jsp"
+        url = "https://amobile.altura.systems/aportal/aportal.jsp"
         headers = {
         'Host': 'amobile.altura.systems',
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -253,21 +253,23 @@ def aPortal(session, url=""):
         }
     else:
         headers = {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'Accept-Language': 'es-ES,es;q=0.9',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'DNT': '1',
-        'Pragma': 'no-cache',
-        'Referer': 'http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/index.jsp',
-        'Upgrade-Insecure-Requests': '1',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36'
+            'Host': 'sar.cnel.gob.ec:9090',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'es-ES,es;q=0.9',
+            'Cache-Control': 'no-cache',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'DNT': '1',
+            'Pragma': 'no-cache',
+            'Priority': 'u=0, i',
+            'Referer': 'http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/index.jsp',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
         }
 
     response = session.get(url, headers=headers, data={})
     
     print("\nHeaders aPortal", session.cookies.get_dict(), response.status_code)
-    #print(response.text)
+    print(response.text)
 
     tmpkey = response.text.split('".alencode();')[0]
     tmpkey = tmpkey.split('var key = "')[1]
@@ -290,7 +292,7 @@ def aPortal(session, url=""):
 
 def acceso(session, u, c, url=""):
     if url == "":
-        url = "https://amobile.altura.systems/aportal/l/es/u/0/accesoUsuario"
+        url = "https://amobile.altura.systems/accesoUsuario"
         headers = {
         'Host': 'amobile.altura.systems',
         'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -312,15 +314,17 @@ def acceso(session, u, c, url=""):
     }
     else:
         headers = {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'Accept-Language': 'es-ES,es;q=0.9',
-        'Connection': 'keep-alive',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'DNT': '1',
-        'Origin': 'http://sar.cnel.gob.ec:9090',
-        'Referer': 'http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/index.jsp',
-        'Upgrade-Insecure-Requests': '1',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36'
+            'Host': 'sar.cnel.gob.ec:9090',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': 'es-ES,es;q=0.9',
+            'Cache-Control': 'no-cache',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'DNT': '1',
+            'Pragma': 'no-cache',
+            'Priority': 'u=0, i',
+            'Referer': 'http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/index.jsp',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
         }
 
     payload = f'accion=login&v=-1&u={u}&c={c}&action='
@@ -364,14 +368,16 @@ def index(session, url=""):
         }
     else:
         headers = {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'Accept-Language': 'es-ES,es;q=0.9,und;q=0.8,en;q=0.7',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
-        'DNT': '1',
-        'Pragma': 'no-cache',
-        'Upgrade-Insecure-Requests': '1',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36'
+            'Host': 'sar.cnel.gob.ec:9090',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Encoding': 'gzip, deflate',
+            'Accept-Language': 'es-ES,es;q=0.9',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive',
+            'DNT': '1',
+            'Pragma': 'no-cache',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
         }
 
     response = session.get(url, headers=headers)
@@ -382,7 +388,7 @@ def index(session, url=""):
         # Llamar a la función para obtener cookies específicas
         keys_to_extract = ['JSESSIONID', 'AJSESSIONID', 'AJSESSIONID24', 'SSID']
         cookies = obtener_cookies(session.cookies.get_dict(), keys_to_extract)
-
+        print("Response text:",response.text)
         if cookies:
             print("Cookies encontradas:", cookies)
             return session

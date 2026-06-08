@@ -10,8 +10,10 @@ from ..utils import validar_campos_editables, validate_key, register_request, en
 import requests
 import urllib3
 from urllib3.util import create_urllib3_context
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 from dotenv import load_dotenv
 from dataclasses import asdict
+import ssl
 
 load_dotenv()
 
@@ -19,7 +21,8 @@ BASEURL = os.getenv("BASEURL")
 
 
 ctx = create_urllib3_context()
-ctx.load_default_certs()
+ctx.check_hostname = False
+ctx.verify_mode = ssl.CERT_NONE
 ctx.set_ciphers("AES256-GCM-SHA384")
 
 TIPO_ORDENES={
@@ -148,6 +151,7 @@ class CustomSSLContextHTTPAdapter(requests.adapters.HTTPAdapter):
             block=block, ssl_context=self.ssl_context)
         
 session = requests.session()
+session.verify = False
 session.adapters.pop("https://", None)
 session.mount("https://", CustomSSLContextHTTPAdapter(ctx))
 
@@ -263,6 +267,33 @@ def login(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+
+@router.post("/cantidad_por_bandeja/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet/
+def cantidad_por_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        print (api_request)
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}$count?$filter=Usrcons eq '{api_request.usuario_api}' and Password eq '{encode(api_request.clave_api)}' and Estado eq '{api_request.data['estado']}'"
+        print (api_request.endpoint)
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/bandeja/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet/
+def bandeja(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
+    try:
+        print (api_request)
+
+        if api_request.data['top']:
+            top = api_request.data['top']
+        else:
+            top = 10
+
+        api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$skip=0&$top={top}&$filter=Usrcons eq '{api_request.usuario_api}' and Password eq '{encode(api_request.clave_api)}' and Estado eq '{api_request.data['estado']}'"
+        print (api_request.endpoint)
+        return middleware_request(api_request, db)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
     
 @router.post("/order_in_bandeja/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet
@@ -698,7 +729,7 @@ def agencias(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
     
 
-@router.post("/search_med/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/beberSet
+@router.post("/search_med/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/equnrRetSet
 def search_med(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=Sernr eq '{api_request.data['serie']}' and Mtart eq 'ZMED' and Werks eq '{api_request.data['user_web']}'"
@@ -706,7 +737,7 @@ def search_med(api_request: ApiRequestModelInput, db: Session = Depends(get_db))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
-@router.post("/search_med_lib/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/beberSet
+@router.post("/search_med_lib/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/equnrSet
 def search_med_lib(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$filter=Arbpl eq '{api_request.data['lote']}' and ISernr eq '{api_request.data['serie']}' and Mtart eq 'ZMED' and Werks eq '{api_request.data['user_web']}' and Beber eq '{api_request.data['agencia']}'"
@@ -774,114 +805,115 @@ def guardar_orden(api_request: ApiRequestModelInput, db: Session = Depends(get_d
             #    print(f"Advertencia: La llave '{clave}' no existe en el JSON base.")
         return base_json
     
-    try:
-        #print (api_request.data['pyload'])
+    #try:
+    #print (api_request.data['pyload'])
 
-        data_to_save = None
-        #data_to_save1=None
-        #data_to_save2=None
-        json_base=None
-        tkn=None
-        valid_fields=None
-        es_valido_payload=True
-        errores=None
-        es_valido_fechas={"value": "" }
-        es_valido_sellos={"error": False }
-        
-        # Leer el archivo JSON base
-        with open("app/template_json/payload_save_order.json", 'r', encoding='utf-8') as archivo:
-            json_base = json.load(archivo)
-            
-        with open("app/template_json/valid_fields_oEntry.json", 'r', encoding='utf-8') as archivo:
-            valid_fields = json.load(archivo)
-        
-        objToRtrn = {}
-          
-        #Obtener Orden Expandida
-        #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
-        if  "sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet" == api_request.endpoint:
-            api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet'
-            #api_request.data['orden']=first_order
-            #api_request.data['clase']=clase
-            order_expand = order_expandida(api_request, db)
-            tkn = order_expand['tkn']
-            order_expand = order_expand['data']['d']['results'][0]
-            
-            order_expand['Usrcons'] = order_expand['Usuario']
-            order_expand['Pascons'] = order_expand['Password']
-            order_expand['Tarverif'] = order_expand['TarifVerif']
-            order_expand['Zzlon'] = order_expand['Zutmy']
-            order_expand['Zzlat'] = order_expand['Zutmx']
-            
-            order_expand['Zposte'] = order_expand['Zzposte']
-            order_expand['Region'] = order_expand['PaRegion']
-            order_expand['City1'] = order_expand['PaCity1']
-            order_expand['City2'] = order_expand['PaCity2']
-            order_expand['Street'] = order_expand['PaStreet']
-            order_expand['HouseNum1'] = order_expand['PaHouseNum1']
-            order_expand['StrSuppl3'] = order_expand['PaStrSuppl3']
-            order_expand['Location'] = order_expand['PaLocation']
-            order_expand['StrSuppl1'] = order_expand['PaStrSuppl1']
-            order_expand['Building'] = order_expand['PaBuilding']
-            order_expand['StrSuppl2'] = order_expand['PaStrSuppl2']
-            order_expand['Floor'] = order_expand['PaFloor']
-            order_expand['Roomnumber'] = order_expand['PaRoomnumber']
-            order_expand['HomeCity'] = order_expand['PaHomeCity']
-            order_expand['HouseNum2'] = order_expand['PaHouseNum2']
-            order_expand['Remark'] = order_expand['PaRemark']
-            order_expand['TipoConductorCe'] = order_expand['TipoConductor']
-            order_expand['TomacorienteCe'] = order_expand['Tomacoriente']
-            order_expand['ProteccionCe'] = order_expand['Proteccion']
-            order_expand['LongitudCe'] = order_expand['Longitud']
-            order_expand['CredMesplazoCe'] = order_expand['CredMesplazoCi']
-            order_expand['MontoCe'] = order_expand['MontoCi']
-            order_expand['FecRestSrv'] = order_expand['FecRestServ']
-            order_expand['HorRestSrv'] = order_expand['HorRestServ']
-            
-            tipoOrden = int(order_expand['Ilart'])
-            clase = api_request.data['clase']
-            if (tipoOrden == 32 and (clase == "INSP" or clase == "insp")):
-                clase = "INSP32"
-            
-            es_valido_payload, errores = validar_campos_editables(clase, api_request.data['pyload'], valid_fields)
-            if not es_valido_payload:
-                objToRtrn['Message'] = {"Error": errores}
-                return objToRtrn
-            
-            es_valido_fechas = validar_fechas(api_request.data['pyload'])
-            if es_valido_fechas["value"] == "X":
-                objToRtrn['Message'] = {"Error": es_valido_fechas["mensaje"]}
-                return objToRtrn
-            
-            if api_request.data['pyload']['ORDENSELLOS']:
-                es_valido_sellos = do_valida_sellos(api_request.data['pyload']['ORDENSELLOS'])
-                if es_valido_sellos["error"]:
-                    objToRtrn['Message'] = {"Error": es_valido_sellos["mensaje"]}
-                    return objToRtrn
-            
-            
-            if json_base:
-                json_base = actualizar_json(json_base, order_expand)
-                data_to_save = actualizar_json(json_base, api_request.data['pyload'])
-
-
-                api_request.endpoint = f"{BASEURL}/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet"
-            
-        
-        
-        data_to_save['Aufnr'] = str(data_to_save['Aufnr']).zfill(12)
-        
-        objToRtrn['Payload'] = data_to_save
-        objToRtrn['Saved'] = middleware_post(api_request, data_to_save, db, token=tkn)
+    data_to_save = None
+    #data_to_save1=None
+    #data_to_save2=None
+    json_base=None
+    tkn=None
+    valid_fields=None
+    es_valido_payload=True
+    errores=None
+    es_valido_fechas={"value": "" }
+    es_valido_sellos={"error": False }
     
-        api_request.endpoint = "sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/messageSet"
+    # Leer el archivo JSON base
+    with open("app/template_json/payload_save_order.json", 'r', encoding='utf-8') as archivo:
+        json_base = json.load(archivo)
         
-        objToRtrn['Message'] = mensaje(api_request, db)
-        
-        return objToRtrn
+    with open("app/template_json/valid_fields_oEntry.json", 'r', encoding='utf-8') as archivo:
+        valid_fields = json.load(archivo)
     
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    objToRtrn = {}
+        
+    #Obtener Orden Expandida
+    #sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
+    if  "sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet" == api_request.endpoint:
+        api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet'
+        #api_request.data['orden']=first_order
+        #api_request.data['clase']=clase
+        order_expand = order_expandida(api_request, db)
+        tkn = order_expand['tkn']
+        #print(order_expand)
+        order_expand = order_expand['data']['d']['results'][0]
+        
+        order_expand['Usrcons'] = order_expand['Usuario']
+        order_expand['Pascons'] = order_expand['Password']
+        order_expand['Tarverif'] = order_expand['TarifVerif']
+        order_expand['Zzlon'] = order_expand['Zutmy']
+        order_expand['Zzlat'] = order_expand['Zutmx']
+        
+        order_expand['Zposte'] = order_expand['Zzposte']
+        order_expand['Region'] = order_expand['PaRegion']
+        order_expand['City1'] = order_expand['PaCity1']
+        order_expand['City2'] = order_expand['PaCity2']
+        order_expand['Street'] = order_expand['PaStreet']
+        order_expand['HouseNum1'] = order_expand['PaHouseNum1']
+        order_expand['StrSuppl3'] = order_expand['PaStrSuppl3']
+        order_expand['Location'] = order_expand['PaLocation']
+        order_expand['StrSuppl1'] = order_expand['PaStrSuppl1']
+        order_expand['Building'] = order_expand['PaBuilding']
+        order_expand['StrSuppl2'] = order_expand['PaStrSuppl2']
+        order_expand['Floor'] = order_expand['PaFloor']
+        order_expand['Roomnumber'] = order_expand['PaRoomnumber']
+        order_expand['HomeCity'] = order_expand['PaHomeCity']
+        order_expand['HouseNum2'] = order_expand['PaHouseNum2']
+        order_expand['Remark'] = order_expand['PaRemark']
+        order_expand['TipoConductorCe'] = order_expand['TipoConductor']
+        order_expand['TomacorienteCe'] = order_expand['Tomacoriente']
+        order_expand['ProteccionCe'] = order_expand['Proteccion']
+        order_expand['LongitudCe'] = order_expand['Longitud']
+        order_expand['CredMesplazoCe'] = order_expand['CredMesplazoCi']
+        order_expand['MontoCe'] = order_expand['MontoCi']
+        order_expand['FecRestSrv'] = order_expand['FecRestServ']
+        order_expand['HorRestSrv'] = order_expand['HorRestServ']
+        
+        tipoOrden = int(order_expand['Ilart'])
+        clase = api_request.data['clase']
+        if (tipoOrden == 32 and (clase == "INSP" or clase == "insp")):
+            clase = "INSP32"
+        
+        es_valido_payload, errores = validar_campos_editables(clase, api_request.data['pyload'], valid_fields)
+        if not es_valido_payload:
+            objToRtrn['Message'] = {"Error": errores}
+            return objToRtrn
+        
+        es_valido_fechas = validar_fechas(api_request.data['pyload'])
+        if es_valido_fechas["value"] == "X":
+            objToRtrn['Message'] = {"Error": es_valido_fechas["mensaje"]}
+            return objToRtrn
+        
+        if api_request.data['pyload']['ORDENSELLOS']:
+            es_valido_sellos = do_valida_sellos(api_request.data['pyload']['ORDENSELLOS'])
+            if es_valido_sellos["error"]:
+                objToRtrn['Message'] = {"Error": es_valido_sellos["mensaje"]}
+                return objToRtrn
+        
+        
+        if json_base:
+            json_base = actualizar_json(json_base, order_expand)
+            data_to_save = actualizar_json(json_base, api_request.data['pyload'])
+
+
+            api_request.endpoint = f"{BASEURL}/sap/opu/odata/SAP/ZWMGS_ORDEN_MOD_SRV_02/ordenCabSet"
+        
+    
+    
+    data_to_save['Aufnr'] = str(data_to_save['Aufnr']).zfill(12)
+    
+    objToRtrn['Payload'] = data_to_save
+    objToRtrn['Saved'] = middleware_post(api_request, data_to_save, db, token=tkn)
+
+    api_request.endpoint = "sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/messageSet"
+    
+    objToRtrn['Message'] = mensaje(api_request, db)
+    
+    return objToRtrn
+    
+    #except Exception as e:
+    #    raise HTTPException(status_code=500, detail=str(e))
     
     
 @router.post("/mensaje/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/messageSet
