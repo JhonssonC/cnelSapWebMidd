@@ -67,13 +67,11 @@ def cerrarSesion(session):
 
     response = session.post(url, headers=headers, data=payload)
 
-    print(response.text)
     
 def dataSearch(session, dataSearch):
     url = "http://sar.cnel.gob.ec:9090/aflow/l/es/aflow4/funcion?"
-    #payload = "id_reporte=915&id=915&PAR_UNI=07&PAR_PRO=&PAR_CAN=&PAR_SEC=&PAR_DEP=&PAR_GES=&PAR_CONTRA=17312&PAR_CUA=&FEC_INI=01/05/2025&FEC_FIN=15/5/2025&fecha=1747346666824&f=1747346666824"
 
-    timestamp_actual = int(time.time() * 1000)
+    timestamp_actual = str(int(time.time() * 1000))
     
     payload = """ID_FUNCION=FUN_BUS_CLI2&ID_TRAMITE=0&VERSION=1&ID_TAREA=FRM_CON_INF&ID_PROCESO=PRO_BUS_C3.6&ID_TAREA_TRAMITE=0&G{FECHA}="""+timestamp_actual+"""&^$EMPRESA=CNEL&TXT_AUX_CON="""+dataSearch+"""&TXT_CON_ALT=&^$fecha="""+timestamp_actual+"""&KEYREQUEST=id"""+timestamp_actual
 
@@ -91,27 +89,19 @@ def dataSearch(session, dataSearch):
     }
     
     response = session.post(url, headers=headers, data=payload)
-    
-    print("Response dataSearch:", session.cookies.get_dict())
-    print("Response dataSearch:", response.text)
 
     if response:
-        # Llamar a la función para obtener cookies específicas
         keys_to_extract = ['JSESSIONID', 'AJSESSIONID24', 'SSID']
         cookies = obtener_cookies(session.cookies.get_dict(), keys_to_extract)
         if cookies:
-            #print("Cookies encontradas:", cookies)
             return {
                 'session': session,
                 'response': json.loads(response.text)
             }
-        else:
-            print("No se encontraron las cookies especificadas.")
     return session
 
 def jsGenerate(session, id_reporte=915, id=915, PAR_UNI='07', PAR_PRO='', PAR_CAN='', PAR_SEC='', PAR_DEP='', PAR_GES='', PAR_CONTRA='17312', PAR_CUA='', FEC_INI='01/05/2025', FEC_FIN='15/5/2025'):
     url = "https://amobile.altura.systems/areports/l/es/jsGenerate"
-    #payload = "id_reporte=915&id=915&PAR_UNI=07&PAR_PRO=&PAR_CAN=&PAR_SEC=&PAR_DEP=&PAR_GES=&PAR_CONTRA=17312&PAR_CUA=&FEC_INI=01/05/2025&FEC_FIN=15/5/2025&fecha=1747346666824&f=1747346666824"
 
     timestamp_actual = int(time.time() * 1000)
     payload = f"id_reporte={id_reporte}&id={id}&PAR_UNI={PAR_UNI}&PAR_PRO={PAR_PRO}&PAR_CAN={PAR_CAN}&PAR_SEC={PAR_SEC}&PAR_DEP={PAR_DEP}&PAR_GES={PAR_GES}&PAR_CONTRA={PAR_CONTRA}&PAR_CUA={PAR_CUA}&FEC_INI={FEC_INI}&FEC_FIN={FEC_FIN}&fecha={timestamp_actual}&f={timestamp_actual}"
@@ -136,22 +126,15 @@ def jsGenerate(session, id_reporte=915, id=915, PAR_UNI='07', PAR_PRO='', PAR_CA
     }
 
     response = session.post(url, headers=headers, data=payload)
-    
-    print("Response jsGenerate:", session.cookies.get_dict())
-    print("Response jsGenerate:", response.text)
 
     if response:
-        # Llamar a la función para obtener cookies específicas
         keys_to_extract = ['JSESSIONID', 'AJSESSIONID24', 'SSID']
         cookies = obtener_cookies(session.cookies.get_dict(), keys_to_extract)
         if cookies:
-            #print("Cookies encontradas:", cookies)
             return {
                 'session': session,
                 'response': json.loads(response.text)
             }
-        else:
-            print("No se encontraron las cookies especificadas.")
     return session
 
 def getKey(session, key, url=""):
@@ -178,12 +161,6 @@ def getKey(session, key, url=""):
     }
 
     response = session.get(url, headers=headers)
-    
-    print("\nHeaders getKey", session.cookies.get_dict())
-    
-    #print("Response getKeyHeaders:", response.headers)
-    print("\nResponse getKeyContent:", response.text)
-    
     if response:
         return session
     
@@ -216,15 +193,8 @@ def loginAflowGetKey(session, key, url=""):
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36'
         }
-    print (url)
+
     response = session.get(url, headers=headers, data=payload)
-    
-    print (response)
-    
-    print("\nHeaders getKey", session.cookies.get_dict())
-    
-    #print("Response getKeyHeaders:", response.headers)
-    #print("\nResponse getKeyContent:", response.text)
 
     if len(session.cookies.get_dict()) > 0:
         return session
@@ -267,15 +237,11 @@ def aPortal(session, url=""):
         }
 
     response = session.get(url, headers=headers, data={})
-    
-    print("\nHeaders aPortal", session.cookies.get_dict(), response.status_code)
-    print(response.text)
 
     tmpkey = response.text.split('".alencode();')[0]
     tmpkey = tmpkey.split('var key = "')[1]
 
     if response:
-        # Llamar a la función para obtener cookies específicas
         keys_to_extract = ['JSESSIONID', 'AJSESSIONID', 'AJSESSIONID24', 'SSID']
         cookies = obtener_cookies(session.cookies.get_dict(), keys_to_extract)
 
@@ -285,10 +251,7 @@ def aPortal(session, url=""):
                 'key': tmpkey,
                 'session': session
             }
-        else:
-            print("No se encontraron las cookies especificadas.")
     
-
 
 def acceso(session, u, c, url=""):
     if url == "":
@@ -331,17 +294,12 @@ def acceso(session, u, c, url=""):
 
     response = session.post(url, headers=headers, data=payload)
     
-    print("\nHeaders Acceso",session.cookies.get_dict(), response.status_code)
-    
     if response:
-        # Llamar a la función para obtener cookies específicas
         keys_to_extract = ['JSESSIONID', 'AJSESSIONID', 'AJSESSIONID24', 'SSID']
         cookies = obtener_cookies(session.cookies.get_dict(), keys_to_extract)
 
         if cookies:
             return session
-        else:
-            print("No se encontraron las cookies especificadas.")
 
 
 def index(session, url=""):
@@ -381,16 +339,9 @@ def index(session, url=""):
         }
 
     response = session.get(url, headers=headers)
-    
-    print("\nHeaders Main",session.cookies.get_dict(), response.status_code)
 
     if response:
-        # Llamar a la función para obtener cookies específicas
         keys_to_extract = ['JSESSIONID', 'AJSESSIONID', 'AJSESSIONID24', 'SSID']
         cookies = obtener_cookies(session.cookies.get_dict(), keys_to_extract)
-        print("Response text:",response.text)
         if cookies:
-            print("Cookies encontradas:", cookies)
             return session
-        else:
-            print("No se encontraron las cookies especificadas.")

@@ -43,11 +43,10 @@ def init_db():
                 with open(SQL_FILE_PATH, "r") as sql_file:
                     for line in sql_file:
                         query = text(line)
-                        print(query)
                         conn.execute(query)
                 conn.commit()
     else:
-        print(f"El archivo {SQL_FILE_PATH} no existe.")
+        pass
         
 
 def get_db():

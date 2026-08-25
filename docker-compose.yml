@@ -4,6 +4,13 @@ services:
     container_name: cnel-sap-web-midd-container
     ports:
       - "8080:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - DD_AGENT_HOST=host.docker.internal
+      - TZ=America/Guayaquil
+    volumes:
+      - ./logs:/app/logs
     restart: always
     env_file:
       - .env

@@ -32,24 +32,16 @@ def getKeys(api_request: AportalUser, db: Session = Depends(get_db)):
         session = index(session)
         if session.cookies.get_dict():
             while 'awsSesion' not in session.cookies.get_dict():
-                print("Esperando a que se obtenga la cookie 'awsSesion'...")
                 time.sleep(1)
                 session = acceso(session, api_request.usuario, api_request.clave)
-                print("\nCookies Acceso:", session.cookies.get_dict())
                 
                 if session.cookies.get_dict():
                     
                     dictionaryAportal = aPortal(session)
                     session = dictionaryAportal['session']
-                    print("\nCookies aPortal:", session.cookies.get_dict())
                     
                     if session.cookies.get_dict():
                         session = getKey(session, dictionaryAportal['key'])
-                            
-                        print("\nCookies getKey:", session.cookies.get_dict())
-                        
-                    else:
-                        print("No se pudo obtener la cookie getKey.") 
                         
             return JSONResponse(
                 status_code=200,
@@ -61,7 +53,6 @@ def getKeys(api_request: AportalUser, db: Session = Depends(get_db)):
 
                     
         else:
-            print("No se pudo obtener JSESSIONID.")
             return JSONResponse(
                 status_code=500,
                 content={
@@ -138,26 +129,17 @@ def getAflowCookies(api_request: ResumenDeGestion, db: Session = Depends(get_db)
         session = index(session, url="http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/index.jsp")
         if session.cookies.get_dict():
             while 'AJSESSIONID' not in session.cookies.get_dict():
-                #print("Esperando a que se obtenga la cookie 'awsSesion'...")
                 time.sleep(1)
                 session = acceso(session, api_request.usuario, api_request.clave, url="http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/accesoUsuario")
-                #print("\nCookies Acceso:", session.cookies.get_dict())
                 
                 if session.cookies.get_dict():
                     
                     dictionaryAportal = aPortal(session, url="http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/aportal.jsp")
                     ky = dictionaryAportal['key']
                     session = dictionaryAportal['session']
-                    print("\nKey aPortal:", ky)
-                    #print("\nCookies aPortal:", session.cookies.get_dict())
                     
                     if session.cookies.get_dict():
                         session = loginAflowGetKey(session, ky)
-                        #print("Session después de loginAflowGetKey:", session)
-                        print("\nCookies getKey:", session.cookies.get_dict())
-                        
-                    else:
-                        print("No se pudo obtener la cookie getKey.") 
 
 
             if 'AJSESSIONID' in session.cookies.get_dict():
@@ -217,30 +199,20 @@ def getSearch(api_request: ResumenDeGestion, db: Session = Depends(get_db)):
         session = index(session)
         if session.cookies.get_dict():
             while 'SSID' not in session.cookies.get_dict():
-                #print("Esperando a que se obtenga la cookie 'awsSesion'...")
                 time.sleep(1)
                 session = acceso(session, api_request.usuario, api_request.clave)
-                #print("\nCookies Acceso:", session.cookies.get_dict())
                 
                 if session.cookies.get_dict():
                     
                     dictionaryAportal = aPortal(session)
                     session = dictionaryAportal['session']
-                    #print("\nCookies aPortal:", session.cookies.get_dict())
                     
                     if session.cookies.get_dict():
                         session = loginAflowGetKey(session, dictionaryAportal['key'])
-                        print("\nCookies getKey:", session.cookies.get_dict())
-                        
-                    else:
-                        print("No se pudo obtener la cookie getKey.") 
                         
                         
             if 'SSID' in session.cookies.get_dict():
                 data = dataSearch(session, api_request.data_search)
-                
-                print("\nData jsGenerate:", (data['response']))
-                print("\nCookies jsGenerate:", data['session'].cookies.get_dict())
                 
                 return JSONResponse(
                     status_code=200,
@@ -266,14 +238,8 @@ def getSearch(api_request: ResumenDeGestion, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-
-
-
-
 @router.post("/getKeyAflowAciss/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet
 def getKeyAflowAciss(api_request: ResumenDeGestion, db: Session = Depends(get_db)):
-
-#try:
 
     usuario_id = validate_key(api_request.llave, db)
     if not usuario_id:
@@ -297,34 +263,20 @@ def getKeyAflowAciss(api_request: ResumenDeGestion, db: Session = Depends(get_db
 
 
     if not 'AJSESSIONID' in session.cookies.get_dict():
-        # Si app == 'SAR' puede requerir URL distintas; adaptar si es necesario
-        # por defecto se usa el flujo existente (awsSesion)
         session = index(session)
         if session.cookies.get_dict():
-            # esperar cookie AJSESSIONID (o ajustar según app)
             while 'AJSESSIONID' not in session.cookies.get_dict():
-                print("Esperando a que se obtenga la cookie 'AJSESSIONID'...")
                 time.sleep(1)
                 session = acceso(session, api_request.usuario, api_request.clave)
-                print("\nCookies Acceso:", session.cookies.get_dict())
-                
                 
                 if session.cookies.get_dict():
                     dictionaryAportal = aPortal(session)
                     ky = dictionaryAportal['key']
                     session = dictionaryAportal['session']
-                    print("\nKey aPortal:", ky)
-                    #print("\nCookies aPortal:", session.cookies.get_dict())
                     
                     if session.cookies.get_dict():
                         session = loginAflowGetKey(session, ky, url="aciis")
-                        #print("Session después de loginAflowGetKey:", session)
-                        print("\nCookies getKey:", session.cookies.get_dict())
-                        
-                    else:
-                        print("No se pudo obtener la cookie getKey.") 
-                    
-                    
+
 
     if 'AJSESSIONID' in session.cookies.get_dict():
 
@@ -346,9 +298,6 @@ def getKeyAflowAciss(api_request: ResumenDeGestion, db: Session = Depends(get_db
         db.add(cookie_entry)
         db.commit()
 
-        #print("\nData jsGenerate:", (data['response']))
-        print("\nCookies jsGenerate:", session.cookies.get_dict())
-
         return JSONResponse(
             status_code=200,
             content={
@@ -368,15 +317,9 @@ def getKeyAflowAciss(api_request: ResumenDeGestion, db: Session = Depends(get_db
         }
     )
 
-#    except Exception as e:
-#        raise HTTPException(status_code=500, detail=str(e))    
-
-
 
 @router.post("/getResumenDeGestion/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet
 def getKeysResumenGestion(api_request: ResumenDeGestion, db: Session = Depends(get_db)):
-
-#try:
 
     usuario_id = validate_key(api_request.llave, db)
     if not usuario_id:
@@ -400,25 +343,18 @@ def getKeysResumenGestion(api_request: ResumenDeGestion, db: Session = Depends(g
 
 
     if not 'awsSesion' in session.cookies.get_dict():
-        # Si app == 'SAR' puede requerir URL distintas; adaptar si es necesario
-        # por defecto se usa el flujo existente (awsSesion)
         session = index(session)
         if session.cookies.get_dict():
-            # esperar cookie awsSesion (o ajustar según app)
             while 'awsSesion' not in session.cookies.get_dict():
-                print("Esperando a que se obtenga la cookie 'awsSesion'...")
                 time.sleep(1)
                 session = acceso(session, api_request.usuario, api_request.clave)
-                print("\nCookies Acceso:", session.cookies.get_dict())
 
                 if session.cookies.get_dict():
                     dictionaryAportal = aPortal(session)
                     session = dictionaryAportal['session']
-                    print("\nCookies aPortal:", session.cookies.get_dict())
 
                     if session.cookies.get_dict():
                         session = getKey(session, dictionaryAportal['key'])
-                        print("\nCookies getKey:", session.cookies.get_dict())
 
 
     # al tener awsSesion, llamar jsGenerate y guardar session en BD
@@ -445,9 +381,6 @@ def getKeysResumenGestion(api_request: ResumenDeGestion, db: Session = Depends(g
         db.add(cookie_entry)
         db.commit()
 
-        print("\nData jsGenerate:", (data['response']))
-        print("\nCookies jsGenerate:", data['session'].cookies.get_dict())
-
         return JSONResponse(
             status_code=200,
             content={
@@ -468,9 +401,6 @@ def getKeysResumenGestion(api_request: ResumenDeGestion, db: Session = Depends(g
         }
     )
 
-#    except Exception as e:
-#        raise HTTPException(status_code=500, detail=str(e))
-
     
 @router.post("/logout/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet
 def getKeys(api_request: AportalLogout, db: Session = Depends(get_db)):
@@ -489,8 +419,6 @@ def getKeys(api_request: AportalLogout, db: Session = Depends(get_db)):
         session = index(session)
         
         cerrarSesion()
-        
-        print("Sesión cerrada correctamente.")
     
         return JSONResponse(
             status_code=200,
@@ -502,4 +430,3 @@ def getKeys(api_request: AportalLogout, db: Session = Depends(get_db)):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-

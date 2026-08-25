@@ -7,6 +7,7 @@ from app.database import get_db
 from app.models import Cierre, ContratoSap, Grupo
 from ..schemas import ApiRequestModelInput, Contratosap
 from ..utils import validar_campos_editables, validate_key, register_request, encode, validar_fechas, do_valida_sellos
+from app.logger import logger
 import requests
 import urllib3
 from urllib3.util import create_urllib3_context
@@ -194,10 +195,10 @@ def middleware_request(api_request: ApiRequestModelInput, db: Session, request: 
                     return {"status": status_api, "data": json.loads(response.text), 'tkn':response.headers['x-csrf-token']}  # Devuelve la respuesta si no se encuentran las cadenas
                 
                 else:
-                    print(f"Intento {retry_count + 1}: Encontró cadenas prohibidas en la respuesta. Reintentando...")
+                    logger.warning(f"Intento {retry_count + 1}: Encontró cadenas prohibidas en la respuesta. Reintentando...")
                     
             except requests.RequestException as e:
-                print(f"Intento {retry_count + 1}: Error durante la solicitud - {e}. Reintentando...")
+                logger.warning(f"Intento {retry_count + 1}: Error durante la solicitud - {e}. Reintentando...")
             
             retry_count += 1
 
@@ -223,9 +224,7 @@ def middleware_post(api_request: ApiRequestModelInput, payload:dict, db: Session
                 currentHeaders = HEADERS.copy()
                 if token != None:
                     currentHeaders['x-csrf-token']=token
-                    print(token)
                 response = session.request("POST", api_request.endpoint, json=payload, headers=currentHeaders)# Realiza la solicitud
-                #print (response.text)
                 if not any(error in response.text.lower() for error in error_strings):
                     
                     status_api = response.status_code 
@@ -234,10 +233,10 @@ def middleware_post(api_request: ApiRequestModelInput, payload:dict, db: Session
                     return {"status": status_api, "data": json.loads(response.text)}  # Devuelve la respuesta si no se encuentran las cadenas
                 
                 else:
-                    print(f"Intento {retry_count + 1}: Encontró cadenas prohibidas en la respuesta. Reintentando...")
+                    logger.warning(f"Intento {retry_count + 1}: Encontró cadenas prohibidas en la respuesta. Reintentando...")
                     
             except requests.RequestException as e:
-                print(f"Intento {retry_count + 1}: Error durante la solicitud - {e}. Reintentando...")
+                logger.warning(f"Intento {retry_count + 1}: Error durante la solicitud - {e}. Reintentando...")
             
             retry_count += 1
 
@@ -271,9 +270,7 @@ def login(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
 @router.post("/cantidad_por_bandeja/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet/
 def cantidad_por_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
-        print (api_request)
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}$count?$filter=Usrcons eq '{api_request.usuario_api}' and Password eq '{encode(api_request.clave_api)}' and Estado eq '{api_request.data['estado']}'"
-        print (api_request.endpoint)
         return middleware_request(api_request, db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -282,15 +279,12 @@ def cantidad_por_bandeja(api_request: ApiRequestModelInput, db: Session = Depend
 @router.post("/bandeja/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet/
 def bandeja(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
-        print (api_request)
-
         if api_request.data['top']:
             top = api_request.data['top']
         else:
             top = 10
 
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$skip=0&$top={top}&$filter=Usrcons eq '{api_request.usuario_api}' and Password eq '{encode(api_request.clave_api)}' and Estado eq '{api_request.data['estado']}'"
-        print (api_request.endpoint)
         return middleware_request(api_request, db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -299,9 +293,7 @@ def bandeja(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
 @router.post("/order_in_bandeja/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet
 def order_in_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
-        print (api_request)
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$skip=0&$top=10&$filter=Usrcons eq '{api_request.usuario_api}' and Password eq '{encode(api_request.clave_api)}' and endswith(Orden,'{api_request.data['orden']}')"
-        print (api_request.endpoint)
         return middleware_request(api_request, db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -311,14 +303,11 @@ def order_in_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(ge
 @router.post("/firsts_in_bandeja/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/bandejaSet
 def firsts_in_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
-        print (api_request)
-        
         if api_request.data['top']:
             top = api_request.data['top']
         else:
             top = 10
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}?$skip=0&$top={top}&$filter=Usrcons eq '{api_request.usuario_api}' and Password eq '{encode(api_request.clave_api)}' and endswith(Orden,'')"
-        print (api_request.endpoint)
         return middleware_request(api_request, db)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -327,13 +316,11 @@ def firsts_in_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(g
     
 @router.post("/order/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
 def order(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
-    print(api_request)
     try:
         clase = int(api_request.data['clase'])
         if clase>0:
             clase = TIPO_ORDENES[str(clase)]
     except Exception as e:
-        print (f"Clase: {api_request.data['clase']}")
         clase = api_request.data['clase']
     
     try:
@@ -346,13 +333,11 @@ def order(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     
 @router.post("/order_expandida/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/orderSet
 def order_expandida(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
-    #print(api_request)
     try:
         clase = int(api_request.data['clase'])
         if clase>0:
             clase = TIPO_ORDENES[str(clase)]
     except Exception as e:
-        print (f"Clase: {api_request.data['clase']}")
         clase = api_request.data['clase']
     
     try:
@@ -622,7 +607,6 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
     list_contratos=[]
     contrato = Contratosap(**{'usuario':api_request.usuario_api})
     try:
-        print(api_request)
         #Obtener Usuaio
         if api_request.endpoint:
             api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/loginSet'
@@ -677,7 +661,6 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
             api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet'
             contratos = contrato_sap(api_request, db)
             contratos = contratos['data']['d']['results']
-            print (contratos)
             
             for dictContrato in contratos:
                 contrato.contrato=dictContrato['Ebeln']
@@ -688,7 +671,6 @@ def obtener_datos_de_contrato(api_request: ApiRequestModelInput, db: Session = D
                 api_request.endpoint='sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/posContSet'
                 posiciones = posicion_cont(api_request, db)
                 posiciones = posiciones['data']['d']['results']
-                print (posiciones)
                 for dictPocision in posiciones:
                     contrato.posicion_cont = dictPocision['Ebelp']
                     contrato.posicion_cont_desc = dictPocision['Txz01']

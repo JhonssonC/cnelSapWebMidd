@@ -13,11 +13,10 @@ def registrar_usuario(data: ImputUser , db: Session = Depends(get_db)):
     if not exists_user(data.usuario, db):
         usr = generate_user(data, db)
         if not usr:
-            return JSONResponse(status_code=404, content={'message': 'No se pudo generar el Usuario'})
-        print('Usuario Creado', usr)
-        return JSONResponse(status_code=201, content={"message": "Se ha regitrado Usuario", "data":usr.model_dump()})
+            raise HTTPException(status_code=404, detail="No se pudo generar el Usuario")
+        return JSONResponse(status_code=201, content={"message": "Se ha registrado Usuario", "data": usr.model_dump()})
     else:
-        return JSONResponse(status_code=400, content={'message': 'Usuario ya Existe'})
+        raise HTTPException(status_code=400, detail="Usuario ya Existe")
     
     
 # Endpoint para regenerar la llave
@@ -26,9 +25,9 @@ def regenerar_llave(data: ImputUser , db: Session = Depends(get_db)):
 
     usr_valid = validate_user(data.usuario, data.clave, db)
     if not usr_valid:
-        return JSONResponse(status_code=404, content={'message': 'Usuario o clave incorrecta'})
-    reg_key = regenerate_key(data)
-    if not regenerate_key:
-        return JSONResponse(status_code=400, content={'message': 'No se pudo generar llave'})
+        raise HTTPException(status_code=404, detail="Usuario o clave incorrecta")
+    reg_key = regenerate_key(data, db)
+    if not reg_key:
+        raise HTTPException(status_code=400, detail="No se pudo generar llave")
     return JSONResponse(status_code=200, content={'new key': reg_key})
     

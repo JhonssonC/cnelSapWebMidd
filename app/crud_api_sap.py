@@ -39,9 +39,6 @@ def saveContrato(contrato: Contratosap, db: Session):
         db.add(new_contrato)
         db.commit()
         db.refresh(new_contrato)
-        print("Contrato Agregado")
-    else:
-        print("Contrato Existente")
 
 def create_usuariosap(dataSap:dict, db: Session):
 
@@ -67,9 +64,6 @@ def create_usuariosap(dataSap:dict, db: Session):
         db.add(us)
         db.commit()
         db.refresh(us)
-        print('Usuario Creado!')
-    else:
-        print('Usuario Existente!')
     return us
 
 def getUsuariosap(usuarioStr:str, db: Session):
@@ -79,7 +73,6 @@ def getUsuariosap(usuarioStr:str, db: Session):
 
 
 def create_proyectoap(dataSap:dict, db: Session):
-    print(dataSap)
     us = getUsuariosap(dataSap['Usuario'], db)
     if not us:
         us = UsuarioSap(

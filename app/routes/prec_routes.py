@@ -18,7 +18,6 @@ def get_route(coordinate: Coordinate, db: Session = Depends(get_db)):
 # Endpoint para crear o actualizar una tramitación
 @router.post("/tramitacion/")
 def create_or_update_tramitacion(tramitacion: TramitacionCreate, db: Session = Depends(get_db) ):
-    print(tramitacion)
     return create_update_tramitacion(tramitacion, db)
 
     

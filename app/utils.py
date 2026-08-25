@@ -25,7 +25,6 @@ def encode(p):
     strb64 = str(base64.b64encode(dataBytes))
     toenconded = strb64[2:len(strb64)-1]
     encoded = do_modifica_char(toenconded)
-    print('Contraseña codificada:', encoded)
     return encoded
 
 # Helper para crear la llave (usando UUID)
@@ -40,7 +39,6 @@ def hash_password(password: str) -> str:
 def validate_key(llave: str, db: Session):
     
     user = db.query(models.UserValidation).filter(models.UserValidation.llave == llave).first()
-    print(user.usuario)
     if user:
         return user
 
@@ -108,7 +106,7 @@ def validar_fechas(datos):
     error = {"value": "", "mensaje": ""}  # Se incluye el mensaje de error en el retorno
     
     def mostrar_mensaje(mensaje):
-        print(mensaje)  # Puedes reemplazar esto por un logger o cualquier otro mecanismo.
+        pass
 
     # Validar FecEjecTrab
     if not datos.get("FecEjecTrab"):
@@ -213,7 +211,6 @@ def do_valida_sellos(sellos):
         if row.get("NroSello"):
             if row.get("NroSello") == nro_sello and row.get("Tipo") == tipo_sello:
                 mensaje = "No se puede ingresar nro. de sellos y tipos duplicados"
-                print(mensaje)  # Simula mostrar el mensaje (puedes usar un logger aquí)
                 return {"error": True, "mensaje": mensaje}
 
     return {"error": False, "mensaje": ""}  # No hay errores
