@@ -7,8 +7,8 @@ from .database import create_db_and_tables, init_db
 from app.logger import logger, log_request, get_user_from_request
 
 # Crear la aplicación de FastAPI
-app = FastAPI(title="Middleware API", version="1.0.0", description="API para el middleware de integración", 
-              docs_url=None, redoc_url=None, openapi_url=None)
+app = FastAPI(title="Middleware API", version="1.0.0", description="API para el middleware de integración")
+
 
 @app.on_event("startup")
 def startup_event():

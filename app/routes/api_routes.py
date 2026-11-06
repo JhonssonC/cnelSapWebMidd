@@ -1,5 +1,7 @@
 import json
 import os
+import time
+import gc
 from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from app.crud_api_sap import create_usuariosap, getCierres, getGrupos, saveCierres, saveContrato, saveGroups
@@ -169,22 +171,23 @@ HEADERS = {
 }
 
 # Endpoint para realizar peticiones GET a la otra API (middleware)
-def middleware_request(api_request: ApiRequestModelInput, db: Session, request: Request = None, max_retries=3):
+def middleware_request(api_request: ApiRequestModelInput, db: Session, request: Request = None, max_retries=3, timeout: float = None):
     
     query_params={}
     if request:
         query_params = dict(request.query_params)
+    start_time = time.time()
     try:
         
         retry_count = 0
         error_strings = ["connection reset", "connection abort"]  # Cadenas a buscar en el texto de respuesta
         
         usuario_id = validate_key(api_request.llave, db)
+        last_exception = None
 
         while retry_count < max_retries:
-            
             try:
-                response = session.request("GET", api_request.endpoint, params=query_params, headers=HEADERS) # Realiza la solicitud
+                response = session.request("GET", api_request.endpoint, params=query_params, headers=HEADERS, timeout=timeout) # Realiza la solicitud
                 #print (response.headers)
                 if not any(error in response.text.lower() for error in error_strings):
                     
@@ -192,20 +195,36 @@ def middleware_request(api_request: ApiRequestModelInput, db: Session, request: 
                     # Registrar la petición
                     register_request(usuario_id.id, api_request, status_api, db)
                     
-                    return {"status": status_api, "data": json.loads(response.text), 'tkn':response.headers['x-csrf-token']}  # Devuelve la respuesta si no se encuentran las cadenas
+                    tkn = response.headers.get('x-csrf-token', '')
+                    res_data = {"status": status_api, "data": json.loads(response.text), 'tkn': tkn}
+                    return res_data  # Devuelve la respuesta si no se encuentran las cadenas
                 
                 else:
                     logger.warning(f"Intento {retry_count + 1}: Encontró cadenas prohibidas en la respuesta. Reintentando...")
                     
+            except requests.exceptions.Timeout as e:
+                logger.warning(f"Intento {retry_count + 1}: Timeout de {timeout}s alcanzado durante la solicitud - {e}. Reintentando...")
+                last_exception = e
             except requests.RequestException as e:
                 logger.warning(f"Intento {retry_count + 1}: Error durante la solicitud - {e}. Reintentando...")
+                last_exception = e
             
             retry_count += 1
 
+        if last_exception:
+            raise last_exception
+
         raise Exception(f"No se pudo completar la solicitud después de {max_retries} intentos.")
 
+    except requests.exceptions.Timeout as e:
+        logger.error(f"Petición anulada por Timeout ({timeout}s excedido): {e}")
+        gc.collect()
+        raise HTTPException(status_code=504, detail=f"Timeout: La petición ha superado el tiempo máximo de {int(timeout) if timeout else 45} segundos y fue anulada.")
+    except HTTPException as e:
+        gc.collect()
+        raise e
     except Exception as e:
-
+        gc.collect()
         raise HTTPException(status_code=500, detail=str(e))
     
 # Endpoint para realizar peticiones POST a la otra API (middleware)
@@ -271,8 +290,12 @@ def login(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
 def cantidad_por_bandeja(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     try:
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}$count?$filter=Usrcons eq '{api_request.usuario_api}' and Password eq '{encode(api_request.clave_api)}' and Estado eq '{api_request.data['estado']}'"
-        return middleware_request(api_request, db)
+        return middleware_request(api_request, db, timeout=20)
+    except HTTPException:
+        gc.collect()
+        raise
     except Exception as e:
+        gc.collect()
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -325,8 +348,12 @@ def order(api_request: ApiRequestModelInput, db: Session = Depends(get_db)):
     
     try:
         api_request.endpoint = f"{BASEURL}/{api_request.endpoint}(Aufnr='{api_request.data['orden']}',Clase='{clase}',Usuario='{api_request.usuario_api}',Password='{encode(api_request.clave_api)}')"
-        return middleware_request(api_request, db)
+        return middleware_request(api_request, db, timeout=20)
+    except HTTPException:
+        gc.collect()
+        raise
     except Exception as e:
+        gc.collect()
         raise HTTPException(status_code=500, detail=str(e))
     
     
