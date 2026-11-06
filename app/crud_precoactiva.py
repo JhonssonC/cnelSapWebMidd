@@ -19,11 +19,11 @@ def create_sequence(sequence: models.Sequence, db: Session):
 
 # Calcular la distancia cuadrada y ordenar por la más cercana
 def get_nearest_sequence(x: float, y: float, db: Session):
-    
+    distance_expr = func.sqrt(func.pow(models.Sequence.x - x, 2) + func.pow(models.Sequence.y - y, 2)).label('distance')
     nearest = db.query(
         models.Sequence,
-        func.sqrt(func.pow(models.Sequence.x - x, 2) + func.pow(models.Sequence.y - y, 2)).label('distance')
-    ).order_by('distance').first()
+        distance_expr
+    ).order_by(distance_expr).first()
     
     if nearest:
         return {

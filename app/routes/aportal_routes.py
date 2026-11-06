@@ -15,6 +15,8 @@ from app.database import get_db
 
 router = APIRouter()
 
+MAX_PORTAL_ATTEMPTS = int(os.getenv("MAX_PORTAL_ATTEMPTS", "15"))
+
     
 @router.post("/getKeys/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet
 def getKeys(api_request: AportalUser, db: Session = Depends(get_db)):
@@ -25,42 +27,48 @@ def getKeys(api_request: AportalUser, db: Session = Depends(get_db)):
         if not usuario_id:
             raise HTTPException(status_code=401, detail="Invalid key")
         
+        db.close()
+        
         # Crear una sesión para mantener cookies
         session = requests.Session()
         
 
         session = index(session)
-        if session.cookies.get_dict():
-            while 'awsSesion' not in session.cookies.get_dict():
+        if session and session.cookies.get_dict():
+            attempts = 0
+            while 'awsSesion' not in session.cookies.get_dict() and attempts < MAX_PORTAL_ATTEMPTS:
+                attempts += 1
                 time.sleep(1)
                 session = acceso(session, api_request.usuario, api_request.clave)
                 
-                if session.cookies.get_dict():
+                if session and session.cookies.get_dict():
                     
                     dictionaryAportal = aPortal(session)
-                    session = dictionaryAportal['session']
-                    
-                    if session.cookies.get_dict():
-                        session = getKey(session, dictionaryAportal['key'])
+                    if dictionaryAportal:
+                        session = dictionaryAportal['session']
                         
-            return JSONResponse(
-                status_code=200,
-                content={
-                    "message": "Proceso completado con éxito.",
-                    "cookies": session.cookies.get_dict()
-                }
-            )
-
+                        if session and session.cookies.get_dict():
+                            session = getKey(session, dictionaryAportal['key'])
+                        
+            if session and 'awsSesion' in session.cookies.get_dict():
+                return JSONResponse(
+                    status_code=200,
+                    content={
+                        "message": "Proceso completado con éxito.",
+                        "cookies": session.cookies.get_dict()
+                    }
+                )
                     
-        else:
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "message": "No se pudo establecer la sesión correctamente.",
-                    "cookies": session.cookies.get_dict()
-                }
-            )
+        return JSONResponse(
+            status_code=500,
+            content={
+                "message": "No se pudo establecer la sesión correctamente.",
+                "cookies": session.cookies.get_dict() if session else {}
+            }
+        )
     
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -78,14 +86,14 @@ def descargar_texto(api_request: str, db: Session = Depends(get_db)):
         if not usuario_id:
             raise HTTPException(status_code=401, detail="Invalid key")
         
-        # Crear una sesión para mantener cookies
-    
+        db.close()
+        
         # Crea un archivo de texto de ejemplo si no existe
         if not os.path.exists("texto.txt"):
             with open("texto.txt", "w") as f:
                 f.write("No Encontrado.\n")
                 
-        # 2. Leer el contenido del archivo de forma asíncrona
+        # 2. Leer el contenido del archivo
         try:
             with open("texto.txt", 'r', encoding='utf-8') as f:
                 contenido = f.read()
@@ -95,6 +103,8 @@ def descargar_texto(api_request: str, db: Session = Depends(get_db)):
         # 3. Devolver el contenido como PlainTextResponse
         return PlainTextResponse(content=contenido)
 
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
@@ -114,36 +124,44 @@ def getAflowCookies(api_request: ResumenDeGestion, db: Session = Depends(get_db)
                 cookie_entry.last_used = now
                 db.add(cookie_entry)
                 db.commit()
+                cookies_cached = json.loads(cookie_entry.cookies_json) if cookie_entry.cookies_json else {}
                 return JSONResponse(
                     status_code=200,
                     content={
                         "message": "Cookies devueltas desde cache.",
                         "cookies": {
-                            "cookies": json.loads(cookie_entry.cookies_json) if cookie_entry.cookies_json else {}
+                            "cookies": cookies_cached
                         }
                     }
                 )
 
+        # Liberar conexión a BD mientras se consulta el portal externo
+        db.close()
+
         # --- no hay cache válida: obtener nuevas cookies ---
         session = requests.Session()
         session = index(session, url="http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/index.jsp")
-        if session.cookies.get_dict():
-            while 'AJSESSIONID' not in session.cookies.get_dict():
+        if session and session.cookies.get_dict():
+            attempts = 0
+            while 'AJSESSIONID' not in session.cookies.get_dict() and attempts < MAX_PORTAL_ATTEMPTS:
+                attempts += 1
                 time.sleep(1)
                 session = acceso(session, api_request.usuario, api_request.clave, url="http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/accesoUsuario")
                 
-                if session.cookies.get_dict():
+                if session and session.cookies.get_dict():
                     
                     dictionaryAportal = aPortal(session, url="http://sar.cnel.gob.ec:9090/aportal/l/es/u/0/aportal.jsp")
-                    ky = dictionaryAportal['key']
-                    session = dictionaryAportal['session']
-                    
-                    if session.cookies.get_dict():
-                        session = loginAflowGetKey(session, ky)
+                    if dictionaryAportal:
+                        ky = dictionaryAportal['key']
+                        session = dictionaryAportal['session']
+                        
+                        if session and session.cookies.get_dict():
+                            session = loginAflowGetKey(session, ky)
 
 
-            if 'AJSESSIONID' in session.cookies.get_dict():
+            if session and 'AJSESSIONID' in session.cookies.get_dict():
                 cookies_json_new = json.dumps(session.cookies.get_dict())
+                cookie_entry = db.query(models.AportalCookies).filter_by(llave=api_request.llave, app="SAR").first()
                 if not cookie_entry:
                     cookie_entry = models.AportalCookies(
                         llave=api_request.llave,
@@ -170,15 +188,16 @@ def getAflowCookies(api_request: ResumenDeGestion, db: Session = Depends(get_db)
                     }
                 )
                     
-        else:
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "message": "No se pudo establecer la sesión correctamente.",
-                    "cookies": session.cookies.get_dict()
-                }
-            )
+        return JSONResponse(
+            status_code=500,
+            content={
+                "message": "No se pudo establecer la sesión correctamente.",
+                "cookies": session.cookies.get_dict() if session else {}
+            }
+        )
     
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -192,26 +211,31 @@ def getSearch(api_request: ResumenDeGestion, db: Session = Depends(get_db)):
         if not usuario_id:
             raise HTTPException(status_code=401, detail="Invalid key")
         
+        db.close()
+        
         # Crear una sesión para mantener cookies
         session = requests.Session()
         
 
         session = index(session)
-        if session.cookies.get_dict():
-            while 'SSID' not in session.cookies.get_dict():
+        if session and session.cookies.get_dict():
+            attempts = 0
+            while 'SSID' not in session.cookies.get_dict() and attempts < MAX_PORTAL_ATTEMPTS:
+                attempts += 1
                 time.sleep(1)
                 session = acceso(session, api_request.usuario, api_request.clave)
                 
-                if session.cookies.get_dict():
+                if session and session.cookies.get_dict():
                     
                     dictionaryAportal = aPortal(session)
-                    session = dictionaryAportal['session']
-                    
-                    if session.cookies.get_dict():
-                        session = loginAflowGetKey(session, dictionaryAportal['key'])
+                    if dictionaryAportal:
+                        session = dictionaryAportal['session']
+                        
+                        if session and session.cookies.get_dict():
+                            session = loginAflowGetKey(session, dictionaryAportal['key'])
                         
                         
-            if 'SSID' in session.cookies.get_dict():
+            if session and 'SSID' in session.cookies.get_dict():
                 data = dataSearch(session, api_request.data_search)
                 
                 return JSONResponse(
@@ -225,15 +249,16 @@ def getSearch(api_request: ResumenDeGestion, db: Session = Depends(get_db)):
                     }
                 )
                     
-        else:
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "message": "No se pudo establecer la sesión correctamente.",
-                    "cookies": session.cookies.get_dict()
-                }
-            )
+        return JSONResponse(
+            status_code=500,
+            content={
+                "message": "No se pudo establecer la sesión correctamente.",
+                "cookies": session.cookies.get_dict() if session else {}
+            }
+        )
     
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -261,27 +286,32 @@ def getKeyAflowAciss(api_request: ResumenDeGestion, db: Session = Depends(get_db
             db.commit()
             session.cookies.update(json.loads(cookie_entry.cookies_json) if cookie_entry.cookies_json else {})
 
+    db.close()
 
     if not 'AJSESSIONID' in session.cookies.get_dict():
         session = index(session)
-        if session.cookies.get_dict():
-            while 'AJSESSIONID' not in session.cookies.get_dict():
+        if session and session.cookies.get_dict():
+            attempts = 0
+            while 'AJSESSIONID' not in session.cookies.get_dict() and attempts < MAX_PORTAL_ATTEMPTS:
+                attempts += 1
                 time.sleep(1)
                 session = acceso(session, api_request.usuario, api_request.clave)
                 
-                if session.cookies.get_dict():
+                if session and session.cookies.get_dict():
                     dictionaryAportal = aPortal(session)
-                    ky = dictionaryAportal['key']
-                    session = dictionaryAportal['session']
-                    
-                    if session.cookies.get_dict():
-                        session = loginAflowGetKey(session, ky, url="aciis")
+                    if dictionaryAportal:
+                        ky = dictionaryAportal['key']
+                        session = dictionaryAportal['session']
+                        
+                        if session and session.cookies.get_dict():
+                            session = loginAflowGetKey(session, ky, url="aciis")
 
 
-    if 'AJSESSIONID' in session.cookies.get_dict():
+    if session and 'AJSESSIONID' in session.cookies.get_dict():
 
         # serializar cookies y persistir (crear o actualizar)
         cookies_json_new = json.dumps(session.cookies.get_dict())
+        cookie_entry = db.query(models.AportalCookies).filter_by(llave=api_request.llave, app=app_name).first()
         if not cookie_entry:
             cookie_entry = models.AportalCookies(
                 llave=api_request.llave,
@@ -313,7 +343,7 @@ def getKeyAflowAciss(api_request: ResumenDeGestion, db: Session = Depends(get_db
         status_code=500,
         content={
             "message": "No se pudo establecer la sesión correctamente.",
-            "cookies": session.cookies.get_dict() if 'session' in locals() else {}
+            "cookies": session.cookies.get_dict() if session else {}
         }
     )
 
@@ -341,30 +371,35 @@ def getKeysResumenGestion(api_request: ResumenDeGestion, db: Session = Depends(g
             db.commit()
             session.cookies.update(json.loads(cookie_entry.cookies_json) if cookie_entry.cookies_json else {})
 
+    db.close()
 
     if not 'awsSesion' in session.cookies.get_dict():
         session = index(session)
-        if session.cookies.get_dict():
-            while 'awsSesion' not in session.cookies.get_dict():
+        if session and session.cookies.get_dict():
+            attempts = 0
+            while 'awsSesion' not in session.cookies.get_dict() and attempts < MAX_PORTAL_ATTEMPTS:
+                attempts += 1
                 time.sleep(1)
                 session = acceso(session, api_request.usuario, api_request.clave)
 
-                if session.cookies.get_dict():
+                if session and session.cookies.get_dict():
                     dictionaryAportal = aPortal(session)
-                    session = dictionaryAportal['session']
+                    if dictionaryAportal:
+                        session = dictionaryAportal['session']
 
-                    if session.cookies.get_dict():
-                        session = getKey(session, dictionaryAportal['key'])
+                        if session and session.cookies.get_dict():
+                            session = getKey(session, dictionaryAportal['key'])
 
 
     # al tener awsSesion, llamar jsGenerate y guardar session en BD
-    if 'awsSesion' in session.cookies.get_dict():
+    if session and 'awsSesion' in session.cookies.get_dict():
         data = jsGenerate(session, api_request.id_reporte, api_request.id, api_request.par_uni, api_request.par_pro,
                             api_request.par_can, api_request.par_sec, api_request.par_dep, api_request.par_ges,
                             api_request.par_contra, api_request.par_cua, api_request.fec_ini, api_request.fec_fin)
 
         # serializar cookies y persistir (crear o actualizar)
         cookies_json_new = json.dumps(session.cookies.get_dict())
+        cookie_entry = db.query(models.AportalCookies).filter_by(llave=api_request.llave, app=app_name).first()
         if not cookie_entry:
             cookie_entry = models.AportalCookies(
                 llave=api_request.llave,
@@ -397,13 +432,13 @@ def getKeysResumenGestion(api_request: ResumenDeGestion, db: Session = Depends(g
         status_code=500,
         content={
             "message": "No se pudo establecer la sesión correctamente.",
-            "cookies": session.cookies.get_dict() if 'session' in locals() else {}
+            "cookies": session.cookies.get_dict() if session else {}
         }
     )
 
     
 @router.post("/logout/")#endpoint: sap/opu/odata/SAP/ZWMGS_ORDER_GEST_SRV/contratoSet
-def getKeys(api_request: AportalLogout, db: Session = Depends(get_db)):
+def logout_aportal(api_request: AportalLogout, db: Session = Depends(get_db)):
     try:
         
         usuario_id = validate_key(api_request.llave, db)
@@ -411,22 +446,27 @@ def getKeys(api_request: AportalLogout, db: Session = Depends(get_db)):
         if not usuario_id:
             raise HTTPException(status_code=401, detail="Invalid key")
         
+        db.close()
+        
         # Crear una sesión para mantener cookies
         session = requests.Session()
         # Cargar las cookies al objeto Session
-        session.cookies.update(api_request.sessionDict)
+        if api_request.sessionDict:
+            session.cookies.update(api_request.sessionDict)
 
         session = index(session)
         
-        cerrarSesion()
+        cerrarSesion(session)
     
         return JSONResponse(
             status_code=200,
             content={
                 "message": "Sesión cerrada correctamente.",
-                "cookies": session.cookies.get_dict()
+                "cookies": session.cookies.get_dict() if session else {}
             }
         )
     
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

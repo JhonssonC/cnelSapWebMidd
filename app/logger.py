@@ -10,13 +10,27 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOGS_DIR = os.path.join(BASE_DIR, "logs")
 os.makedirs(LOGS_DIR, exist_ok=True)
 
-from datetime import datetime
+INSTANCE_ID = os.getenv("HOSTNAME", "local")
+
 try:
     from zoneinfo import ZoneInfo
     LOCAL_TZ = ZoneInfo("America/Guayaquil")
 except ImportError:
     import pytz
     LOCAL_TZ = pytz.timezone("America/Guayaquil")
+
+
+class SafeTimedRotatingFileHandler(TimedRotatingFileHandler):
+    """
+    Evita colisiones de rotación de archivos cuando múltiples contenedores/workers
+    comparten el volumen de logs a medianoche.
+    """
+    def doRollover(self):
+        try:
+            super().doRollover()
+        except OSError:
+            pass
+
 
 # Formateador personalizado
 class DailyLogFormatter(logging.Formatter):
@@ -25,7 +39,8 @@ class DailyLogFormatter(logging.Formatter):
         timestamp = dt.strftime('%Y-%m-%d %H:%M:%S')
         level = record.levelname
         msg = record.getMessage()
-        return f"{timestamp} | {level:<7} | {msg}"
+        return f"{timestamp} | {level:<7} | [{INSTANCE_ID}] | {msg}"
+
 
 # Crear el logger principal
 logger = logging.getLogger("cnel_app")
@@ -43,19 +58,21 @@ if not logger.handlers:
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
 
-    # File Handler con rotación diaria
+    # File Handler con rotación diaria segura para multi-contenedor
     log_file_path = os.path.join(LOGS_DIR, "app.log")
-    file_handler = TimedRotatingFileHandler(
+    file_handler = SafeTimedRotatingFileHandler(
         filename=log_file_path,
         when="midnight",
         interval=1,
         backupCount=30,
-        encoding="utf-8"
+        encoding="utf-8",
+        delay=True,
     )
     file_handler.suffix = "%Y-%m-%d"
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)
+
 
 def log_request(endpoint: str, usuario: str, status_code: int, detail: str = None):
     """
@@ -69,6 +86,7 @@ def log_request(endpoint: str, usuario: str, status_code: int, detail: str = Non
     else:
         det_str = f" | Detalle: {detail}" if detail else ""
         logger.error(f"Endpoint: {endpoint} | Usuario: {usr} | Estatus: {status_code}{det_str}")
+
 
 async def get_user_from_request(request: Request) -> str:
     """
@@ -104,4 +122,3 @@ async def get_user_from_request(request: Request) -> str:
         pass
 
     return user if user else "N/A"
-

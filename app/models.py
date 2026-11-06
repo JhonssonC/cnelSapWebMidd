@@ -19,12 +19,12 @@ class Tramitacion(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     fechahora = Column(DateTime, nullable=False)
-    cuadrilla = Column(String, nullable=False)
-    ccontrato = Column(String)
-    orden = Column(String)
+    cuadrilla = Column(String, nullable=False, index=True)
+    ccontrato = Column(String, index=True)
+    orden = Column(String, index=True)
     tipo = Column(String, nullable=False)
-    tramiteSar = Column(String, nullable=False)
-    tramiteBpm = Column(String, nullable=False)
+    tramiteSar = Column(String, nullable=False, index=True)
+    tramiteBpm = Column(String, nullable=False, index=True)
     nombe_cliente = Column(String)
     novedad = Column(String)
     observacion = Column(String)
@@ -40,9 +40,9 @@ class UserValidation(Base):
     __tablename__ = "users"
     
     id = Column(Integer, primary_key=True, index=True)
-    usuario= Column(String, nullable=False)
+    usuario= Column(String, nullable=False, index=True)
     clave= Column(String, nullable=False)
-    llave= Column(String, nullable=False)
+    llave= Column(String, nullable=False, index=True)
     habilitado = Column(Boolean, nullable=False, default=False)
     superuser= Column(Boolean, nullable=False, default=False)
 
@@ -50,11 +50,11 @@ class ApiRequest(Base):
     __tablename__ = "requestsApiSapWeb"
     
     id = Column(Integer, primary_key=True, index=True)
-    usuario_id = Column(Integer, nullable=False)
+    usuario_id = Column(Integer, nullable=False, index=True)
     usuario_api = Column(String, nullable=False)
     clave_api = Column(String, nullable=False)
     endpoint = Column(String, nullable=False)
-    data = Column(String)# Usamos JSON para almacenar el dict
+    data = Column(Text)# Usamos Text para almacenar payloads JSON grandes en PostgreSQL
     status = Column(Integer, nullable=False)
     
     
@@ -65,7 +65,7 @@ class UsuarioSap(Base):
     __tablename__ = "usuariosap"
     
     id = Column(Integer, primary_key=True, index=True)
-    usuario = Column(String, nullable=False)
+    usuario = Column(String, nullable=False, index=True)
     nombre = Column(String)
     searchhelp = Column(String)
     werks = Column(String, nullable=False)
@@ -86,7 +86,7 @@ class ContratoSap(Base):
     __tablename__ = "contratosap"
     
     id = Column(Integer, primary_key=True, index=True)
-    usuario = Column(String, nullable=False)
+    usuario = Column(String, nullable=False, index=True)
     searchhelp = Column(String)
     usuario_web_orden = Column(String, nullable=False) #UsuarioWebOrden# Werk
     usuario_web_orden_desc = Column(String)
@@ -117,8 +117,8 @@ class Grupo(Base):
     __tablename__ = "grupo"
     
     id = Column(Integer, primary_key=True, index=True)
-    clase = Column(String, nullable=False)
-    codigo_grupo = Column(String)  
+    clase = Column(String, nullable=False, index=True)
+    codigo_grupo = Column(String, index=True)  
     desc_cod_grup = Column(String, nullable=False)
     
 
@@ -126,17 +126,17 @@ class Cierre(Base):
     __tablename__ = "cierre"
     
     id = Column(Integer, primary_key=True, index=True)
-    clase = Column(String, nullable=False)
+    clase = Column(String, nullable=False, index=True)
     codigo_cierre = Column(String)  
     desc_cod_cierr = Column(String, nullable=False)
-    codigo_grupo = Column(String, nullable=False)  # Clave foránea
+    codigo_grupo = Column(String, nullable=False, index=True)  # Clave foránea
 
 class AportalCookies(Base):
     __tablename__ = "aportal_cookies"
 
     id = Column(Integer, primary_key=True, index=True)
-    llave = Column(String)
-    app = Column(String)  # 'ACIIS' o 'SAR'
+    llave = Column(String, index=True)
+    app = Column(String, index=True)  # 'ACIIS' o 'SAR'
     cookies_json = Column(Text, nullable=True)
     last_saved = Column(DateTime, nullable=True)
     last_used = Column(DateTime, nullable=True)

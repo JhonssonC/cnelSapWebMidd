@@ -154,7 +154,11 @@ class CustomSSLContextHTTPAdapter(requests.adapters.HTTPAdapter):
 session = requests.session()
 session.verify = False
 session.adapters.pop("https://", None)
-session.mount("https://", CustomSSLContextHTTPAdapter(ctx))
+session.mount("https://", CustomSSLContextHTTPAdapter(ctx, pool_connections=50, pool_maxsize=50))
+
+SAP_CONNECT_TIMEOUT = float(os.getenv("SAP_CONNECT_TIMEOUT", "10"))
+SAP_READ_TIMEOUT = float(os.getenv("SAP_READ_TIMEOUT", "60"))
+SAP_TIMEOUT = (SAP_CONNECT_TIMEOUT, SAP_READ_TIMEOUT)
 
 router = APIRouter()
 
@@ -180,19 +184,24 @@ def middleware_request(api_request: ApiRequestModelInput, db: Session, request: 
         error_strings = ["connection reset", "connection abort"]  # Cadenas a buscar en el texto de respuesta
         
         usuario_id = validate_key(api_request.llave, db)
+        if not usuario_id:
+            raise HTTPException(status_code=401, detail="Invalid key")
+        uid = usuario_id.id
+        # Liberar la conexión al pool antes de esperar la respuesta HTTP externa de SAP
+        db.close()
 
         while retry_count < max_retries:
             
             try:
-                response = session.request("GET", api_request.endpoint, params=query_params, headers=HEADERS) # Realiza la solicitud
+                response = session.request("GET", api_request.endpoint, params=query_params, headers=HEADERS, timeout=SAP_TIMEOUT) # Realiza la solicitud
                 #print (response.headers)
                 if not any(error in response.text.lower() for error in error_strings):
                     
                     status_api = response.status_code 
                     # Registrar la petición
-                    register_request(usuario_id.id, api_request, status_api, db)
+                    register_request(uid, api_request, status_api, db)
                     
-                    return {"status": status_api, "data": json.loads(response.text), 'tkn':response.headers['x-csrf-token']}  # Devuelve la respuesta si no se encuentran las cadenas
+                    return {"status": status_api, "data": json.loads(response.text), 'tkn':response.headers.get('x-csrf-token', '')}  # Devuelve la respuesta si no se encuentran las cadenas
                 
                 else:
                     logger.warning(f"Intento {retry_count + 1}: Encontró cadenas prohibidas en la respuesta. Reintentando...")
@@ -204,6 +213,8 @@ def middleware_request(api_request: ApiRequestModelInput, db: Session, request: 
 
         raise Exception(f"No se pudo completar la solicitud después de {max_retries} intentos.")
 
+    except HTTPException:
+        raise
     except Exception as e:
 
         raise HTTPException(status_code=500, detail=str(e))
@@ -217,6 +228,11 @@ def middleware_post(api_request: ApiRequestModelInput, payload:dict, db: Session
         error_strings = ["connection reset", "connection abort"]  # Cadenas a buscar en el texto de respuesta
         
         usuario_id = validate_key(api_request.llave, db)
+        if not usuario_id:
+            raise HTTPException(status_code=401, detail="Invalid key")
+        uid = usuario_id.id
+        # Liberar la conexión al pool antes de esperar la respuesta HTTP externa de SAP
+        db.close()
 
         while retry_count < max_retries:
             
@@ -224,12 +240,12 @@ def middleware_post(api_request: ApiRequestModelInput, payload:dict, db: Session
                 currentHeaders = HEADERS.copy()
                 if token != None:
                     currentHeaders['x-csrf-token']=token
-                response = session.request("POST", api_request.endpoint, json=payload, headers=currentHeaders)# Realiza la solicitud
+                response = session.request("POST", api_request.endpoint, json=payload, headers=currentHeaders, timeout=SAP_TIMEOUT)# Realiza la solicitud
                 if not any(error in response.text.lower() for error in error_strings):
                     
                     status_api = response.status_code 
                     # Registrar la petición
-                    register_request(usuario_id.id, api_request, status_api, db)
+                    register_request(uid, api_request, status_api, db)
                     return {"status": status_api, "data": json.loads(response.text)}  # Devuelve la respuesta si no se encuentran las cadenas
                 
                 else:
@@ -242,6 +258,8 @@ def middleware_post(api_request: ApiRequestModelInput, payload:dict, db: Session
 
         raise Exception(f"No se pudo completar la solicitud después de {max_retries} intentos.")
 
+    except HTTPException:
+        raise
     except Exception as e:
 
         raise HTTPException(status_code=500, detail=str(e))

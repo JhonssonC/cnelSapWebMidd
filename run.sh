@@ -5,8 +5,12 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR"
 
+# Número de instancias del contenedor middleware (por defecto 3, o primer argumento: ./run.sh 5)
+REPLICAS="${1:-3}"
+
 echo "=================================================="
-echo "  Construyendo y lanzando contenedor Docker"
+echo "  Desplegando Clúster Middleware + PostgreSQL + Nginx"
+echo "  Instancias de Middleware a levantar: ${REPLICAS}"
 echo "=================================================="
 
 # Verificar el archivo .env
@@ -20,29 +24,24 @@ if command -v docker &> /dev/null && docker compose version &> /dev/null; then
 elif command -v docker-compose &> /dev/null; then
     COMPOSE_CMD="docker-compose"
 else
-    echo "ℹ️ Docker Compose no se detectó. Usando comandos 'docker build' y 'docker run'..."
-    docker build -t cnel-sap-web-midd-container .
-    docker stop cnel-sap-web-midd-container 2>/dev/null || true
-    docker rm cnel-sap-web-midd-container 2>/dev/null || true
-    
-    ENV_FLAG=""
-    if [ -f ".env" ]; then
-        ENV_FLAG="--env-file .env"
-    fi
-
-    docker run -d \
-      --name cnel-sap-web-midd-container \
-      -p 8080:8080 \
-      $ENV_FLAG \
-      cnel-sap-web-midd-container
-
-    echo "✅ Contenedor desplegado exitosamente en el puerto 8080."
-    exit 0
+    echo "❌ Error: Se requiere Docker Compose para orquestar PostgreSQL, las ${REPLICAS} instancias y Nginx."
+    exit 1
 fi
 
-echo "🚀 Ejecutando: $COMPOSE_CMD up --build -d"
-$COMPOSE_CMD up --build -d
+# Detener contenedor legacy individual si existía de despliegues previos
+docker rm -f cnel-sap-web-midd-container 2>/dev/null || true
+
+echo "🚀 Ejecutando: $COMPOSE_CMD up --build -d --scale middleware=${REPLICAS}"
+$COMPOSE_CMD up --build -d --scale middleware="${REPLICAS}"
+
+# Recargar Nginx para asegurar que resuelva todas las IPs de las N réplicas activas
+echo "🔄 Sincronizando balanceador de carga Nginx con las ${REPLICAS} instancias..."
+$COMPOSE_CMD exec -T nginx nginx -s reload 2>/dev/null || $COMPOSE_CMD restart nginx
 
 echo ""
-echo "✅ Contenedor construido y ejecutándose correctamente."
-echo "📊 Puedes revisar los logs ejecutando: $COMPOSE_CMD logs -f"
+echo "✅ Clúster desplegado y balanceado en el puerto ${NGINX_PORT:-8080}."
+echo "📊 Estado de contenedores:"
+$COMPOSE_CMD ps
+echo ""
+echo "📋 Puedes revisar los logs ejecutando: $COMPOSE_CMD logs -f"
+echo "📈 Para escalar en caliente a N instancias (ej. 5): ./run.sh 5"

@@ -65,7 +65,7 @@ def cerrarSesion(session):
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
     }
 
-    response = session.post(url, headers=headers, data=payload)
+    response = session.post(url, headers=headers, data=payload, timeout=25)
 
     
 def dataSearch(session, dataSearch):
@@ -88,7 +88,7 @@ def dataSearch(session, dataSearch):
     'Cookie': 'JSESSIONID=4cd697e7fd6ffd83161d0cdb1b16; SSID=KEqoU7jEp9q1dLwxkCQhlQxantrnd1WqucMS2iiYSjRQS5GdeREV3amdjJpq56R/gdyvlOyJAUdhUKm/pN/+L5p7AWW9vX2hmgzFwX3bMvwb/MNbqM/zulMb+0Zh0c9L; AJSESSIONID=TAhocKy2NmkiCModZfBJ/oIxdipIIaSqKfU1v+tSbhfmd9C+RhLcnQ==; AJSESSIONID24=P/q0tsc78QQrB5qN3jHoOblbSD8eQ8kUmn9OPctetcaMY4BlCg+uwle2arm+U+s+; JSESSIONID=4f48ee217aadaa7db8bc4ecc9cfb'
     }
     
-    response = session.post(url, headers=headers, data=payload)
+    response = session.post(url, headers=headers, data=payload, timeout=25)
 
     if response:
         keys_to_extract = ['JSESSIONID', 'AJSESSIONID24', 'SSID']
@@ -125,7 +125,7 @@ def jsGenerate(session, id_reporte=915, id=915, PAR_UNI='07', PAR_PRO='', PAR_CA
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36'
     }
 
-    response = session.post(url, headers=headers, data=payload)
+    response = session.post(url, headers=headers, data=payload, timeout=25)
 
     if response:
         keys_to_extract = ['JSESSIONID', 'AJSESSIONID24', 'SSID']
@@ -160,7 +160,7 @@ def getKey(session, key, url=""):
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36',
     }
 
-    response = session.get(url, headers=headers)
+    response = session.get(url, headers=headers, timeout=25)
     if response:
         return session
     
@@ -194,7 +194,7 @@ def loginAflowGetKey(session, key, url=""):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36'
         }
 
-    response = session.get(url, headers=headers, data=payload)
+    response = session.get(url, headers=headers, data=payload, timeout=25)
 
     if len(session.cookies.get_dict()) > 0:
         return session
@@ -236,7 +236,7 @@ def aPortal(session, url=""):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
         }
 
-    response = session.get(url, headers=headers, data={})
+    response = session.get(url, headers=headers, data={}, timeout=25)
 
     tmpkey = response.text.split('".alencode();')[0]
     tmpkey = tmpkey.split('var key = "')[1]
@@ -292,7 +292,7 @@ def acceso(session, u, c, url=""):
 
     payload = f'accion=login&v=-1&u={u}&c={c}&action='
 
-    response = session.post(url, headers=headers, data=payload)
+    response = session.post(url, headers=headers, data=payload, timeout=25)
     
     if response:
         keys_to_extract = ['JSESSIONID', 'AJSESSIONID', 'AJSESSIONID24', 'SSID']
@@ -338,7 +338,7 @@ def index(session, url=""):
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36'
         }
 
-    response = session.get(url, headers=headers)
+    response = session.get(url, headers=headers, timeout=25)
 
     if response:
         keys_to_extract = ['JSESSIONID', 'AJSESSIONID', 'AJSESSIONID24', 'SSID']

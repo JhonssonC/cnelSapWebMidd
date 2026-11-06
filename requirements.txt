@@ -40,6 +40,7 @@ sphinxcontrib-qthelp==2.0.0
 sphinxcontrib-serializinghtml==2.0.0
 SQLAlchemy==2.0.35
 sqlalchemy-libsql==0.1.0
+psycopg2-binary==2.9.9
 starlette==0.38.6
 typing_extensions==4.12.2
 urllib3==2.2.3

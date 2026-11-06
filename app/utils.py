@@ -78,23 +78,26 @@ def regenerate_key(data: ImputUser, db: Session):
     if user:
         nueva_llave= generate_key()
         user.llave = nueva_llave
+        db.commit()
         return {"usuario": data.usuario, "llave": nueva_llave}
     
     
 
 # Registrar la petición en la tabla de peticiones
 def register_request(usuario_id: int, api_request: ApiRequestModelInput, status_api: int, db: Session):
-    
-    new_req = models.ApiRequest(
-        usuario_id = usuario_id,
-        usuario_api = api_request.usuario_api,
-        clave_api = api_request.clave_api,
-        endpoint = api_request.endpoint,
-        data = json.dumps(api_request.data),# Usamos JSON para almacenar el dict
-        status = status_api
-    )
-    db.add(new_req)
-    db.commit()
+    try:
+        new_req = models.ApiRequest(
+            usuario_id = usuario_id,
+            usuario_api = api_request.usuario_api,
+            clave_api = api_request.clave_api,
+            endpoint = api_request.endpoint,
+            data = json.dumps(api_request.data),# Usamos JSON para almacenar el dict
+            status = status_api
+        )
+        db.add(new_req)
+        db.commit()
+    except Exception:
+        db.rollback()
 
     return api_request
 
